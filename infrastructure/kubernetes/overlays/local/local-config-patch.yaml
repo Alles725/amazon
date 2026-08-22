@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-config
+data:
+  APP_ENV: local
+  LOG_LEVEL: debug
+  # kind serves plain HTTP, so a Secure cookie would never be stored.
+  SESSION_SECURE_COOKIE: "false"
+  OPENAPI_ENABLED: "true"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: storefront-config
+data:
+  APP_ENV: local

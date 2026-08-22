@@ -1,0 +1,19 @@
+app:
+  name: amazon-mvp-api
+  environment: local
+  port: 3001
+  logLevel: info
+
+database:
+  # Overridden by DATABASE_URL (Kubernetes Secret). Never commit real credentials.
+  url: postgresql://postgres:postgres@localhost:5432/amazon_mvp?schema=public
+
+session:
+  cookieName: amzmvp_sid
+  ttlHours: 168
+  secureCookie: false
+  sameSite: lax
+
+openapi:
+  enabled: true
+  path: /api/docs

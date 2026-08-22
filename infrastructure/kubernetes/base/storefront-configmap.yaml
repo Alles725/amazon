@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: storefront-config
+data:
+  APP_ENV: development
+  PORT: "3000"
+  API_INTERNAL_URL: http://api:3001
+  API_PUBLIC_BASE_PATH: /api/v1
+  FEATURES_FILE: /app/config/features.yaml
+  # In-cluster the Ingress owns /api routing, so the Next.js rewrite must be off.
+  DISABLE_API_REWRITE: "true"

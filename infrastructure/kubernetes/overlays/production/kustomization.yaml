@@ -1,0 +1,21 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Must be repeated in every overlay: resources generated HERE are not covered by
+# the base's namespace directive, and a namespace-less generated Secret will not
+# be matched to its namespaced consumers by the name-reference transformer.
+namespace: amazon-mvp
+
+resources:
+  - ../../base
+
+patches:
+  - path: production-patch.yaml
+
+images:
+  - name: amazon-mvp/api
+    newTag: production
+  - name: amazon-mvp/storefront
+    newTag: production
+
+# Secrets are supplied by the platform, never by this repository.

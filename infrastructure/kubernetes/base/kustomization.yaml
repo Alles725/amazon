@@ -1,0 +1,44 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: amazon-mvp
+
+labels:
+  # includeSelectors: false — a purely informational label must not be baked into
+  # Deployment selectors, which are immutable after creation.
+  - pairs:
+      app.kubernetes.io/part-of: amazon-mvp
+    includeSelectors: false
+
+resources:
+  - namespace.yaml
+  - postgres-configmap.yaml
+  - postgres-service.yaml
+  - postgres-statefulset.yaml
+  - api-configmap.yaml
+  - api-deployment.yaml
+  - api-service.yaml
+  - storefront-configmap.yaml
+  - storefront-deployment.yaml
+  - storefront-service.yaml
+  - migration-job.yaml
+  - ingress.yaml
+
+configMapGenerator:
+  # features.yaml is generated from the single source of truth at config/, so the
+  # cluster and the repo can never disagree about what is switched on.
+  # Reading above the kustomization root requires
+  #   kustomize build --load-restrictor LoadRestrictionsNone
+  # which is why the Makefile pipes kustomize into kubectl instead of `apply -k`.
+  - name: features-config
+    files:
+      - features.yaml=../../../config/features.yaml
+
+generatorOptions:
+  disableNameSuffixHash: false
+
+images:
+  - name: amazon-mvp/api
+    newTag: dev
+  - name: amazon-mvp/storefront
+    newTag: dev

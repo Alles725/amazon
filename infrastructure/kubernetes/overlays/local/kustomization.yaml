@@ -1,0 +1,29 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Must be repeated in every overlay: resources generated HERE are not covered by
+# the base's namespace directive, and a namespace-less generated Secret will not
+# be matched to its namespaced consumers by the name-reference transformer.
+namespace: amazon-mvp
+
+resources:
+  - ../../base
+
+patches:
+  - path: local-config-patch.yaml
+
+secretGenerator:
+  # LOCAL ONLY. kind runs on plain HTTP on your laptop; these values never leave
+  # it. Development and production read their secrets from the cluster instead.
+  - name: postgres-secret
+    literals:
+      - POSTGRES_PASSWORD=local-dev-password
+  - name: api-secret
+    literals:
+      - DATABASE_URL=postgresql://amazon_mvp:local-dev-password@postgresql:5432/amazon_mvp?schema=public
+
+images:
+  - name: amazon-mvp/api
+    newTag: local
+  - name: amazon-mvp/storefront
+    newTag: local

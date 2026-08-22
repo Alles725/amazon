@@ -1,0 +1,95 @@
+name: CI
+
+on:
+  push: { branches: [main] }
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: amazon_mvp
+          POSTGRES_PASSWORD: ci-password
+          POSTGRES_DB: amazon_mvp
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U amazon_mvp"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+
+    env:
+      DATABASE_URL: postgresql://amazon_mvp:ci-password@localhost:5432/amazon_mvp?schema=public
+      APP_ENV: test
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 9 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: pnpm }
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma client
+        run: pnpm --filter @amazon-mvp/database generate
+
+      - name: Build shared packages
+        run: |
+          pnpm --filter @amazon-mvp/api-contract build
+          pnpm --filter @amazon-mvp/config-schema build
+          pnpm --filter @amazon-mvp/database build
+
+      - name: Lint
+        run: pnpm -r --if-present lint
+
+      - name: Typecheck
+        run: pnpm -r --if-present typecheck
+
+      - name: Unit tests
+        run: pnpm -r --if-present test
+
+      - name: Apply migrations
+        run: pnpm --filter @amazon-mvp/database migrate:deploy
+
+      - name: Check migrations match the Prisma schema
+        # Catches a schema edited without a matching migration.
+        run: pnpm --filter @amazon-mvp/database exec prisma migrate diff
+          --from-migrations prisma/migrations
+          --to-schema-datamodel prisma/schema.prisma
+          --shadow-database-url "$DATABASE_URL" --exit-code
+
+      - name: Integration tests
+        run: pnpm --filter @amazon-mvp/api test:integration
+
+      - name: Build
+        run: pnpm -r --if-present build
+
+      - name: Check the committed OpenAPI document is current
+        # The contract is the Dev1 -> Dev2 boundary: it must ship with the change.
+        run: |
+          pnpm --filter @amazon-mvp/api openapi
+          git diff --exit-code docs/openapi.json
+
+  manifests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/setup-kustomize@v4
+      - name: Render every overlay
+        run: |
+          for overlay in local development production; do
+            kustomize build --load-restrictor LoadRestrictionsNone \
+              "infrastructure/kubernetes/overlays/$overlay" > /dev/null
+          done
+
+  images:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build images
+        run: |
+          docker build -f apps/api/Dockerfile -t amazon-mvp/api:ci .
+          docker build -f apps/storefront/Dockerfile -t amazon-mvp/storefront:ci .

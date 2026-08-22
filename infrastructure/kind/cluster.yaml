@@ -1,0 +1,15 @@
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: amazon-mvp
+nodes:
+  - role: control-plane
+    kubeadmConfigPatches:
+      # Required for the ingress-nginx controller to bind host ports on kind.
+      - |
+        kind: InitConfiguration
+        nodeRegistration:
+          kubeletExtraArgs:
+            node-labels: "ingress-ready=true"
+    extraPortMappings:
+      - { containerPort: 80, hostPort: 8080, protocol: TCP }
+      - { containerPort: 443, hostPort: 8443, protocol: TCP }

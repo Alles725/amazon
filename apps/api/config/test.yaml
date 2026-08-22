@@ -1,0 +1,6 @@
+app:
+  environment: test
+  logLevel: error
+
+openapi:
+  enabled: false

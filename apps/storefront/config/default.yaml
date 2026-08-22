@@ -1,0 +1,10 @@
+app:
+  name: amazon-mvp-storefront
+  environment: local
+  port: 3000
+
+api:
+  internalBaseUrl: http://localhost:3001
+  publicBasePath: /api/v1
+
+featuresFile: ../../config/features.yaml

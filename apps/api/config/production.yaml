@@ -1,0 +1,10 @@
+app:
+  environment: production
+  logLevel: info
+
+session:
+  secureCookie: true
+  sameSite: lax
+
+openapi:
+  enabled: false

@@ -1,0 +1,6 @@
+app:
+  environment: development
+  logLevel: debug
+
+session:
+  secureCookie: true

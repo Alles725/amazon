@@ -1,0 +1,77 @@
+# Single source of truth for what is switched on. Everything ships disabled and
+# is turned on here once implemented and tested.
+features:
+  home:
+    enabled: true
+    description: Landing page
+
+  authentication:
+    enabled: true
+    description: Register, login, logout, account shell
+
+  catalog:
+    enabled: false
+    description: Product listing
+
+  productDetails:
+    enabled: false
+    description: Product detail page
+
+  cart:
+    enabled: false
+    description: Shopping cart
+
+  checkout:
+    enabled: false
+    description: Checkout and order placement
+
+  orders:
+    enabled: false
+    description: Order history
+
+  account:
+    enabled: false
+    description: Account management beyond the auth shell
+
+# Route -> feature binding. `disabledBehavior` decides what a visitor sees when
+# the backing feature is off.
+routes:
+  home:
+    feature: home
+    disabledBehavior: not-found
+
+  login:
+    feature: authentication
+    disabledBehavior: coming-soon
+
+  register:
+    feature: authentication
+    disabledBehavior: coming-soon
+
+  products:
+    feature: catalog
+    disabledBehavior: coming-soon
+
+  productDetails:
+    feature: productDetails
+    disabledBehavior: coming-soon
+
+  cart:
+    feature: cart
+    disabledBehavior: coming-soon
+
+  checkout:
+    feature: checkout
+    disabledBehavior: not-found
+
+  orders:
+    feature: orders
+    disabledBehavior: coming-soon
+
+  orderDetails:
+    feature: orders
+    disabledBehavior: coming-soon
+
+  account:
+    feature: account
+    disabledBehavior: coming-soon

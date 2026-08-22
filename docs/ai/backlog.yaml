@@ -1,0 +1,149 @@
+# Story backlog. Statuses: planned | in_progress | blocked | done | cancelled
+# "done" means implemented AND executed successfully at least once.
+
+iterations:
+  - id: 1
+    name: Foundations
+    stories:
+      - id: BE-001
+        owner: dev1
+        status: done
+        title: NestJS structure, config validation, health/readiness, logging
+      - id: BE-002
+        owner: dev1
+        status: blocked
+        title: Prisma/PostgreSQL connection and initial migrations
+        blocked_by: >-
+          Migration SQL hand-written; prisma generate and migrate deploy never
+          executed. Run drift:check first.
+      - id: BE-003
+        owner: dev1
+        status: blocked
+        title: Users module and registration
+        blocked_by: Unit tests pass against a fake; no database run yet.
+      - id: UI-001
+        owner: dev2
+        status: done
+        title: Next.js application shell
+      - id: UI-002
+        owner: dev2
+        status: done
+        title: Design-system primitives
+      - id: UI-003
+        owner: dev2
+        status: done
+        title: All required routes, unimplemented ones show Coming Soon
+      - id: PLAT-001
+        owner: dev3
+        status: done
+        title: pnpm workspace and root commands
+      - id: PLAT-002
+        owner: dev3
+        status: blocked
+        title: Dockerfiles for API and storefront
+        blocked_by: No Docker available; never built.
+      - id: PLAT-003
+        owner: dev3
+        status: blocked
+        title: Local PostgreSQL Kubernetes workload
+        blocked_by: Manifests render; never applied to a cluster.
+
+  - id: 2
+    name: Authentication vertical slice
+    stories:
+      - id: BE-004
+        owner: dev1
+        status: blocked
+        title: Login and persistent sessions
+        blocked_by: Needs PostgreSQL for the integration suite.
+      - id: BE-005
+        owner: dev1
+        status: blocked
+        title: Authentication guard and /auth/me
+        blocked_by: Same.
+      - id: BE-006
+        owner: dev1
+        status: blocked
+        title: Logout and session invalidation
+        blocked_by: Same.
+      - id: UI-004
+        owner: dev2
+        status: done
+        title: YAML-driven feature registry
+      - id: UI-005
+        owner: dev2
+        status: done
+        title: FeatureGate and route behaviour
+      - id: UI-006
+        owner: dev2
+        status: blocked
+        title: Registration UI
+        blocked_by: Builds; never exercised against a running API.
+      - id: UI-007
+        owner: dev2
+        status: blocked
+        title: Login and logout UI
+        blocked_by: Same.
+      - id: UI-008
+        owner: dev2
+        status: blocked
+        title: Authenticated account shell
+        blocked_by: Same.
+      - id: PLAT-004
+        owner: dev3
+        status: blocked
+        title: API and storefront Deployments and Services
+        blocked_by: Render correctly; never applied.
+      - id: PLAT-005
+        owner: dev3
+        status: blocked
+        title: Ingress
+        blocked_by: Same.
+      - id: PLAT-006
+        owner: dev3
+        status: blocked
+        title: Migration Job
+        blocked_by: Same.
+      - id: PLAT-007
+        owner: dev3
+        status: done
+        title: Kustomize overlays
+        note: >-
+          All three overlays render. Fixed a real defect: overlay-generated
+          Secrets were namespace-less, so consumers kept the unhashed name.
+
+  - id: 3
+    name: Stable MVP skeleton
+    stories:
+      - id: BE-007
+        owner: dev1
+        status: done
+        title: Catalog/cart/orders module boundaries and application interfaces
+      - id: PLAT-008
+        owner: dev3
+        status: blocked
+        title: OpenAPI artifact and shared API types
+        blocked_by: >-
+          api-contract exists and builds. docs/openapi.json not generated —
+          the generator needs the API to boot, which needs Prisma.
+      - id: PLAT-009
+        owner: dev3
+        status: done
+        title: CI pipeline (install, lint, typecheck, test, build, manifests, images)
+        note: Written and committed; never executed on a runner.
+      - id: PLAT-010
+        owner: dev3
+        status: blocked
+        title: Integration smoke tests through the Ingress
+        blocked_by: Script written; needs a deployment.
+
+next_up:
+  - id: FIRSTRUN-001
+    title: First cluster run
+    steps:
+      - pnpm --filter @amazon-mvp/database generate
+      - pnpm --filter @amazon-mvp/database drift:check   # verify hand-written SQL
+      - make bootstrap && make test && make typecheck
+      - make openapi && commit docs/openapi.json
+      - make cluster && make images && make deploy && make migrate && make seed
+      - make smoke

@@ -1,0 +1,320 @@
+/*
+ * Design tokens. The storefront's visual identity is "工 workshop notice board":
+ * paper ground, ink text, one pine accent, and a monospace utility face used for
+ * build/feature state. Nothing here imitates Amazon's UI.
+ *
+ * Fonts are deliberately system/offline-safe stacks — the cluster has no
+ * outbound internet, so a webfont request would just cost a layout shift.
+ */
+:root {
+  --paper: #fcfbf8;
+  --paper-sunk: #f4f1ea;
+  --ink: #16191c;
+  --ink-muted: #5f666d;
+  --pine: #14584c;
+  --pine-hover: #0e3f37;
+  --ember: #b4531f;
+  --rule: #e2ded4;
+
+  --font-display: Georgia, 'Iowan Old Style', 'Times New Roman', serif;
+  --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-utility: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
+
+  --step-0: 1rem;
+  --step-1: 1.1875rem;
+  --step-2: 1.5rem;
+  --step-3: 2.125rem;
+  --step-4: 3rem;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+
+  --radius: 2px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+  margin: 0;
+}
+
+h1 { font-size: var(--step-3); }
+h2 { font-size: var(--step-2); }
+h3 { font-size: var(--step-1); }
+
+p { margin: 0 0 var(--space-4); }
+
+a {
+  color: var(--pine);
+  text-underline-offset: 3px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--pine);
+  outline-offset: 2px;
+}
+
+/* Mono eyebrow used for section labels and state. Encodes "system state",
+   never used for decoration. */
+.eyebrow {
+  font-family: var(--font-utility);
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin: 0 0 var(--space-2);
+}
+
+.page {
+  max-width: 68rem;
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-4) var(--space-12);
+}
+
+.page--narrow { max-width: 30rem; }
+
+.stack > * + * { margin-top: var(--space-4); }
+
+.lede {
+  font-size: var(--step-1);
+  color: var(--ink-muted);
+  max-width: 46ch;
+}
+
+/* Navigation ------------------------------------------------------------- */
+.nav {
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper);
+}
+
+.nav__inner {
+  max-width: 68rem;
+  margin: 0 auto;
+  padding: var(--space-4);
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-6);
+  flex-wrap: wrap;
+}
+
+.nav__brand {
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.nav__links {
+  display: flex;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  margin-left: auto;
+  align-items: baseline;
+}
+
+.nav__link {
+  font-size: 0.9375rem;
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.nav__link:hover { color: var(--pine); }
+
+.nav__link--muted { color: var(--ink-muted); }
+
+/* Signature: the build-state stamp strip. It lists what is actually switched on,
+   which is the one thing a reader of this skeleton needs to know. */
+.stamp-strip {
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper-sunk);
+  font-family: var(--font-utility);
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.stamp-strip__inner {
+  max-width: 68rem;
+  margin: 0 auto;
+  padding: var(--space-2) var(--space-4);
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  align-items: center;
+  color: var(--ink-muted);
+}
+
+.stamp {
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 1px var(--space-2);
+  background: var(--paper);
+}
+
+.stamp--on {
+  border-color: var(--pine);
+  color: var(--pine);
+}
+
+/* Primitives -------------------------------------------------------------- */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font: inherit;
+  font-weight: 500;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 120ms ease, border-color 120ms ease;
+}
+
+.button--primary { background: var(--pine); color: var(--paper); }
+.button--primary:hover:not(:disabled) { background: var(--pine-hover); }
+
+.button--secondary {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--rule);
+}
+.button--secondary:hover:not(:disabled) { border-color: var(--ink-muted); }
+
+.button--quiet {
+  background: transparent;
+  color: var(--ink-muted);
+  padding: var(--space-2) 0;
+}
+.button--quiet:hover:not(:disabled) { color: var(--ink); }
+
+.button:disabled { opacity: 0.55; cursor: not-allowed; }
+.button--block { width: 100%; }
+
+.field { display: block; margin-bottom: var(--space-4); }
+
+.field__label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: var(--space-1);
+}
+
+.field__input {
+  width: 100%;
+  font: inherit;
+  padding: var(--space-3);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.field__input:focus { border-color: var(--pine); }
+.field__input[aria-invalid='true'] { border-color: var(--ember); }
+
+.field__hint { font-size: 0.8125rem; color: var(--ink-muted); margin-top: var(--space-1); }
+.field__error { font-size: 0.8125rem; color: var(--ember); margin-top: var(--space-1); }
+
+.card {
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--paper);
+  padding: var(--space-6);
+}
+
+.card__title { margin-bottom: var(--space-2); }
+
+.badge {
+  display: inline-block;
+  font-family: var(--font-utility);
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius);
+  border: 1px solid var(--rule);
+  color: var(--ink-muted);
+}
+
+.badge--live { border-color: var(--pine); color: var(--pine); }
+.badge--pending { border-color: var(--ember); color: var(--ember); }
+
+/* States ------------------------------------------------------------------ */
+.state {
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: var(--space-8);
+  text-align: left;
+  background: var(--paper);
+}
+
+.state--error { border-color: var(--ember); }
+
+.state__title { margin-bottom: var(--space-2); }
+.state__body { color: var(--ink-muted); max-width: 52ch; }
+
+.state__actions { margin-top: var(--space-6); display: flex; gap: var(--space-3); flex-wrap: wrap; }
+
+.skeleton-line {
+  height: 0.75rem;
+  border-radius: var(--radius);
+  background: var(--paper-sunk);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+.skeleton-line + .skeleton-line { margin-top: var(--space-3); }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

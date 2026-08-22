@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-config
+data:
+  APP_ENV: development
+  PORT: "3001"
+  LOG_LEVEL: info
+  SESSION_COOKIE_NAME: amzmvp_sid
+  SESSION_TTL_HOURS: "168"
+  # Same-origin behind the Ingress, so Lax is the right default and still lets
+  # top-level navigations carry the cookie.
+  SESSION_SAME_SITE: lax
+  SESSION_SECURE_COOKIE: "false"
+  OPENAPI_ENABLED: "true"

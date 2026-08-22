@@ -1,0 +1,5 @@
+app:
+  environment: development
+
+api:
+  internalBaseUrl: http://api:3001

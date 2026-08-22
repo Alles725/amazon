@@ -1,0 +1,25 @@
+current: MVP-001
+
+objectives:
+  - id: MVP-001
+    name: Authentication vertical slice
+    status: in_progress
+    note: >-
+      Code complete. Blocked on a first run against a real cluster: no
+      environment has yet executed migrations, the images or the smoke test.
+
+  - id: MVP-002
+    name: Catalog
+    status: planned
+
+  - id: MVP-003
+    name: Cart
+    status: planned
+
+  - id: MVP-004
+    name: Checkout and order creation
+    status: planned
+
+  - id: MVP-005
+    name: Account and order history
+    status: planned
