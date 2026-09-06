@@ -10,7 +10,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "jest --passWithNoTests",
     "test:integration": "jest --config jest.integration.config.js --runInBand",
-    "openapi": "tsx src/openapi.ts"
+    "openapi": "nest build && node dist/openapi.js"
   },
   "dependencies": {
     "@amazon-mvp/api-contract": "workspace:*",

@@ -7,4 +7,4 @@ api:
   internalBaseUrl: http://localhost:3001
   publicBasePath: /api/v1
 
-featuresFile: ../../config/features.yaml
+featuresFile: ../../../config/features.yaml
