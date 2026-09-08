@@ -10,8 +10,10 @@ import { AuthRequestError, authClient } from './auth-client';
 type Mode = 'login' | 'register';
 
 /**
- * Shared by /login and /register. No <form> submit navigation: the click handler
- * owns the request so errors stay on the page.
+ * Used by /register (mode="register"). /login has its own Amazon-style
+ * identifier screen (see features/auth/login-identifier-form.tsx) instead of
+ * this form's combined email+password step. No <form> submit navigation: the
+ * click handler owns the request so errors stay on the page.
  */
 export function AuthForm({ mode }: { mode: Mode }) {
   const router = useRouter();
