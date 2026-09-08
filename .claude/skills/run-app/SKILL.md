@@ -163,6 +163,20 @@ adaptar `BASE_URL` e sem Ingress).
 docker stop mvp-pg   # mantém os dados; docker rm mvp-pg para descartar de vez
 ```
 
+Apague os arquivos de log capturados no passo 5 (`api-dev.log`,
+`storefront-dev.log` ou nomes equivalentes) depois de encerrar os processos —
+são temporários, só servem para inspecionar a sessão que acabou de rodar, e
+não devem ficar soltos no repositório:
+
+```bash
+rm -f api-dev.log storefront-dev.log
+```
+
+Se o `rm` falhar com "device or resource busy", o processo que escrevia nele
+ainda está de pé — confirme que matou o processo certo na porta 3000/3001
+antes de tentar de novo. Isso vale mesmo quando o log foi capturado em
+`/tmp/` (fora do repositório): não deixe lixo acumulando de sessão em sessão.
+
 ## 8. Relatório
 
 Informe: o que subiu e em qual porta, resultado dos checks de saúde/auth, e
