@@ -29,28 +29,50 @@ git diff --stat
 git diff main...HEAD --stat
 ```
 
-Fatos que você vai encontrar (não os trate como erro):
-- só existe a branch `main` e um único commit, `Initial commit: Amazon MVP skeleton`;
-- não há git hooks instalados (só os `.sample`);
-- não há template de PR nem `CODEOWNERS` em `.github/` — lá só existe `workflows/ci.yaml`.
+Não trate o que encontrar como erro, mas também não assuma nada de sessões
+anteriores: não há git hooks instalados (só os `.sample`), e não há template de
+PR nem `CODEOWNERS` em `.github/` — lá só existe `workflows/ci.yaml`. Confira
+sempre ao vivo (`git log`, `git branch -a`) — não hardcode "só existe a branch
+main e um commit" nem qualquer outro estado específico: este repositório já
+teve múltiplas PRs merged e o histórico cresce a cada uma.
 
 **Consequência importante: este repositório não tem convenção estabelecida de
 nome de branch, de mensagem de commit ou de descrição de PR.** Não afirme que
 tem. Proponha, explique de onde veio a proposta, e deixe o usuário decidir.
 
-Se `git branch --show-current` retornar `main`, trate isso como bloqueio
-imediato — vá para a seção 2 antes de qualquer outro passo.
+Antes de ir para a seção 2, rode:
+
+```bash
+git fetch origin main --quiet
+git log origin/main..HEAD --oneline
+```
+
+Se a branch atual não for `main` mas o `git log origin/main..HEAD` vier vazio
+(ou só com commits de um trabalho anterior e não-relacionado), trate isso como
+o mesmo sinal de alerta que uma branch já mesclada: não é uma feature branch
+aberta para esta tarefa, é uma branch "reciclada" ou obsoleta. Vá para a
+seção 2 antes de qualquer outro passo.
 
 ## 2. Branch (regra obrigatória)
 
-**Nunca commite diretamente em `main`.** Se `git branch --show-current` disser
-`main`, **pare antes do commit** e crie/troque para uma branch nova — não é
-opcional e não depende de o diff parecer pequeno. `main` é sempre a base, nunca
-o destino de um commit desta skill.
+**Esta skill sempre cria uma branch nova a partir de `main` para o trabalho
+que ela vai commitar — nunca reaproveita a branch que já estiver com checkout
+feito**, seja ela `main`, uma branch de feature de outra tarefa, ou uma branch
+já mesclada em uma PR anterior. Não é opcional, não depende de o diff parecer
+pequeno, e não depende de a branch atual "parecer" já ser uma branch nova —
+verifique sempre com `git fetch origin main` antes de decidir.
 
 ```bash
-git checkout -b <nome-da-branch>
+git fetch origin main --quiet
+git checkout -b <nome-da-branch> origin/main
 ```
+
+Isso vale mesmo se já existirem mudanças não commitadas no working tree: o
+`git checkout -b ... origin/main` preserva modificações não commitadas ao
+trocar de base, então rode esse comando mesmo em cima de um diff em andamento
+— não é preciso descartar nada primeiro. Se o checkout falhar por conflito
+real (arquivo modificado que também diverge entre a branch atual e
+`origin/main`), pare e mostre o conflito ao usuário em vez de forçar.
 
 Criar a branch é uma ação segura (não reescreve nada, não precisa da mesma
 confirmação exigida para commit/push/PR), mas confirme o **nome** com o usuário
@@ -63,7 +85,8 @@ corresponde a uma história, proponha algo como `BE-002-prisma-migrations` e
 diga que é uma sugestão derivada dos IDs do backlog, não uma regra existente.
 
 **A PR final sempre aponta para `main` como base** (`--base main` no `gh pr
-create`, seção 8). `main` nunca é o head de uma PR criada por esta skill.
+create`, seção 8). `main` nunca é o head de uma PR criada por esta skill, e
+nunca é commitada diretamente por esta skill.
 
 ## 3. Validar antes de propor qualquer coisa
 
@@ -168,9 +191,16 @@ do repo) — não afirme que existe.
 
 ## 8. Push e abertura da PR
 
-Só depois de confirmação explícita e separada. Se `gh` não estiver instalado
-(neste ambiente não está), **não tente instalar**: entregue os comandos para o
-usuário executar.
+Só depois de confirmação explícita e separada. Confira com `gh --version` antes
+de assumir que está disponível — não hardcode se está instalado ou não, isso já
+mudou de uma sessão para outra. Se não estiver, **não tente instalar**: entregue
+os comandos para o usuário executar.
+
+`gh pr create` só funciona com uma conta que tenha permissão de escrita no
+repositório (`gh api repos/<owner>/<repo> -q '.permissions'` mostra o nível
+atual). Ações que exigem admin (renomear/trocar a branch padrão, mudar
+proteção de branch) não são cobertas por esta skill — se surgirem, pare e peça
+para o usuário resolver na conta com permissão adequada.
 
 ```bash
 git push -u origin <branch>

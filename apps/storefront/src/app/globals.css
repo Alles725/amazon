@@ -318,3 +318,170 @@ a {
   clip: rect(0 0 0 0);
   white-space: nowrap;
 }
+
+/*
+ * Login screen ---------------------------------------------------------
+ * Deliberate, scoped exception to the "nothing imitates Amazon's UI" rule
+ * above: this screen is required to visually match Amazon's real sign-in
+ * page, so it uses its own literal colors instead of the workshop tokens.
+ * Confined to the .amazon-* classes below; nothing else on the site is
+ * affected.
+ */
+.amazon-login {
+  min-height: 100vh;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 16px 0;
+}
+
+.amazon-login__logo {
+  display: inline-block;
+  margin-bottom: 24px;
+}
+
+.amazon-login__logo svg {
+  width: 110px;
+  height: auto;
+  display: block;
+}
+
+.amazon-card {
+  width: 100%;
+  max-width: 350px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px 24px 24px;
+}
+
+.amazon-card__title {
+  font-family: var(--font-body);
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 1.25;
+  color: #0f1111;
+  margin: 0 0 16px;
+}
+
+.amazon-field {
+  display: block;
+}
+
+.amazon-field__label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f1111;
+  margin-bottom: 4px;
+}
+
+.amazon-field__input {
+  width: 100%;
+  height: 39px;
+  padding: 7px 8px;
+  font: inherit;
+  font-size: 15px;
+  color: #0f1111;
+  background: #fff;
+  border: 1px solid #a6a6a6;
+  border-radius: 4px;
+}
+
+.amazon-field__input:focus {
+  outline: none;
+  border-color: #e77600;
+  box-shadow: 0 0 3px 2px rgba(228, 121, 17, 0.5);
+}
+
+.amazon-field__input[aria-invalid='true'] {
+  border-color: #c40000;
+}
+
+.amazon-field__error {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: #c40000;
+  margin: 6px 0 0;
+}
+
+.amazon-button {
+  display: block;
+  width: 100%;
+  margin-top: 14px;
+  padding: 10px 8px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  color: #0f1111;
+  background: #f7ca00;
+  border: none;
+  border-radius: 100px;
+  cursor: pointer;
+}
+
+.amazon-button:hover { background: #f2c200; }
+.amazon-button:active { background: #e0b400; }
+
+.amazon-card__legal {
+  font-size: 12px;
+  line-height: 1.5;
+  color: #0f1111;
+  margin: 14px 0 0;
+}
+
+.amazon-card__legal a {
+  color: #0066c0;
+  text-decoration: none;
+}
+
+.amazon-card__legal a:hover { color: #c45500; text-decoration: underline; }
+
+.amazon-card__help {
+  display: inline-block;
+  margin-top: 16px;
+  font-size: 13px;
+  color: #0066c0;
+  text-decoration: none;
+}
+
+.amazon-card__help:hover { color: #c45500; text-decoration: underline; }
+
+.amazon-login :focus-visible {
+  outline: 2px solid #007185;
+  outline-offset: 2px;
+}
+
+.amazon-login__footer {
+  width: 100%;
+  margin-top: auto;
+  padding: 20px 16px;
+  border-top: 1px solid #e7e7e7;
+  text-align: center;
+}
+
+.amazon-login__footer-links {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  column-gap: 16px;
+  row-gap: 4px;
+  margin-bottom: 8px;
+}
+
+.amazon-login__footer-links a {
+  font-size: 12px;
+  color: #0066c0;
+  text-decoration: none;
+}
+
+.amazon-login__footer-links a:hover { text-decoration: underline; }
+
+.amazon-login__footer-copyright {
+  font-size: 12px;
+  color: #767676;
+  margin: 0;
+}
