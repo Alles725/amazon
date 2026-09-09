@@ -1,42 +1,47 @@
+import Link from 'next/link';
 import { AmazonLogo } from '@/components/amazon-logo';
 
 const COLUMNS = [
   {
     title: 'Conheça-nos',
     links: [
-      'Sobre a Amazon',
-      'Informações corporativas',
-      'Carreiras',
-      'Comunicados à imprensa',
-      'Comunidade',
-      'Acessibilidade',
-      'Amazon Science',
+      { label: 'Sobre a Amazon', href: '/about' },
+      { label: 'Informações corporativas', href: '/corporate-information' },
+      { label: 'Carreiras', href: '/careers' },
+      { label: 'Comunicados à imprensa', href: '/press' },
+      { label: 'Comunidade', href: '/community' },
+      { label: 'Acessibilidade', href: '/accessibility' },
+      { label: 'Amazon Science', href: '/amazon-science' },
     ],
   },
   {
     title: 'Ganhe dinheiro conosco',
     links: [
-      'Venda na Amazon',
-      'Proteja e construa a sua marca',
-      'Forneça para a Amazon',
-      'Publique seus livros',
-      'Seja um associado',
-      'Anuncie seus produtos',
+      { label: 'Venda na Amazon', href: '/sell' },
+      { label: 'Proteja e construa a sua marca', href: '/brand-protection' },
+      { label: 'Forneça para a Amazon', href: '/supply' },
+      { label: 'Publique seus livros', href: '/publish' },
+      { label: 'Seja um associado', href: '/associates' },
+      { label: 'Anuncie seus produtos', href: '/advertise' },
     ],
   },
   {
     title: 'Pagamento',
-    links: ['Meios de Pagamento', 'Compre com Pontos', 'Cartão de crédito Amazon'],
+    links: [
+      { label: 'Meios de Pagamento', href: '/payment-methods' },
+      { label: 'Compre com Pontos', href: '/points' },
+      { label: 'Cartão de crédito Amazon', href: '/credit-card' },
+    ],
   },
   {
     title: 'Deixe-nos ajudar você',
     links: [
-      'Sua conta',
-      'Frete e prazo de entrega',
-      'Devoluções e reembolsos',
-      'Gerencie seu conteúdo e dispositivos',
-      'Recalls e alertas de segurança do produto',
-      'Ajuda',
+      { label: 'Sua conta', href: '/account' },
+      { label: 'Frete e prazo de entrega', href: '/shipping' },
+      { label: 'Devoluções e reembolsos', href: '/returns' },
+      { label: 'Gerencie seu conteúdo e dispositivos', href: '/content-and-devices' },
+      { label: 'Recalls e alertas de segurança do produto', href: '/recalls' },
+      { label: 'Ajuda', href: '/help' },
     ],
   },
 ];
@@ -62,8 +67,8 @@ export function AmazonFooter() {
               <h3 className="az-footer__heading">{column.title}</h3>
               <ul className="az-footer__list">
                 {column.links.map((link) => (
-                  <li key={link}>
-                    <a href="#">{link}</a>
+                  <li key={link.href}>
+                    <Link href={link.href}>{link.label}</Link>
                   </li>
                 ))}
               </ul>

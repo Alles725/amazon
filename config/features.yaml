@@ -33,6 +33,73 @@ features:
     enabled: false
     description: Account management beyond the auth shell
 
+  # Footer informational pages. Each is an independent, content-only page —
+  # not part of a vertical slice — so one team member can build any one of
+  # them without touching the others.
+  about:
+    enabled: false
+    description: About Amazon
+  corporateInformation:
+    enabled: false
+    description: Corporate information
+  careers:
+    enabled: false
+    description: Careers
+  press:
+    enabled: false
+    description: Press releases
+  community:
+    enabled: false
+    description: Community
+  accessibility:
+    enabled: false
+    description: Accessibility
+  amazonScience:
+    enabled: false
+    description: Amazon Science
+  sell:
+    enabled: false
+    description: Sell on Amazon
+  brandProtection:
+    enabled: false
+    description: Brand protection and building
+  supply:
+    enabled: false
+    description: Supply to Amazon
+  publish:
+    enabled: false
+    description: Self-publish books
+  associates:
+    enabled: false
+    description: Become an associate
+  advertise:
+    enabled: false
+    description: Advertise products
+  paymentMethods:
+    enabled: false
+    description: Accepted payment methods
+  points:
+    enabled: false
+    description: Buy with points
+  creditCard:
+    enabled: false
+    description: Amazon credit card
+  shipping:
+    enabled: false
+    description: Shipping and delivery times
+  returns:
+    enabled: false
+    description: Returns and refunds
+  contentAndDevices:
+    enabled: false
+    description: Manage content and devices
+  recalls:
+    enabled: false
+    description: Product recalls and safety alerts
+  help:
+    enabled: false
+    description: Customer help center
+
 # Route -> feature binding. `disabledBehavior` decides what a visitor sees when
 # the backing feature is off.
 routes:
@@ -74,4 +141,88 @@ routes:
 
   account:
     feature: account
+    disabledBehavior: coming-soon
+
+  about:
+    feature: about
+    disabledBehavior: coming-soon
+
+  corporateInformation:
+    feature: corporateInformation
+    disabledBehavior: coming-soon
+
+  careers:
+    feature: careers
+    disabledBehavior: coming-soon
+
+  press:
+    feature: press
+    disabledBehavior: coming-soon
+
+  community:
+    feature: community
+    disabledBehavior: coming-soon
+
+  accessibility:
+    feature: accessibility
+    disabledBehavior: coming-soon
+
+  amazonScience:
+    feature: amazonScience
+    disabledBehavior: coming-soon
+
+  sell:
+    feature: sell
+    disabledBehavior: coming-soon
+
+  brandProtection:
+    feature: brandProtection
+    disabledBehavior: coming-soon
+
+  supply:
+    feature: supply
+    disabledBehavior: coming-soon
+
+  publish:
+    feature: publish
+    disabledBehavior: coming-soon
+
+  associates:
+    feature: associates
+    disabledBehavior: coming-soon
+
+  advertise:
+    feature: advertise
+    disabledBehavior: coming-soon
+
+  paymentMethods:
+    feature: paymentMethods
+    disabledBehavior: coming-soon
+
+  points:
+    feature: points
+    disabledBehavior: coming-soon
+
+  creditCard:
+    feature: creditCard
+    disabledBehavior: coming-soon
+
+  shipping:
+    feature: shipping
+    disabledBehavior: coming-soon
+
+  returns:
+    feature: returns
+    disabledBehavior: coming-soon
+
+  contentAndDevices:
+    feature: contentAndDevices
+    disabledBehavior: coming-soon
+
+  recalls:
+    feature: recalls
+    disabledBehavior: coming-soon
+
+  help:
+    feature: help
     disabledBehavior: coming-soon
