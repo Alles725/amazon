@@ -1,4 +1,12 @@
-export function AmazonLogo({ className }: { className?: string }) {
+export function AmazonLogo({
+  className,
+  variant = 'dark',
+}: {
+  className?: string;
+  /** `dark` text (for the white login card) or `light` text (for the dark header/footer). */
+  variant?: 'dark' | 'light';
+}) {
+  const fill = variant === 'light' ? '#fff' : '#111';
   return (
     <svg viewBox="0 0 200 66" role="img" aria-label="Amazon" className={className}>
       <text
@@ -8,7 +16,7 @@ export function AmazonLogo({ className }: { className?: string }) {
         fontSize="40"
         fontWeight="700"
         letterSpacing="-1"
-        fill="#111"
+        fill={fill}
       >
         amazon
       </text>
