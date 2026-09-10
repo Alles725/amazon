@@ -31,6 +31,38 @@
         ]
       }
     },
+    "/api/v1/auth/identify": {
+      "post": {
+        "operationId": "AuthController_identify",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IdentifyDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IdentifyResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Check whether an email is already registered",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
     "/api/v1/auth/register": {
       "post": {
         "operationId": "AuthController_register",
@@ -215,6 +247,30 @@
       }
     },
     "schemas": {
+      "IdentifyDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "ada@example.com"
+          }
+        },
+        "required": [
+          "email"
+        ]
+      },
+      "IdentifyResponseDto": {
+        "type": "object",
+        "properties": {
+          "exists": {
+            "type": "boolean",
+            "example": true
+          }
+        },
+        "required": [
+          "exists"
+        ]
+      },
       "RegisterDto": {
         "type": "object",
         "properties": {

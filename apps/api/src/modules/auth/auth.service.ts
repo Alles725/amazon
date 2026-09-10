@@ -60,6 +60,17 @@ export class AuthService {
     return { session, profile: toProfile(user) };
   }
 
+  /**
+   * Backs the "sign in or create an account" split screen: the client needs to
+   * know, before asking for a password, whether to show the password step or
+   * the "new to Amazon" step. Reveals existence only — nothing else about the
+   * account — reusing the same existsByEmail check `register` already relies
+   * on for its friendly duplicate-email error.
+   */
+  async identify(email: string): Promise<{ exists: boolean }> {
+    return { exists: await this.users.existsByEmail(email) };
+  }
+
   async login(input: { email: string; password: string }, meta: RequestMeta = {}): Promise<AuthResult> {
     const user = await this.users.findByEmailWithSecret(input.email);
 

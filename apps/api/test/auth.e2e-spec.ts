@@ -79,6 +79,27 @@ describe('authentication (integration)', () => {
     expect(response.body.error.details.length).toBeGreaterThan(0);
   });
 
+  it('identifies whether an email is already registered', async () => {
+    const email = unique();
+
+    const beforeRegistration = await request(app.getHttpServer())
+      .post(AUTH_ROUTES.identify)
+      .send({ email })
+      .expect(200);
+    expect(beforeRegistration.body).toEqual({ exists: false });
+
+    await request(app.getHttpServer())
+      .post(AUTH_ROUTES.register)
+      .send({ email, password, displayName: 'Ada Lovelace' })
+      .expect(201);
+
+    const afterRegistration = await request(app.getHttpServer())
+      .post(AUTH_ROUTES.identify)
+      .send({ email })
+      .expect(200);
+    expect(afterRegistration.body).toEqual({ exists: true });
+  });
+
   it('logs in, persists authentication across requests and logs out', async () => {
     const email = unique();
     await request(app.getHttpServer())

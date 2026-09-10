@@ -41,6 +41,19 @@ export interface LoginRequest {
   password: string;
 }
 
+export interface IdentifyRequest {
+  email: string;
+}
+
+/**
+ * Deliberately reveals only whether the email is registered — nothing else
+ * about the account. This is the minimum surface needed for the "sign in or
+ * create an account" split screen; see AuthService.identify.
+ */
+export interface IdentifyResponse {
+  exists: boolean;
+}
+
 export interface UserProfile {
   id: string;
   email: string;
@@ -79,6 +92,7 @@ export const AUTH_ROUTES = {
   login: `${API_PREFIX}/auth/login`,
   logout: `${API_PREFIX}/auth/logout`,
   me: `${API_PREFIX}/auth/me`,
+  identify: `${API_PREFIX}/auth/identify`,
   protectedExample: `${API_PREFIX}/protected/example`,
 } as const;
 

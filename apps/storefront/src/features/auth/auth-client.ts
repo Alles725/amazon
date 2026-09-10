@@ -1,6 +1,14 @@
 'use client';
 
-import { ApiErrorBody, LoginRequest, RegisterRequest, SessionResponse, isApiErrorBody } from '@amazon-mvp/api-contract';
+import {
+  ApiErrorBody,
+  IdentifyRequest,
+  IdentifyResponse,
+  LoginRequest,
+  RegisterRequest,
+  SessionResponse,
+  isApiErrorBody,
+} from '@amazon-mvp/api-contract';
 
 /**
  * Browser-side calls are same-origin: the Ingress routes /api to the API, so the
@@ -50,6 +58,7 @@ async function post<T>(path: string, body?: unknown): Promise<T> {
 }
 
 export const authClient = {
+  identify: (input: IdentifyRequest) => post<IdentifyResponse>('/auth/identify', input),
   register: (input: RegisterRequest) => post<SessionResponse>('/auth/register', input),
   login: (input: LoginRequest) => post<SessionResponse>('/auth/login', input),
   logout: () => post<{ success: true }>('/auth/logout'),

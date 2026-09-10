@@ -421,6 +421,8 @@ a {
   border: none;
   border-radius: 100px;
   cursor: pointer;
+  text-align: center;
+  text-decoration: none;
 }
 
 .amazon-button:hover { background: #f2c200; }
@@ -485,6 +487,137 @@ a {
   color: #767676;
   margin: 0;
 }
+
+.amazon-alert {
+  width: 100%;
+  max-width: 350px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 12px 14px;
+  background: #fff2f2;
+  border: 1px solid #c40000;
+  border-radius: 8px;
+  color: #0f1111;
+}
+
+.amazon-alert__icon {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  color: #c40000;
+}
+
+.amazon-alert__title {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.amazon-alert__body {
+  font-size: 13px;
+  margin: 2px 0 0;
+}
+
+.amazon-identity {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 14px;
+  color: #0f1111;
+  margin-bottom: 16px;
+  word-break: break-all;
+}
+
+.amazon-identity__change {
+  flex: none;
+  font: inherit;
+  font-size: 13px;
+  color: #0066c0;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.amazon-identity__change:hover { color: #c45500; text-decoration: underline; }
+
+.amazon-field__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.amazon-field__row .amazon-field__label { margin-bottom: 0; }
+
+.amazon-field__row a {
+  font-size: 13px;
+  color: #0066c0;
+  text-decoration: none;
+}
+
+.amazon-field__row a:hover { color: #c45500; text-decoration: underline; }
+
+.amazon-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 16px 0;
+  font-size: 12px;
+  color: #767676;
+}
+
+.amazon-divider::before,
+.amazon-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #e7e7e7;
+}
+
+.amazon-button--secondary {
+  background: #fff;
+  border: 1px solid #a6a6a6;
+}
+
+.amazon-button--secondary:hover { background: #f7f8f8; }
+.amazon-button--secondary:active { background: #eee; }
+
+.amazon-hr {
+  height: 1px;
+  margin: 16px 0 0;
+  background: #e7e7e7;
+  border: none;
+}
+
+.amazon-card__prose {
+  font-size: 14px;
+  color: #0f1111;
+  margin: 0 0 16px;
+}
+
+.amazon-note {
+  margin-top: 16px;
+}
+
+.amazon-note__title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f1111;
+  margin: 0 0 4px;
+}
+
+.amazon-note a {
+  font-size: 13px;
+  color: #0066c0;
+  text-decoration: none;
+}
+
+.amazon-note a:hover { color: #c45500; text-decoration: underline; }
 
 /*
  * Home page ---------------------------------------------------------------

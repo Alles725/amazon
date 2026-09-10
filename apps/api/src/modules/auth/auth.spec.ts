@@ -159,6 +159,14 @@ describe('AuthService', () => {
     expect((wrongPassword as ApiError).getStatus()).toBe((unknownEmail as ApiError).getStatus());
   });
 
+  it('identify reports existence without leaking anything else about the account', async () => {
+    const { service } = build();
+    await service.register(credentials);
+
+    await expect(service.identify(credentials.email)).resolves.toEqual({ exists: true });
+    await expect(service.identify('nobody@example.com')).resolves.toEqual({ exists: false });
+  });
+
   it('revokes the session on logout and tolerates a missing cookie', async () => {
     const { service, sessions } = build();
     await service.logout('token-for-user-1');

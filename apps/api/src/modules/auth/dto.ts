@@ -35,6 +35,18 @@ export class LoginDto {
   password: string;
 }
 
+export class IdentifyDto {
+  @ApiProperty({ example: 'ada@example.com' })
+  @IsEmail({}, { message: 'email must be a valid email address' })
+  @MaxLength(254)
+  @Transform(({ value }) => (typeof value === 'string' ? value.trim().toLowerCase() : value))
+  email: string;
+}
+
+export class IdentifyResponseDto {
+  @ApiProperty({ example: true }) exists: boolean;
+}
+
 export class UserProfileDto {
   @ApiProperty() id: string;
   @ApiProperty() email: string;
