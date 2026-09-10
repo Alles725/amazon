@@ -1,6 +1,6 @@
 ---
 name: create-pr
-description: Prepara uma Pull Request neste repositório — confere branch e diff, roda as validações, checa os artefatos obrigatórios (migration, openapi, docs/ai), e propõe mensagem de commit, título e descrição. Executa commit, push e abertura da PR só depois de uma única confirmação explícita ("abrir PR?"). Use quando o usuário pedir "abrir PR", "preparar PR", "criar pull request".
+description: Prepara uma Pull Request neste repositório — confere branch e diff, roda as validações, checa os artefatos obrigatórios (migration, openapi, docs/ai), e propõe mensagem de commit, título e descrição. Executa commit, push e abertura da PR só depois de uma única confirmação explícita ("abrir PR?"), já com assignee (quem abriu) e reviewers (demais collaborators) preenchidos. Use quando o usuário pedir "abrir PR", "preparar PR", "criar pull request".
 allowed-tools: Read, Grep, Glob, Bash, PowerShell
 ---
 
@@ -196,28 +196,33 @@ do repo) — não afirme que existe.
 
 ## 8. Commit, push e abertura da PR
 
-Antes de montar o comando final, descubra quem marcar como reviewer:
+Antes de montar o comando final, descubra o login autenticado, os reviewers e
+o assignee:
 
 ```bash
 gh api user -q '.login'
 gh api repos/<owner>/<repo>/collaborators -q '.[].login'
 ```
 
-Reviewers = todos os collaborators **menos** o login autenticado (quem está
-abrindo a PR). Não peça confirmação para essa lista — é derivada direto da API,
-não uma escolha subjetiva. Se a chamada falhar (sem permissão, `gh` não
-autenticado) ou não sobrar ninguém, siga sem `--reviewer` e avise no relatório
-final que ninguém foi marcado, em vez de travar o fluxo.
+- **Assignee** = o próprio login autenticado (quem está abrindo a PR).
+- **Reviewers** = todos os collaborators **menos** o login autenticado.
 
-Com a mensagem de commit (seção 5), o título/descrição da PR (seção 6) e a
-lista de reviewers já prontos, faça **uma única pergunta**: "abrir PR?" (ou
-equivalente claro). Só depois de uma resposta afirmativa clara rode os
+Não peça confirmação para nenhum dos dois — ambos são derivados direto da API,
+não uma escolha subjetiva. Se a chamada falhar (sem permissão, `gh` não
+autenticado), siga sem `--assignee`/`--reviewer` e avise no relatório final o
+que ficou de fora, em vez de travar o fluxo. Se não sobrar ninguém para
+reviewer, só omita `--reviewer` (o `--assignee` continua saindo normalmente).
+
+Com a mensagem de commit (seção 5), o título/descrição da PR (seção 6), o
+assignee e a lista de reviewers já prontos, faça **uma única pergunta**: "abrir
+PR?" (ou equivalente claro). Só depois de uma resposta afirmativa clara rode os
 comandos em sequência — não pergunte de novo entre um e outro:
 
 ```bash
 git commit -m "<mensagem da seção 5>"
 git push -u origin <branch>
 gh pr create --base main --head <branch> --title "<título>" --body-file <arquivo> \
+  --assignee <login-autenticado> \
   --reviewer <login1>,<login2>
 ```
 
