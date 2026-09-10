@@ -1,6 +1,7 @@
 import 'server-only';
 import Link from 'next/link';
 import { AmazonLogo } from '@/components/amazon-logo';
+import { AccountMenu } from '@/components/amazon/account-menu';
 import { getServerSession } from '@/features/auth/server-session';
 
 const NAV_LINKS = [
@@ -60,12 +61,7 @@ export async function AmazonHeader() {
           </button>
         </form>
 
-        <Link href={session ? '/account' : '/login'} className="az-topbar__account">
-          <span className="az-topbar__account-line1">
-            Olá, {session ? firstName : 'faça login'}
-          </span>
-          <span className="az-topbar__account-line2">Contas e Listas</span>
-        </Link>
+        <AccountMenu session={session} />
 
         <Link href="/orders" className="az-topbar__orders">
           <span className="az-topbar__account-line1">Devoluções</span>
