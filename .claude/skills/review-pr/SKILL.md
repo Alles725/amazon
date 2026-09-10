@@ -1,14 +1,15 @@
 ---
 name: review-pr
-description: Revisão técnica somente-leitura das alterações atuais antes de abrir uma Pull Request — bugs, segurança, arquitetura modular, testes, performance e as regras não-negociáveis deste repositório. Use quando o usuário pedir "revisar", "review", "olha meu diff", ou antes de criar uma PR.
-allowed-tools: Read, Grep, Glob, Bash(git *)
+description: Revisão técnica das alterações atuais antes de abrir uma Pull Request — bugs, segurança, arquitetura modular, testes, performance e as regras não-negociáveis deste repositório. Por padrão só-leitura; com --fix aplica as correções dos achados. Use quando o usuário pedir "revisar", "review", "olha meu diff", "corrige os achados da review", ou antes de criar uma PR.
+allowed-tools: Read, Edit, Grep, Glob, Bash(git *)
 ---
 
 # review-pr — revisão técnica do diff
 
-Revisão **somente leitura**. Não edite arquivos, não rode testes, não commite.
-Se algo precisar ser corrigido, aponte o local e o que fazer — a correção é uma
-ação separada, pedida pelo usuário.
+Por padrão, revisão **somente leitura**. Não edite arquivos, não rode testes,
+não commite. Se algo precisar ser corrigido, aponte o local e o que fazer — a
+correção só acontece se a skill for chamada com `--fix` ou o usuário pedir
+correção explicitamente na mesma mensagem (ver seção 5).
 
 ## 1. Delimitar o escopo
 
@@ -127,3 +128,39 @@ bom, diga que está bom.
 
 Termine com: o que ainda falta rodar (aponte a skill `check`) e se o diff está
 pronto para PR.
+
+## 5. Modo `--fix`
+
+Só entra neste modo se a skill for chamada com `--fix` ou o usuário pedir
+correção explicitamente na mesma mensagem. Sem isso, a skill termina na
+seção 4 — puramente leitura.
+
+Com `--fix`: primeiro gere a lista completa de achados (seções 1–4), depois
+corrija. Nunca edite direto ao encontrar um problema durante a varredura —
+o relatório completo evita corrigir um achado de um jeito que contradiz outro
+achado mais grave descoberto depois.
+
+Regras da correção:
+
+- **Corrija na ordem de severidade**: Blocker → Importante → Sugestão.
+- **Só aplique correção que o próprio achado já deixou clara e seja segura**
+  (bug óbvio, violação de regra não-negociável com correção mecânica, segredo
+  exposto, falta de validação simples). Não force uma correção arriscada,
+  ampla, ou que exija decisão de produto/arquitetura que não é sua — para
+  esses casos, deixe o achado no relatório como está e explique por que não
+  foi corrigido automaticamente.
+- **Achados de "Sugestão"** (legibilidade/simplificação) só corrija se forem
+  triviais; achados que exigem redesenho maior ficam de fora do `--fix`.
+- **Teste faltando** (eixo "Testes"): pode escrever o teste que falta, mas não
+  invente asserção fraca só para existir um arquivo de teste — se não souber
+  o comportamento esperado com segurança, aponte em vez de inventar.
+- **Nunca corrija abrindo um novo problema não-negociável** — ex.: não resolva
+  um achado de arquitetura fazendo o storefront importar de `apps/api`, nem
+  "resolva" performance criando N+1 em outro lugar.
+- Esta skill **não roda a suíte de testes nem lint/typecheck** para validar as
+  correções — isso é escopo da skill `check`. Depois de corrigir, diga
+  explicitamente que falta rodar `check` (ou `check --fix`) antes de confiar
+  no resultado.
+- Ao final, reemita o relatório da seção 4, agora marcando cada achado como
+  **corrigido** (com `arquivo:linha` do que mudou), **não corrigido** (com o
+  motivo) ou **inalterado** (achados que já eram "está bom").

@@ -1,6 +1,6 @@
 ---
 name: run-app
-description: Sobe a aplicação completa localmente fora de Kubernetes (PostgreSQL via Docker + API + storefront), do jeito que este projeto é realmente executado no dia a dia. Verifica pré-requisitos, aplica migrations, builda os packages compartilhados e valida os endpoints. Use quando o usuário pedir "rodar a aplicação", "subir o projeto", "iniciar o dev", "testar localmente".
+description: Sobe a aplicação completa localmente fora de Kubernetes (PostgreSQL via Docker + API + storefront), do jeito que este projeto é realmente executado no dia a dia. Abre o Docker Desktop se estiver fechado, sobe o container do Postgres, instala, aplica migrations e inicia os processos — só o necessário para subir tudo; validação profunda fica para a skill check. Use quando o usuário pedir "rodar a aplicação", "subir o projeto", "iniciar o dev", "testar localmente".
 allowed-tools: Read, Grep, Glob, Bash, PowerShell
 ---
 
@@ -27,10 +27,28 @@ pnpm --version
 docker --version
 ```
 
-Se alguma faltar, pare e informe — não simule sucesso. Em Windows, se o Docker
-Desktop estiver instalado mas o comando `docker` não responder, ele
-provavelmente só não foi aberto ainda (abrir manualmente uma vez, aceitar os
-termos, esperar o ícone da baleia indicar "running").
+Se `node`/`pnpm` faltarem, pare e informe — não simule sucesso, essas dependem
+de instalação manual do usuário.
+
+Para o Docker, teste se o daemon está de pé (não só se o binário existe):
+
+```bash
+docker info
+```
+
+Se falhar (`docker --version` funciona mas `docker info` não responde — sinal
+de que o Docker Desktop está instalado mas fechado), **abra você mesmo**:
+
+```powershell
+Start-Process "C:\Program Files\Docker\Docker\Docker Desktop.exe"
+```
+
+Depois faça polling de `docker info` a cada poucos segundos até responder
+(esperar o daemon subir leva de alguns segundos a ~1–2 minutos, dependendo da
+máquina) — não use um `sleep` fixo longo, cheque em loop. Se depois de uns 3
+minutos o daemon ainda não responder, pare e informe o usuário (pode haver
+diálogo de termos/licença esperando clique manual na primeira execução, ou o
+Docker não estar instalado de fato). Só então prossiga para a seção 1.
 
 ## 1. `.env`
 
@@ -77,26 +95,16 @@ E ajuste a porta em `DATABASE_URL` no `.env` (`localhost:5433` em vez de
 ```bash
 pnpm install
 pnpm --filter @amazon-mvp/database generate
-```
-
-A migration inicial (`database/prisma/migrations/20260101000000_init`) foi
-escrita à mão — confira que ela bate com o schema antes de aplicar (aponte
-`--shadow-database-url` para um banco **descartável**, nunca para o
-`amazon_mvp` de uso, ou o diff aplica e deixa tabelas sem
-`_prisma_migrations`, quebrando o próximo `migrate:deploy` com `P3005`):
-
-```bash
-pnpm --filter @amazon-mvp/database drift:check
-```
-
-Se acusar diferença, pare e avise — não prossiga empilhando migration nova
-sobre uma base divergente (skill `db-migration`).
-
-```bash
 pnpm --filter @amazon-mvp/api-contract build
 pnpm --filter @amazon-mvp/config-schema build
 pnpm --filter @amazon-mvp/database build
 ```
+
+Checagem de drift entre migrations e `schema.prisma` **não é passo desta
+skill** — quem valida isso é a skill `check` (seção 2) ou `db-migration`. Só
+rode `drift:check` aqui se o `migrate:deploy` do passo 4 falhar de um jeito
+que sugira divergência; não rode por padrão, é passo de validação, não de
+subida.
 
 ## 4. Migrations e seed
 
@@ -130,7 +138,10 @@ exportando isto antes de rodar qualquer comando node/pnpm pelo Git Bash:
 export MSYS_NO_PATHCONV=1
 ```
 
-## 6. Validar que subiu de verdade
+## 6. Confirmar que subiu
+
+O necessário para saber que os três serviços estão de pé — não é uma suíte de
+teste:
 
 ```bash
 curl -s http://localhost:3001/health
@@ -138,23 +149,12 @@ curl -s http://localhost:3001/ready          # deve reportar database: ok
 curl -s -o /dev/null -w "%{http_code}\n" http://localhost:3000/
 ```
 
-Fluxo de autenticação ponta a ponta (cobre registro, sessão, logout):
-
-```bash
-JAR=/tmp/cookies.txt
-curl -s -c $JAR -X POST http://localhost:3001/api/v1/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{"email":"teste@example.com","password":"correct horse battery staple","displayName":"Teste"}'
-curl -s -b $JAR http://localhost:3001/api/v1/auth/me
-curl -s -b $JAR -X POST http://localhost:3001/api/v1/auth/logout
-```
-
-Endpoints e comportamento esperado documentados no
-[README.md](../../../README.md) ("Endpoints") e exercitados por
-[scripts/smoke-test.mjs](../../../scripts/smoke-test.mjs) (esse script foi
-escrito para rodar contra um deploy em cluster via Ingress — localmente sem
-Kubernetes, valide os endpoints direto como acima, não rode o script sem
-adaptar `BASE_URL` e sem Ingress).
+Isso já confirma API, banco e storefront respondendo. Fluxo de autenticação
+ponta a ponta (registro/sessão/logout) **não é passo desta skill** — só rode
+se o usuário pedir explicitamente para testar auth, usando os endpoints
+documentados no [README.md](../../../README.md) ("Endpoints"). O
+[scripts/smoke-test.mjs](../../../scripts/smoke-test.mjs) foi escrito para um
+deploy em cluster via Ingress — não se aplica aqui sem adaptar `BASE_URL`.
 
 ## 7. Encerrar
 
