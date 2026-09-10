@@ -12,10 +12,11 @@ export const metadata: Metadata = {
 // The session and feature state are read per request, never cached at build time.
 export const dynamic = 'force-dynamic';
 
-// The login page and the home page are bare, chrome-free screens (each
-// matches Amazon's own UI): no build-state stamp strip, no generic site
-// navigation. Both bring their own Amazon-style header/footer instead.
-const BARE_ROUTES = ['/login', '/'];
+// The login page, the home page, and the account hub are bare, chrome-free
+// screens (each matches Amazon's own UI): no build-state stamp strip, no
+// generic site navigation. Each brings its own Amazon-style header/footer
+// instead.
+const BARE_ROUTES = ['/login', '/', '/account'];
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   const pathname = headers().get('x-pathname') ?? '';

@@ -731,6 +731,109 @@ a {
   white-space: nowrap;
 }
 
+.az-topbar__account-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.az-account-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 40;
+  width: 600px;
+  max-width: calc(100vw - 20px);
+  background: #fff;
+  color: #0f1111;
+  border: 1px solid #d5d9d9;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  padding: 16px 20px 12px;
+}
+
+.az-account-dropdown__profile {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #e7e7e7;
+  font-size: 13px;
+}
+
+.az-account-dropdown__manage {
+  color: #007185;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.az-account-dropdown__manage:hover {
+  color: #c45500;
+  text-decoration: underline;
+}
+
+.az-account-dropdown__columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
+  gap: 24px;
+}
+
+.az-account-dropdown__heading {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f1111;
+  margin: 0 0 6px;
+}
+
+.az-account-dropdown__list {
+  list-style: none;
+  margin: 0 0 4px;
+  padding: 0;
+}
+
+.az-account-dropdown__list li {
+  margin-bottom: 1px;
+}
+
+.az-account-dropdown__list a,
+.az-account-dropdown__list button {
+  display: inline-block;
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.2;
+  color: #0f1111;
+  background: none;
+  border: none;
+  padding: 3px 0;
+  cursor: pointer;
+  text-align: left;
+}
+
+.az-account-dropdown__list a:hover,
+.az-account-dropdown__list button:hover:not(:disabled) {
+  color: #c45500;
+  text-decoration: underline;
+}
+
+.az-account-dropdown__list button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.az-account-dropdown__divider {
+  height: 1px;
+  border: none;
+  background: #e7e7e7;
+  margin: 8px 0 12px;
+}
+
+@media (max-width: 860px) {
+  .az-account-dropdown {
+    display: none;
+  }
+}
+
 .az-search {
   flex: 1 1 auto;
   display: flex;
@@ -1338,9 +1441,88 @@ a {
   text-decoration: underline;
 }
 
+/* Account page -------------------------------------------------------------
+ * Third deliberate, scoped exception to the "nothing imitates Amazon's UI"
+ * rule at the top of this file: /account is required to visually match
+ * amazon.com.br's own account hub, so it reuses the .az-* header/footer and
+ * adds its own literal-color card grid below. Confined to .amazon-account-*
+ * and .az-account-* classes; nothing else on the site is affected.
+ */
+.amazon-account-page {
+  background: #fff;
+  color: #0f1111;
+  font-family: Arial, Helvetica, sans-serif;
+  min-width: 0;
+  overflow-x: clip;
+}
+
+:where(.amazon-account-page) a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.az-account-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 28px 20px 64px;
+}
+
+.az-account-main__title {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #0f1111;
+  margin: 0 0 20px;
+}
+
+.az-account-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.az-account-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background: #fff;
+  border: 1px solid #d5d9d9;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.az-account-card:hover {
+  border-color: #adb1b8;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.az-account-card__icon {
+  flex-shrink: 0;
+  display: flex;
+}
+
+.az-account-card__title {
+  display: block;
+  font-size: 17px;
+  font-weight: 700;
+  color: #0f1111;
+  margin-bottom: 6px;
+}
+
+.az-account-card__desc {
+  display: block;
+  font-size: 13px;
+  line-height: 1.45;
+  color: #565959;
+}
+
 /* Responsive -------------------------------------------------------------- */
 @media (max-width: 900px) {
   .az-footer__columns {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .az-account-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
@@ -1387,5 +1569,13 @@ a {
 
   .az-card {
     flex-basis: 140px;
+  }
+
+  .az-account-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .az-account-main__title {
+    font-size: 22px;
   }
 }

@@ -100,6 +100,37 @@ features:
     enabled: false
     description: Customer help center
 
+  # Account dropdown / account hub destinations that do not have a dedicated
+  # vertical slice yet. Each ships disabled behind its own flag, same as the
+  # footer pages above.
+  security:
+    enabled: false
+    description: Account access and security settings
+  addresses:
+    enabled: false
+    description: Saved addresses
+  giftCards:
+    enabled: false
+    description: Gift cards
+  refunds:
+    enabled: false
+    description: Boleto/Pix refunds
+  messages:
+    enabled: false
+    description: Buyer/seller messages
+  lists:
+    enabled: false
+    description: Shopping and wish lists
+  prime:
+    enabled: false
+    description: Prime membership
+  subscriptions:
+    enabled: false
+    description: Digital subscriptions
+  subscribeAndSave:
+    enabled: false
+    description: Subscribe & Save recurring deliveries
+
 # Route -> feature binding. `disabledBehavior` decides what a visitor sees when
 # the backing feature is off.
 routes:
@@ -225,4 +256,40 @@ routes:
 
   help:
     feature: help
+    disabledBehavior: coming-soon
+
+  security:
+    feature: security
+    disabledBehavior: coming-soon
+
+  addresses:
+    feature: addresses
+    disabledBehavior: coming-soon
+
+  giftCards:
+    feature: giftCards
+    disabledBehavior: coming-soon
+
+  refunds:
+    feature: refunds
+    disabledBehavior: coming-soon
+
+  messages:
+    feature: messages
+    disabledBehavior: coming-soon
+
+  lists:
+    feature: lists
+    disabledBehavior: coming-soon
+
+  prime:
+    feature: prime
+    disabledBehavior: coming-soon
+
+  subscriptions:
+    feature: subscriptions
+    disabledBehavior: coming-soon
+
+  subscribeAndSave:
+    feature: subscribeAndSave
     disabledBehavior: coming-soon
