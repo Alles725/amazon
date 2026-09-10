@@ -15,20 +15,7 @@ export default async function LoginPage() {
           <AmazonLogo />
         </Link>
 
-        <div className="amazon-card">
-          <h1 className="amazon-card__title">Faça login ou crie uma conta</h1>
-
-          <LoginIdentifierForm />
-
-          <p className="amazon-card__legal">
-            Ao continuar, você concorda com as <a href="#">Condições de Uso</a> e a{' '}
-            <a href="#">Notificação de privacidade da Amazon</a>.
-          </p>
-
-          <a className="amazon-card__help" href="#">
-            Precisa de ajuda?
-          </a>
-        </div>
+        <LoginIdentifierForm />
 
         <footer className="amazon-login__footer">
           <nav className="amazon-login__footer-links" aria-label="Amazon">

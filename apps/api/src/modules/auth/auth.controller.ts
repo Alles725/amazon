@@ -6,6 +6,8 @@ import { API_CONFIG } from '../../config/api-config';
 import { AuthService } from './auth.service';
 import {
   ApiErrorResponseDto,
+  IdentifyDto,
+  IdentifyResponseDto,
   LoginDto,
   LogoutResponseDto,
   RegisterDto,
@@ -21,6 +23,15 @@ export class AuthController {
     private readonly auth: AuthService,
     @Inject(API_CONFIG) private readonly config: ApiConfig,
   ) {}
+
+  @Public()
+  @Post('identify')
+  @HttpCode(200)
+  @ApiOperation({ summary: 'Check whether an email is already registered' })
+  @ApiResponse({ status: 200, type: IdentifyResponseDto })
+  async identify(@Body() dto: IdentifyDto): Promise<IdentifyResponseDto> {
+    return this.auth.identify(dto.email);
+  }
 
   @Public()
   @Post('register')
