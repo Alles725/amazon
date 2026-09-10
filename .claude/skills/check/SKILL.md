@@ -1,7 +1,7 @@
 ---
 name: check
-description: Valida se o repositório está pronto para commit/PR executando a mesma sequência do CI (install, prisma generate, build de packages compartilhados, lint, typecheck, testes, build, manifests). Use antes de commitar, antes de abrir PR, ou quando o usuário pedir "verificar", "validar", "rodar os checks", "está tudo passando?".
-allowed-tools: Read, Grep, Glob, Bash, PowerShell
+description: Valida se o repositório está pronto para commit/PR executando a mesma sequência do CI (install, prisma generate, build de packages compartilhados, lint, typecheck, testes, build, manifests). Com a flag --fix, corrige o que der para corrigir e reexecuta até estabilizar. Use antes de commitar, antes de abrir PR, ou quando o usuário pedir "verificar", "validar", "rodar os checks", "está tudo passando?", "corrigir os checks".
+allowed-tools: Read, Edit, Grep, Glob, Bash, PowerShell
 ---
 
 # check — validação pré-commit/PR
@@ -9,8 +9,9 @@ allowed-tools: Read, Grep, Glob, Bash, PowerShell
 Reproduz localmente o job `verify` de [.github/workflows/ci.yaml](../../../.github/workflows/ci.yaml).
 Objetivo: descobrir o que quebraria no CI **antes** de abrir a PR.
 
-Esta skill **não corrige código**. Ela executa, coleta e reporta. Só corrija se o
-usuário pedir explicitamente.
+Por padrão esta skill **não corrige código**: executa, coleta e reporta. Só
+corrija quando invocada com a flag `--fix` (ou o usuário pedir explicitamente
+"corrija" / "conserte" na mesma mensagem) — ver seção 7.
 
 ## 0. Preflight — verificar o toolchain
 
@@ -145,3 +146,41 @@ Regras do relatório:
   já documentadas em [docs/ai/current-state.md](../../../docs/ai/current-state.md)
   (migration nunca aplicada, `docs/openapi.json` inexistente, nada deployado).
 - Conclua com uma frase direta: pronto para PR, ou o que falta.
+
+## 7. Modo `--fix`
+
+Só entra neste modo se a skill for chamada com `--fix` ou o usuário pedir
+correção explicitamente na mesma mensagem. Sem isso, a skill termina na
+seção 6.
+
+Com `--fix`: rode a seção 1 normalmente, gere o relatório da seção 6 para
+saber exatamente o que falhou e então corrija — não edite código antes de
+ter um relatório real do que está quebrado.
+
+Regras da correção:
+
+- **Corrija na ordem da tabela da seção 1** (lint → typecheck → testes →
+  build). Corrigir uma etapa antes pode fazer uma etapa depois passar sozinha;
+  nunca pule pra frente por achar que já sabe a causa.
+- **Lint** — rode com autofix primeiro (`pnpm --filter <pkg> lint --fix` /
+  `next lint --fix`) antes de editar manualmente. Só edite à mão o que o
+  autofix não resolver.
+- **Typecheck e testes** — não há autofix de ferramenta; edite o código
+  você mesmo, corrigindo a causa real do erro (não o sintoma). Nunca
+  desabilite regra de lint, comente teste, ou solte tipo (`any`,
+  `@ts-ignore`) só para o check passar — se a correção correta for grande
+  ou arriscada, pare e reporte em vez de aplicar um atalho.
+- **Após cada correção, reexecute a etapa** (não a sequência inteira) para
+  confirmar antes de seguir para a próxima.
+- **Escopo:** só corrija o que a seção 1 cobre (lint, typecheck, testes,
+  build). Não mexa em migration, `docs/openapi.json`, manifests ou Docker
+  neste modo — essas têm skills próprias (`db-migration`, `openapi-sync`)
+  ou exigem confirmação separada (seção 2).
+- **Se não conseguir corrigir** uma falha com segurança (causa não óbvia,
+  exigiria decisão de produto/arquitetura, ou toca área fora do escopo
+  acima), pare nessa etapa, reporte o que tentou e o que falta, e não force
+  uma correção só para "ficar verde".
+
+Ao final, rode a sequência completa da seção 1 mais uma vez e emita um novo
+relatório (seção 6), agora com uma nota do que foi alterado (arquivo:linha)
+para cada fix aplicado, mostrando o estado **depois** das correções.
