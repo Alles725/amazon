@@ -1,71 +1,64 @@
 # Current state
 
-Last updated: 2026-08-14
+Last updated: 2026-09-24
 
-This file describes only what is actually true right now. "Implemented" means the
-code exists AND has been executed successfully. Anything written but never run is
-listed as partial, with the reason.
+This records observed local results, not an assertion that CI or deployment passed.
 
 ## Verified working
 
-Executed and passing in the authoring environment:
+- Frozen pnpm install, Prisma client generation and shared package builds.
+- Workspace lint, typecheck, unit tests and production builds passed after
+  integrating homepage work with origin/main's account dropdown/hub.
+- Unit tests: config-schema 13, API 12, storefront 11 (36 total).
+- Storefront production build completes with the new account destinations.
+- OpenAPI regenerated successfully; docs/openapi.json has no diff.
+- All three Kustomize overlays render: local, development and production.
+- Local PostgreSQL container, API on port 3001 and storefront on port 3000.
+  API /health and /ready return success, including the database check.
+- Local migrations and seed ran during homepage setup. This does not establish
+  migration/schema drift parity or validate the API integration suite.
+- Chromium checks after merging: homepage at 320–1920 px, local photos,
+  horizontal scrolling, keyboard arrows, disabled end controls, search query
+  submission, product links, footer links and back-to-top.
+- All 20 mock product URLs and 22 footer routes respond. Login/register,
+  cart/orders and account navigation respond; unauthenticated /account redirects
+  to /login, and /api/v1/auth/me returns the expected 401.
+- No browser JavaScript errors or new console errors in those checks.
+  Header/upper section geometry and footer links match the earlier visual
+  baseline; React comment markers were excluded from HTML comparisons.
 
-- `pnpm install` across the workspace.
-- `packages/config-schema` — 13 unit tests pass (config precedence, env
-  overrides, fail-fast validation, feature registry, route state resolution).
-- `apps/api` unit tests — 11 pass, including real Argon2id hashing and
-  verification, salting, session token generation and hashing, generic-error
-  parity between wrong-password and unknown-email logins.
-- `apps/storefront` — 11 tests pass (shipped `features.yaml` is valid, routes
-  resolve to their documented behaviour, and no component reads feature config
-  outside `src/config`).
-- `apps/storefront` production build — succeeds, all 11 routes present.
-- `packages/api-contract` and `packages/config-schema` builds.
-- `kustomize build` for all three overlays — local renders 15 objects,
-  development and production 13 each. Generated Secret names resolve correctly
-  in every consumer reference.
+## Scope and limitations
 
-## Partial — written but never executed
+- Homepage uses the existing local catalog-mock, not an API product feed.
+  The 20 original IDs, names, prices, ratings and review counts are preserved.
+  Photos and curated collections enrich those records; four products still use
+  the existing illustration fallback. No backend/contract/schema change.
+- Product listing/details, cart, checkout and orders remain feature-disabled.
+  A responding route is not evidence of a working purchase flow.
+- Authentication and the account hub/dropdown from main are preserved. A full
+  signed-in browser flow was not repeated during PR preparation.
+- The header/footer are shared with /account. Account-specific code and styles
+  are retained; the shared visual changes also appear there.
+- New carousel interactions were exercised through temporary Playwright scripts,
+  but have no committed runner tests yet.
+- Existing demo prices use decimal numbers. Converting this mock to integer
+  minor units is separate work required before real catalog integration.
 
-Blocked in the authoring environment, which has no Docker, kubectl, kind or
-PostgreSQL, and where `binaries.prisma.sh` is unreachable
-(`x-deny-reason: host_not_allowed`). None of the following is known to work:
+## Not verified in this run
 
-| Item | Blocked by |
-| --- | --- |
-| `prisma generate` | Engine CDN unreachable |
-| `database/prisma/migrations/…/migration.sql` | Hand-written, never applied. **Run `pnpm --filter @amazon-mvp/database drift:check` before trusting it.** |
-| Seed script | Needs a database |
-| API build and typecheck | Needs the generated Prisma client |
-| API integration tests (13 cases) | Needs PostgreSQL |
-| `docs/openapi.json` | Generator needs the API to boot |
-| Both Dockerfiles | No Docker |
-| kind cluster, deployment, migration Job | No cluster |
-| `scripts/smoke-test.mjs` | No deployment |
+- Database integration tests and destructive shadow-database drift checks.
+  The check skill requires explicit confirmation before database-writing checks;
+  never use the local development database as the shadow database.
+- Docker image builds, Kubernetes deployment, migration Job and ingress smoke.
+- Current GitHub CI outcome. Local checks are not a substitute for CI results.
 
-## Not implemented
+## Known environment warnings
 
-- Catalog, cart, checkout, order endpoints. Only module boundaries and
-  application interfaces exist (`catalog.api.ts`, `cart.api.ts`, `orders.api.ts`).
-- Storefront pages for those features render `EmptyState` behind a disabled flag.
-- Account management beyond the authenticated shell.
-
-## Known issues
-
-1. **The migration SQL is unverified.** It was written by hand because
-   `prisma migrate dev` could not run. Drift between it and `schema.prisma` is the
-   single most likely cause of a first-run failure.
-2. **`docs/openapi.json` does not exist yet.** CI checks it is current; that check
-   will fail until it is generated once and committed.
-3. **API unit tests run transpile-only** (`isolatedModules`), so type errors in the
-   API surface in `pnpm typecheck`, not in `pnpm test`. Both run in CI.
-4. `make seed` shells out to `kubectl run` and is the least tested target.
-
-## Deployment state
-
-Nothing has been deployed anywhere.
+- Existing favicon.ico request returns 404.
+- Vite CJS and Node util._extend deprecation warnings; checks still pass.
 
 ## Enabled features
 
-From `config/features.yaml`: `home`, `authentication`. Everything else is off —
-`checkout` renders 404, the rest render Coming Soon.
+Only home and authentication are enabled in config/features.yaml. Checkout
+renders 404; other unimplemented destinations render Coming Soon. The account
+hub is part of the authenticated shell and does not enable account management.

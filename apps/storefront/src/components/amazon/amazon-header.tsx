@@ -6,10 +6,12 @@ import { getServerSession } from '@/features/auth/server-session';
 
 const NAV_LINKS = [
   { label: 'Todos', href: '/products' },
-  { label: 'Venda na Amazon', href: '/products' },
-  { label: 'Atendimento ao Cliente', href: '/products' },
   { label: 'Ofertas do Dia', href: '/products' },
   { label: 'Comprar novamente', href: '/orders' },
+  { label: 'Venda na Amazon', href: '/products' },
+  { label: 'Livros', href: '/products?department=books' },
+  { label: 'Eletrônicos', href: '/products?department=electronics' },
+  { label: 'Atendimento ao Cliente', href: '/products' },
   { label: 'Alimentos e Bebidas', href: '/products' },
   { label: 'Sua Amazon.com.br', href: '/account' },
   { label: 'Ideias de Presente', href: '/products' },
@@ -38,7 +40,12 @@ export async function AmazonHeader() {
           <label htmlFor="az-search-department" className="visually-hidden">
             Selecionar departamento
           </label>
-          <select id="az-search-department" name="department" className="az-search__department" defaultValue="all">
+          <select
+            id="az-search-department"
+            name="department"
+            className="az-search__department"
+            defaultValue="all"
+          >
             <option value="all">Todos</option>
             <option value="electronics">Eletrônicos</option>
             <option value="books">Livros</option>
@@ -90,7 +97,6 @@ export async function AmazonHeader() {
             </Link>
           ))}
         </div>
-        <p className="az-navbar__promo">Aproveite as ofertas do 9.9!</p>
       </nav>
     </header>
   );
@@ -114,8 +120,20 @@ function SearchIcon() {
 
 function CartIcon() {
   return (
-    <svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true" fill="none" stroke="#fff" strokeWidth="1.6">
-      <path d="M3 4h2l2.4 12.4a2 2 0 0 0 2 1.6h7.2a2 2 0 0 0 2-1.6L20 8H6" strokeLinecap="round" strokeLinejoin="round" />
+    <svg
+      viewBox="0 0 24 24"
+      width="30"
+      height="30"
+      aria-hidden="true"
+      fill="none"
+      stroke="#fff"
+      strokeWidth="1.6"
+    >
+      <path
+        d="M3 4h2l2.4 12.4a2 2 0 0 0 2 1.6h7.2a2 2 0 0 0 2-1.6L20 8H6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
       <circle cx="10" cy="21" r="1.4" fill="#fff" stroke="none" />
       <circle cx="17" cy="21" r="1.4" fill="#fff" stroke="none" />
     </svg>
@@ -124,7 +142,15 @@ function CartIcon() {
 
 function MenuIcon() {
   return (
-    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2">
+    <svg
+      viewBox="0 0 24 24"
+      width="18"
+      height="18"
+      aria-hidden="true"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
       <path d="M3 6h18M3 12h18M3 18h18" strokeLinecap="round" />
     </svg>
   );

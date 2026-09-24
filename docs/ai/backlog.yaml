@@ -14,8 +14,8 @@ iterations:
         status: blocked
         title: Prisma/PostgreSQL connection and initial migrations
         blocked_by: >-
-          Migration SQL hand-written; prisma generate and migrate deploy never
-          executed. Run drift:check first.
+          Prisma generation and local migrations/seed ran successfully. Migration
+          drift and API integration still need an authorized disposable database run.
       - id: BE-003
         owner: dev1
         status: blocked
@@ -41,7 +41,7 @@ iterations:
         owner: dev3
         status: blocked
         title: Dockerfiles for API and storefront
-        blocked_by: No Docker available; never built.
+        blocked_by: Docker is available locally; image builds were not verified in this run.
       - id: PLAT-003
         owner: dev3
         status: blocked
@@ -121,11 +121,11 @@ iterations:
         title: Catalog/cart/orders module boundaries and application interfaces
       - id: PLAT-008
         owner: dev3
-        status: blocked
+        status: done
         title: OpenAPI artifact and shared API types
-        blocked_by: >-
-          api-contract exists and builds. docs/openapi.json not generated —
-          the generator needs the API to boot, which needs Prisma.
+        note: >-
+          Shared types build; OpenAPI regeneration succeeded on 2026-09-24
+          with no difference from the committed document.
       - id: PLAT-009
         owner: dev3
         status: done
@@ -136,6 +136,21 @@ iterations:
         status: blocked
         title: Integration smoke tests through the Ingress
         blocked_by: Script written; needs a deployment.
+
+  - id: 4
+    name: Homepage visual refinement
+    stories:
+      - id: HOME-VISUAL-001
+        owner: dev2
+        status: done
+        title: Refine homepage promotions, product shelves, typography and footer
+        note: >-
+          Reuses existing mock records and product cards. Responsive Chromium
+          checks, workspace validation and production builds passed 2026-09-24.
+      - id: HOME-TESTS-001
+        owner: dev2
+        status: planned
+        title: Add committed regression tests for horizontal rail interactions
 
 next_up:
   - id: FIRSTRUN-001

@@ -1,23 +1,24 @@
 import Link from 'next/link';
-import { ProductGlyph } from './product-glyph';
+import { HorizontalRail } from './horizontal-rail';
+import { ProductImage } from './product-image';
 import { Category } from '@/features/home/catalog-mock';
 
 export function CategorySection({ title, categories }: { title: string; categories: Category[] }) {
   return (
-    <section className="az-section" aria-label={title}>
+    <section className="az-section az-section--categories" aria-label={title}>
       <div className="az-section__head">
         <h2 className="az-section__title">{title}</h2>
       </div>
-      <div className="az-categories">
+      <HorizontalRail label={title} className="az-category-rail">
         {categories.map((category) => (
           <Link key={category.id} href="/products" className="az-category">
             <div className="az-category__image">
-              <ProductGlyph kind={category.glyph} />
+              <ProductImage image={category.image} glyph={category.glyph} />
             </div>
             <span className="az-category__name">{category.name}</span>
           </Link>
         ))}
-      </div>
+      </HorizontalRail>
     </section>
   );
 }
