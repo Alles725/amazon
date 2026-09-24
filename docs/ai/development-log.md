@@ -47,3 +47,29 @@ Follow-up:
 1. Run `drift:check` before trusting the migration SQL.
 2. Generate and commit `docs/openapi.json`; CI fails until it exists.
 3. First cluster run (`FIRSTRUN-001` in backlog.yaml) — nothing has been deployed.
+
+## 2026-09-24 — HOME-VISUAL-001
+
+Refined the homepage in three stages: compact header and promotional mosaic;
+reusable horizontal product/category rails and curated collections; denser final
+shelves and dark footer with explicit Arial/Helvetica typography. Added local
+photos with source records. Existing mock IDs/prices/ratings and route links are
+retained. No API, database, contract, feature-flag or dependency changes.
+
+Integrated with origin/main's newer account dropdown/hub without overwriting its
+code or account-specific styling. Shared header/footer styling also affects that
+page. Preserved local skill files outside this visual PR.
+
+Validation after integration: frozen install, Prisma generation, shared builds,
+workspace lint/typecheck, 36 unit tests, production builds, OpenAPI generation
+with no diff, and all three Kustomize overlays passed. Local health/readiness
+passed with PostgreSQL. Chromium checks covered 320–1920 px, image loading,
+scroll/keyboard controls, search, 20 product URLs, 22 footer destinations,
+login/register/cart/orders navigation and back-to-top. Upper homepage geometry
+matches the pre-footer baseline; React comment-only markup changes are ignored.
+No new browser console or JavaScript errors; existing favicon 404 remains.
+
+Not rerun: signed-in end-to-end flow, database integration/drift, Docker image
+builds, Kubernetes deployment or ingress smoke. No committed carousel tests yet;
+temporary Playwright scripts were used. Mock catalog and disabled purchasing
+features are pre-existing limitations, not newly implemented commerce.

@@ -60,10 +60,10 @@ export function AmazonFooter() {
         Voltar ao início
       </a>
 
-      <div className="az-footer__main">
+      <nav className="az-footer__main" aria-label="Informações e ajuda">
         <div className="az-footer__columns">
           {COLUMNS.map((column) => (
-            <div key={column.title} className="az-footer__column">
+            <section key={column.title} className="az-footer__column">
               <h3 className="az-footer__heading">{column.title}</h3>
               <ul className="az-footer__list">
                 {column.links.map((link) => (
@@ -72,10 +72,10 @@ export function AmazonFooter() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </section>
           ))}
         </div>
-      </div>
+      </nav>
 
       <div className="az-footer__bottom">
         <AmazonLogo variant="light" className="az-footer__logo" />
@@ -93,17 +93,19 @@ export function AmazonFooter() {
           ))}
         </nav>
         <p className="az-footer__copyright">© 2021-2026 Amazon.com, Inc. ou suas afiliadas</p>
-        <p className="az-footer__company">
-          Amazon Serviços de Varejo do Brasil Ltda. | CNPJ 15.436.940/0001-03
-        </p>
-        <p className="az-footer__address">
-          Av. Juscelino Kubitschek, 2041, Torre E, 18º andar - São Paulo CEP: 04543-011 |{' '}
-          <a href="#">Fale conosco</a> | ajuda-amazon@amazon.com.br
-        </p>
-        <p className="az-footer__payments">
-          Formas de pagamento aceitas: cartões de crédito (Visa, Mastercard, Elo e Amex), Pix, Nupay,
-          pontos Livelo e parcelamento sem cartão.
-        </p>
+        <div className="az-footer__institutional">
+          <p className="az-footer__company">
+            Amazon Serviços de Varejo do Brasil Ltda. | CNPJ 15.436.940/0001-03
+          </p>
+          <p className="az-footer__address">
+            Av. Juscelino Kubitschek, 2041, Torre E, 18º andar - São Paulo CEP: 04543-011 |{' '}
+            <a href="#">Fale conosco</a> | ajuda-amazon@amazon.com.br
+          </p>
+          <p className="az-footer__payments">
+            Formas de pagamento aceitas: cartões de crédito (Visa, Mastercard, Elo e Amex), Pix,
+            Nupay, pontos Livelo e parcelamento sem cartão.
+          </p>
+        </div>
       </div>
     </footer>
   );

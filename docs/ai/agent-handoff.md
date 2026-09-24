@@ -1,45 +1,50 @@
 # Agent handoff
 
 ## Current objective
-MVP-001 — authentication vertical slice. Code complete, never run end to end.
 
-## Recently completed
-Whole skeleton scaffolded. Unit tests green in three packages; storefront builds;
-all Kustomize overlays render.
+HOME-VISUAL-001 — prepare the completed homepage visual refinement for PR.
+Commit, push and PR publication await the create-pr skill's final confirmation.
 
-## Current problems
-1. The initial migration SQL was hand-written and has never been applied.
-   Run `pnpm --filter @amazon-mvp/database drift:check` first.
-2. `docs/openapi.json` does not exist. CI's freshness check fails until it is
-   generated once and committed.
-3. Nothing has been built as an image or deployed to any cluster.
+## Completed
 
-## Next recommended story
-`FIRSTRUN-001` in `backlog.yaml` — generate the Prisma client, check drift, run
-migrations, deploy to kind, run `make smoke`. Fix what breaks before writing new
-features.
+- Compact header/navbar and promotional mosaic with local product photography.
+- Reusable horizontal rails, product cards and curated category/collection views.
+- Denser final shelves and footer with scoped Arial/Helvetica typography.
+- Changes reconciled onto origin/main, retaining the account hub/dropdown.
+- Workspace lint/typecheck, 36 unit tests, production builds, OpenAPI freshness
+  and three Kustomize overlays pass. Browser checks pass at 320–1920 px.
+- Local API/storefront are running; /health and /ready succeed.
+
+## Open items
+
+- Publish only after the final commit/PR approval; no publication has occurred.
+- Add committed tests for carousel interactions (temporary browser checks exist).
+- Database integration/drift checks require explicit confirmation and a disposable
+  shadow database. Do not reset the working development database.
+- Image builds, cluster deployment and ingress smoke were not verified here.
+- Homepage retains mock data; catalog/cart/order endpoints are unimplemented.
+- Existing demo decimal prices need minor-unit migration before real commerce.
+- Signed-in account flow was not re-exercised in this preparation pass.
+
+## Recovery notes
+
+The pre-preparation local commit remains on local main. The uncommitted stages
+were preserved in a stash named "homepage PR preparation: preserve stages 2 and
+3" and applied without dropping it. Retain that backup until publication is
+confirmed. Local .agents skills and macOS .DS_Store files are preserved on disk
+but excluded from this visual PR.
 
 ## Important files
-- `config/features.yaml` — what is switched on
-- `packages/config-schema/src/features.ts` — FeatureRegistry
-- `apps/api/src/modules/auth/` — the vertical slice
-- `apps/api/src/bootstrap.ts` — shared wiring for server, OpenAPI and tests
-- `database/prisma/schema.prisma` — schema (source of truth for migrations)
-- `infrastructure/kubernetes/` — manifests and overlays
-- `docs/ai/current-state.md` — verified vs unverified, read before trusting anything
 
-## Validation commands
-```bash
-pnpm --filter @amazon-mvp/database drift:check   # do this first
-make bootstrap && make lint && make typecheck && make test
-make manifests                                    # render without applying
-make cluster && make images && make deploy && make migrate && make seed
-make smoke
-```
+- apps/storefront/src/app/page.tsx and globals.css — composition and scoped styles
+- apps/storefront/src/components/amazon/ — shared visual components
+- apps/storefront/src/features/home/catalog-mock.ts — existing mock records
+- config/features.yaml — feature flags, unchanged by this work
+- docs/ai/current-state.md — validation evidence and limitations
+- .agents/skills/create-pr/SKILL.md — publication workflow (local tooling)
 
-## Rules that are easy to break
-- Never import `apps/api` from the storefront; use `@amazon-mvp/api-contract`.
-- Never read another module's tables; go through the `*_API` interface.
-- Money is integer minor units.
-- Regenerate `docs/openapi.json` in the same commit as any API change.
-- New features merge with `enabled: false`.
+## Rules
+
+Preserve API module boundaries and frontend contract imports. Real money uses
+integer minor units. Schema/contract changes require migrations/OpenAPI updates.
+New business features default to disabled. Never commit secrets.
