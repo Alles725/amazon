@@ -2,6 +2,9 @@ import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import { ReactNode } from 'react';
 import { FeatureStampStrip, Navigation } from '@/components/navigation';
+import { CartProvider } from '@/features/cart/cart-provider';
+import { getServerSession } from '@/features/auth/server-session';
+import { isFeatureEnabled } from '@/config/feature-gate';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -16,21 +19,30 @@ export const dynamic = 'force-dynamic';
 // screens (each matches Amazon's own UI): no build-state stamp strip, no
 // generic site navigation. Each brings its own Amazon-style header/footer
 // instead.
-const BARE_ROUTES = ['/login', '/', '/account'];
+const BARE_ROUTES = ['/login', '/', '/account', '/cart'];
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
   const pathname = headers().get('x-pathname') ?? '';
   const bare = BARE_ROUTES.includes(pathname);
+
+  const cartEnabled = isFeatureEnabled('cart');
+  const session = cartEnabled ? await getServerSession() : null;
 
   return (
     <html lang="en">
       <body>
-        <a className="visually-hidden" href="#main">
-          Skip to content
-        </a>
-        {!bare && <FeatureStampStrip />}
-        {!bare && <Navigation />}
-        <div id="main">{children}</div>
+        <CartProvider
+          key={session?.user.id ?? 'guest'}
+          userId={session?.user.id ?? null}
+          enabled={cartEnabled}
+        >
+          <a className="visually-hidden" href="#main">
+            Skip to content
+          </a>
+          {!bare && <FeatureStampStrip />}
+          {!bare && <Navigation />}
+          <div id="main">{children}</div>
+        </CartProvider>
       </body>
     </html>
   );

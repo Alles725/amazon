@@ -152,6 +152,18 @@ iterations:
         status: planned
         title: Add committed regression tests for horizontal rail interactions
 
+  - id: 5
+    name: Persistent cart
+    stories:
+      - id: CART-001
+        owner: dev2
+        status: done
+        title: Authenticated cart page with real catalog data and persistence
+        note: >-
+          Existing schema and session reused. Seven cart integration and seven
+          frontend provider tests pass, plus full browser lifecycle and responsive
+          checks. Shared flag remains off; locally enabled through FEATURES_FILE.
+
 next_up:
   - id: FIRSTRUN-001
     title: First cluster run

@@ -16,6 +16,8 @@ export const ErrorCode = {
   AUTH_SESSION_REQUIRED: 'AUTH_SESSION_REQUIRED',
   RESOURCE_NOT_FOUND: 'RESOURCE_NOT_FOUND',
   FEATURE_DISABLED: 'FEATURE_DISABLED',
+  CART_ITEM_UNAVAILABLE: 'CART_ITEM_UNAVAILABLE',
+  CART_LIMIT_EXCEEDED: 'CART_LIMIT_EXCEEDED',
   INTERNAL_ERROR: 'INTERNAL_ERROR',
 } as const;
 export type ErrorCode = (typeof ErrorCode)[keyof typeof ErrorCode];
@@ -105,3 +107,53 @@ export function isApiErrorBody(value: unknown): value is ApiErrorBody {
     typeof (error as { code?: unknown }).code === 'string'
   );
 }
+
+/** Catalog data is authoritative; prices and totals are integer minor units. */
+export interface CatalogItem {
+  id: string;
+  sku: string;
+  slug: string;
+  name: string;
+  description: string | null;
+  priceMinor: number;
+  currency: string;
+  active: boolean;
+  availableQuantity: number;
+  inStock: boolean;
+}
+
+export interface CatalogPage {
+  items: CatalogItem[];
+  total: number;
+}
+
+export interface CartItemResponse {
+  productId: string;
+  product: CatalogItem;
+  quantity: number;
+  unitPriceMinor: number;
+  lineTotalMinor: number;
+}
+
+export interface CartResponse {
+  id: string | null;
+  userId: string;
+  lines: CartItemResponse[];
+  itemCount: number;
+  subtotalMinor: number;
+  currency: string;
+}
+
+export interface AddCartItemRequest {
+  productId: string;
+  quantity: number;
+}
+export interface UpdateCartItemRequest {
+  quantity: number;
+}
+export const MAX_CART_QUANTITY = 99;
+export const CART_ROUTES = {
+  current: `${API_PREFIX}/cart`,
+  items: `${API_PREFIX}/cart/items`,
+} as const;
+export const CATALOG_ROUTES = { products: `${API_PREFIX}/catalog/products` } as const;

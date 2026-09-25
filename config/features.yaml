@@ -19,7 +19,7 @@ features:
 
   cart:
     enabled: false
-    description: Shopping cart
+    description: Persistent account cart with quantities and subtotals
 
   checkout:
     enabled: false

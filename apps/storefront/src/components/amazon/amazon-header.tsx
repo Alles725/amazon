@@ -1,6 +1,7 @@
 import 'server-only';
 import Link from 'next/link';
 import { AmazonLogo } from '@/components/amazon-logo';
+import { CartHeaderLink } from '@/features/cart/cart-header-link';
 import { AccountMenu } from '@/components/amazon/account-menu';
 import { getServerSession } from '@/features/auth/server-session';
 
@@ -75,13 +76,7 @@ export async function AmazonHeader() {
           <span className="az-topbar__account-line2">e Pedidos</span>
         </Link>
 
-        <Link href="/cart" className="az-topbar__cart" aria-label="Carrinho, 0 itens">
-          <span className="az-topbar__cart-icon">
-            <CartIcon />
-            <span className="az-topbar__cart-count">0</span>
-          </span>
-          <span className="az-topbar__cart-label">Carrinho</span>
-        </Link>
+        <CartHeaderLink icon={<CartIcon />} />
       </div>
 
       <nav className="az-navbar" aria-label="Categorias">

@@ -1,28 +1,37 @@
 import Link from 'next/link';
+import { ReactNode } from 'react';
+import { CatalogItem } from '@amazon-mvp/api-contract';
 import { ProductImage } from './product-image';
 import { RatingStars } from './rating-stars';
 import { discountPercent, formatBRL, Product } from '@/features/home/catalog-mock';
 
-export function ProductCard({ product, compact = false }: { product: Product; compact?: boolean }) {
-  const discount = discountPercent(product);
+export function ProductCard({
+  product,
+  compact = false,
+  action,
+}: {
+  product: Product | CatalogItem;
+  compact?: boolean;
+  action?: ReactNode;
+}) {
+  const catalog = 'priceMinor' in product ? product : null;
+  const mock = 'price' in product ? product : null;
+  const price = catalog ? catalog.priceMinor / 100 : (mock?.price ?? 0);
+  const discount = mock ? discountPercent(mock) : undefined;
   const parts = new Intl.NumberFormat('pt-BR', {
     style: 'currency',
-    currency: 'BRL',
-  }).formatToParts(product.price);
+    currency: catalog?.currency ?? 'BRL',
+  }).formatToParts(price);
   const integer = parts
     .filter((part) => part.type === 'integer' || part.type === 'group')
     .map((part) => part.value)
     .join('');
   const fraction = parts.find((part) => part.type === 'fraction')?.value;
 
-  return (
-    <Link
-      href={`/products/${product.id}`}
-      className={`az-card${compact ? ' az-card--compact' : ''}`}
-      title={product.name}
-    >
+  const content = (
+    <>
       <div className="az-card__image">
-        <ProductImage image={product.image} glyph={product.glyph} />
+        <ProductImage image={mock?.image} glyph={mock?.glyph} />
       </div>
       <div className="az-card__deal">
         {discount && (
@@ -33,10 +42,13 @@ export function ProductCard({ product, compact = false }: { product: Product; co
         )}
       </div>
       <p className="az-card__name">{product.name}</p>
-      <RatingStars rating={product.rating} reviewCount={product.reviewCount} />
-      <div className="az-card__price" aria-label={`Preço atual: ${formatBRL(product.price)}`}>
+      {mock && <RatingStars rating={mock.rating} reviewCount={mock.reviewCount} />}
+      <div
+        className="az-card__price"
+        aria-label={`Preço atual: ${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: catalog?.currency ?? 'BRL' }).format(price)}`}
+      >
         <span className="az-card__currency" aria-hidden="true">
-          R$
+          {parts.find((part) => part.type === 'currency')?.value}
         </span>
         <span className="az-card__price-main" aria-hidden="true">
           {integer}
@@ -45,12 +57,23 @@ export function ProductCard({ product, compact = false }: { product: Product; co
           {fraction}
         </span>
       </div>
-      {product.oldPrice && (
+      {mock?.oldPrice && (
         <span className="az-card__old-price">
-          De: <del>{formatBRL(product.oldPrice)}</del>
+          De: <del>{formatBRL(mock?.oldPrice)}</del>
         </span>
       )}
-      {product.badge && <span className="az-card__badge">{product.badge}</span>}
+      {mock?.badge && <span className="az-card__badge">{mock?.badge}</span>}
+    </>
+  );
+  const className = `az-card${compact ? ' az-card--compact' : ''}`;
+  return catalog ? (
+    <article className={className} aria-label={product.name}>
+      {content}
+      {action}
+    </article>
+  ) : (
+    <Link href={`/products/${product.id}`} className={className} title={product.name}>
+      {content}
     </Link>
   );
 }

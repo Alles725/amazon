@@ -1,30 +1,17 @@
-/**
- * Iteration 3 boundary placeholder (BE story: domain skeletons).
- * The interface exists so cart/orders can be written against it; the
- * implementation lands in Iteration 4. Nothing here touches another module's
- * tables — catalog owns products/categories/inventory.
- */
+import { CatalogItem, CatalogPage } from '@amazon-mvp/api-contract';
+
 export const CATALOG_API = 'CATALOG_API';
+export type CatalogProduct = CatalogItem;
+export type ProductPage = CatalogPage;
 
-export interface CatalogProduct {
-  id: string;
-  sku: string;
-  slug: string;
-  name: string;
-  description: string | null;
-  priceMinor: number;
-  currency: string;
-  inStock: boolean;
-}
-
-export interface ProductPage {
-  items: CatalogProduct[];
-  total: number;
-}
-
+/** Catalog owns products, categories and inventory. */
 export interface CatalogApi {
-  listProducts(query: { page?: number; pageSize?: number; category?: string }): Promise<ProductPage>;
+  listProducts(query: {
+    page?: number;
+    pageSize?: number;
+    category?: string;
+  }): Promise<ProductPage>;
   findBySlug(slug: string): Promise<CatalogProduct | null>;
-  /** Used by cart/orders to price a line without reading catalog tables. */
+  /** Includes unavailable records so existing cart lines remain removable. */
   findByIds(ids: string[]): Promise<CatalogProduct[]>;
 }
