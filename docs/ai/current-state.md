@@ -8,10 +8,10 @@ This records observed local results, not an assertion that CI or deployment pass
 
 - Frozen pnpm install, Prisma client generation and shared package builds.
 - Workspace lint, typecheck, unit tests and production builds passed after
-  integrating homepage work with origin/main's account dropdown/hub.
-- Unit tests: config-schema 13, API 12, storefront 11 (36 total).
-- Storefront production build completes with the new account destinations.
-- OpenAPI regenerated successfully; docs/openapi.json has no diff.
+  implementing the persistent cart on the current main branch.
+- Unit tests: config-schema 13, API 12, storefront 18 (43 total).
+- Storefront production build completes with the cart enabled locally.
+- OpenAPI regenerated successfully with catalog/cart paths and shared response DTOs.
 - All three Kustomize overlays render: local, development and production.
 - Local PostgreSQL container, API on port 3001 and storefront on port 3000.
   API /health and /ready return success, including the database check.
@@ -27,16 +27,42 @@ This records observed local results, not an assertion that CI or deployment pass
   Header/upper section geometry and footer links match the earlier visual
   baseline; React comment markers were excluded from HTML comparisons.
 
+## Persistent cart — 2026-09-24
+
+- `/cart` implements empty, loading, error and populated states using the existing
+  header/footer, session and database tables. No schema migration needed.
+- Authenticated cart endpoints add/update/remove/clear and calculate current
+  catalog prices in integer minor units. A minimal public catalog read supplies
+  the existing database products for the cart's product selection.
+- Catalog and cart ownership stay behind CATALOG_API/CART_API. No client prices
+  or user IDs are accepted. Concurrent first additions serialize per account.
+- 19 database integration tests pass (12 auth, 7 cart), including a run limited
+  to two database connections with six simultaneous additions.
+- 7 new frontend provider tests pass, covering old read responses, failed writes,
+  account changes, expired sessions and refreshes queued during writes.
+- Chromium verified the full cart lifecycle, reload persistence, homepage count,
+  two-tab sync, retry behavior and responsiveness at seven widths (320–1920 px).
+  No unexpected browser JS/console errors. Deliberate 503/401 injections were
+  tested separately; they are expected failure-path checks.
+- Existing homepage geometry, content sections and footer destinations still pass
+  their visual regression checks. The header markup intentionally gains a live count.
+- Cart defaults off in shared config and on in the ignored local FEATURES_FILE.
+  See `docs/cart.md` for setup, endpoints and remaining limitations.
+- Real catalog products have no photos in the existing schema; cart uses an honest
+  image-unavailable state. No fake ratings, recommendations or browsing history.
+
 ## Scope and limitations
 
 - Homepage uses the existing local catalog-mock, not an API product feed.
   The 20 original IDs, names, prices, ratings and review counts are preserved.
   Photos and curated collections enrich those records; four products still use
-  the existing illustration fallback. No backend/contract/schema change.
-- Product listing/details, cart, checkout and orders remain feature-disabled.
+  the existing illustration fallback. The homepage data source is unchanged.
+- Product listing/details, checkout and orders remain feature-disabled. Cart is
+  implemented and enabled in local configuration; its shipped flag stays false.
   A responding route is not evidence of a working purchase flow.
-- Authentication and the account hub/dropdown from main are preserved. A full
-  signed-in browser flow was not repeated during PR preparation.
+- Authentication and the account hub/dropdown are preserved. Cart browser checks
+  use real authenticated sessions; the existing authentication integration suite
+  now also passes against an isolated PostgreSQL database.
 - The header/footer are shared with /account. Account-specific code and styles
   are retained; the shared visual changes also appear there.
 - New carousel interactions were exercised through temporary Playwright scripts,
@@ -44,11 +70,14 @@ This records observed local results, not an assertion that CI or deployment pass
 - Existing demo prices use decimal numbers. Converting this mock to integer
   minor units is separate work required before real catalog integration.
 
+- PR review: internal `markConverted` and `findBySlug` methods lack direct tests;
+  current HTTP cart workflows are covered. Cover these hooks before their future
+  checkout/detail consumers are enabled.
+
 ## Not verified in this run
 
-- Database integration tests and destructive shadow-database drift checks.
-  The check skill requires explicit confirmation before database-writing checks;
-  never use the local development database as the shadow database.
+- Shadow-database drift checks were not run. Never use the development database
+  as a disposable shadow database.
 - Docker image builds, Kubernetes deployment, migration Job and ingress smoke.
 - Current GitHub CI outcome. Local checks are not a substitute for CI results.
 
@@ -59,6 +88,7 @@ This records observed local results, not an assertion that CI or deployment pass
 
 ## Enabled features
 
-Only home and authentication are enabled in config/features.yaml. Checkout
+Only home and authentication are enabled in shared config/features.yaml; the
+local ignored configuration also enables cart. Checkout
 renders 404; other unimplemented destinations render Coming Soon. The account
 hub is part of the authenticated shell and does not enable account management.

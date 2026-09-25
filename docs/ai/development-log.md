@@ -73,3 +73,29 @@ Not rerun: signed-in end-to-end flow, database integration/drift, Docker image
 builds, Kubernetes deployment or ingress smoke. No committed carousel tests yet;
 temporary Playwright scripts were used. Mock catalog and disabled purchasing
 features are pre-existing limitations, not newly implemented commerce.
+
+## 2026-09-24 — CART-001
+
+Implemented an authenticated, PostgreSQL-backed cart using the existing Cart and
+CartItem schema. Added the minimum catalog read needed to select real products,
+kept module boundaries, and extended api-contract/OpenAPI. Prices stay in integer
+minor units, mutations derive identity from the existing session, and per-user
+transaction locks protect concurrent increments/first-cart creation. Catalog reads
+occur outside the lock transaction to avoid connection-pool starvation.
+
+The cart page reuses header/navbar/footer, ProductCard/ProductImage and
+HorizontalRail. It has empty/filled/loading/error states, quantity controls,
+removal/clear, dynamic subtotals and header count, retry handling and tab syncing.
+No homepage dataset replacement, schema change, dependency or fake checkout.
+The existing real products have no photos; placeholders are explicit. Shared cart
+flag remains false, with an ignored local config enabling it for demonstration.
+
+Validation: 43 unit tests, 19 isolated-database integration tests, browser lifecycle
+and failure-path checks, two-tab sync, seven responsive widths and homepage visual
+regression checks. Full auth integration remains green. See current-state.md and
+docs/cart.md for build/contract evidence and limitations. Browser test accounts are
+temporary; the normal development database is never reset.
+
+Final checks for CART-001: frozen install, Prisma generation, all shared builds,
+workspace lint/typecheck/unit tests and production builds passed. OpenAPI regenerated
+and all three Kustomize overlays rendered. No Docker image/deployment or drift run.

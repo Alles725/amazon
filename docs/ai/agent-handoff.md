@@ -2,49 +2,47 @@
 
 ## Current objective
 
-HOME-VISUAL-001 — prepare the completed homepage visual refinement for PR.
-Commit, push and PR publication await the create-pr skill's final confirmation.
+CART-001 — persistent cart implementation and visual match to docs/reference/Cart.
+PR preparation requested. Branch: feat/persistent-shopping-cart. Commit, push
+and PR creation await the final create-pr approval.
 
 ## Completed
 
-- Compact header/navbar and promotional mosaic with local product photography.
-- Reusable horizontal rails, product cards and curated category/collection views.
-- Denser final shelves and footer with scoped Arial/Helvetica typography.
-- Changes reconciled onto origin/main, retaining the account hub/dropdown.
-- Workspace lint/typecheck, 36 unit tests, production builds, OpenAPI freshness
-  and three Kustomize overlays pass. Browser checks pass at 320–1920 px.
-- Local API/storefront are running; /health and /ready succeed.
+- Real account cart using the existing tables and authentication.
+- Minimal catalog read through CATALOG_API; cart never accesses catalog tables.
+- Add, set quantity, remove and clear; authoritative integer-money totals.
+- Shared header count, empty/filled/loading/error page and existing footer.
+- ProductCard supports real catalog entries without invented ratings or photos.
+- Session/account reset, stale-read protection, revalidation and tab invalidation.
+- 43 unit tests and 19 PostgreSQL integration tests pass, plus browser lifecycle,
+  persistence, failures, two-tab sync and seven responsive widths.
+- Homepage geometry/content/footer regression checks pass.
+- Workspace lint/typecheck/build, OpenAPI generation and three overlays pass.
 
-## Open items
+## Configuration and limitations
 
-- Publish only after the final commit/PR approval; no publication has occurred.
-- Add committed tests for carousel interactions (temporary browser checks exist).
-- Database integration/drift checks require explicit confirmation and a disposable
-  shadow database. Do not reset the working development database.
-- Image builds, cluster deployment and ingress smoke were not verified here.
-- Homepage retains mock data; catalog/cart/order endpoints are unimplemented.
-- Existing demo decimal prices need minor-unit migration before real commerce.
-- Signed-in account flow was not re-exercised in this preparation pass.
+The shared cart flag stays false. The local ignored .env.features.yaml enables it;
+.env points FEATURES_FILE at that file. Load this environment when starting the
+storefront. See docs/cart.md. No migration, dependency or auth behavior changes.
 
-## Recovery notes
+Checkout and product detail/listing pages remain placeholders. Real products can
+be added from the selection on /cart. The homepage keeps its previous mock data.
+No real catalog photo metadata exists, so image-unavailable placeholders are used.
+No browsing-history or personalized recommendation service was invented.
 
-The pre-preparation local commit remains on local main. The uncommitted stages
-were preserved in a stash named "homepage PR preparation: preserve stages 2 and
-3" and applied without dropping it. Retain that backup until publication is
-confirmed. Local .agents skills and macOS .DS_Store files are preserved on disk
-but excluded from this visual PR.
+## Preserved user changes
 
-## Important files
+The user reorganized screenshots into docs/reference/Home and docs/reference/Cart
+and modified docs/reference/.DS_Store before this task. Do not revert that work.
+Previous homepage publication was already merged into main (PR #9).
 
-- apps/storefront/src/app/page.tsx and globals.css — composition and scoped styles
-- apps/storefront/src/components/amazon/ — shared visual components
-- apps/storefront/src/features/home/catalog-mock.ts — existing mock records
-- config/features.yaml — feature flags, unchanged by this work
-- docs/ai/current-state.md — validation evidence and limitations
-- .agents/skills/create-pr/SKILL.md — publication workflow (local tooling)
+## Follow-up
 
-## Rules
+Review identified missing direct integration coverage for the internal
+CartService.markConverted and CatalogService.findBySlug methods. Neither is part
+of the current cart HTTP/UI flow; cover them before enabling checkout/details.
 
-Preserve API module boundaries and frontend contract imports. Real money uses
-integer minor units. Schema/contract changes require migrations/OpenAPI updates.
-New business features default to disabled. Never commit secrets.
+Review the final diff before publication. Docker image builds, deployment and
+shadow-database drift were not part of this cart run. Existing favicon 404 and
+toolchain deprecation warnings remain. Add checkout/catalog detail features only
+as separately scoped work; do not make the current disabled button pretend to buy.
