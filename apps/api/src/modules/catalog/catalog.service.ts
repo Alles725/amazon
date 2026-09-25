@@ -1,3 +1,4 @@
+import { CatalogProductDetails } from '@amazon-mvp/api-contract';
 import { Injectable } from '@nestjs/common';
 import { Inventory, Product } from '@amazon-mvp/database';
 import { PrismaService } from '../../common/prisma.service';
@@ -29,6 +30,23 @@ export class CatalogService implements CatalogApi {
       this.prisma.product.count({ where }),
     ]);
     return { items: products.map(toCatalogProduct), total };
+  }
+
+  async getProduct(identifier: string): Promise<CatalogProductDetails | null> {
+    // Validate before querying a PostgreSQL UUID column; slugs remain supported.
+    const isId = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(identifier);
+    const include = { inventory: true, categories: { include: { category: true } } } as const;
+    const product =
+      (isId
+        ? await this.prisma.product.findUnique({ where: { id: identifier }, include })
+        : null) ?? (await this.prisma.product.findUnique({ where: { slug: identifier }, include }));
+    if (!product) return null;
+    return {
+      ...toCatalogProduct(product),
+      categories: product.categories
+        .map(({ category }) => ({ slug: category.slug, name: category.name }))
+        .sort((a, b) => a.slug.localeCompare(b.slug)),
+    };
   }
 
   async findBySlug(slug: string): Promise<CatalogProduct | null> {

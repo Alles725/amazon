@@ -164,6 +164,21 @@ iterations:
           frontend provider tests pass, plus full browser lifecycle and responsive
           checks. Shared flag remains off; locally enabled through FEATURES_FILE.
 
+  - id: 6
+    name: Dynamic product detail
+    stories:
+      - id: PRODUCT-001
+        owner: dev2
+        status: done
+        title: Real product details with category recommendations and cart integration
+        note: >-
+          ID/slug catalog endpoint, existing schema and session, three-column layout,
+          quantity-aware cart addition, unavailable-image state and disabled checkout.
+          56 unit tests, 26 database integration tests and browser checks pass.
+          Shared demo fixtures seed p1-p20 without overwriting records; all catalog
+          products share details/cart. Photo and empty-data fallbacks verified.
+          Shared productDetails flag remains off; local override enables it.
+
 next_up:
   - id: FIRSTRUN-001
     title: First cluster run

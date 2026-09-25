@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ReactNode } from 'react';
 import { CatalogItem } from '@amazon-mvp/api-contract';
 import { ProductImage } from './product-image';
+import { productPresentation } from '@/features/product/product-presentation';
 import { RatingStars } from './rating-stars';
 import { discountPercent, formatBRL, Product } from '@/features/home/catalog-mock';
 
@@ -15,6 +16,7 @@ export function ProductCard({
   action?: ReactNode;
 }) {
   const catalog = 'priceMinor' in product ? product : null;
+  const presentation = catalog ? productPresentation(catalog) : null;
   const mock = 'price' in product ? product : null;
   const price = catalog ? catalog.priceMinor / 100 : (mock?.price ?? 0);
   const discount = mock ? discountPercent(mock) : undefined;
@@ -31,7 +33,7 @@ export function ProductCard({
   const content = (
     <>
       <div className="az-card__image">
-        <ProductImage image={mock?.image} glyph={mock?.glyph} />
+        <ProductImage image={mock?.image ?? presentation?.images[0]} glyph={mock?.glyph} />
       </div>
       <div className="az-card__deal">
         {discount && (
@@ -68,7 +70,9 @@ export function ProductCard({
   const className = `az-card${compact ? ' az-card--compact' : ''}`;
   return catalog ? (
     <article className={className} aria-label={product.name}>
-      {content}
+      <Link href={`/products/${catalog.id}`} className="az-card__detail-link" title={product.name}>
+        {content}
+      </Link>
       {action}
     </article>
   ) : (

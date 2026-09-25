@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { seedDemoProducts } from './demo-products';
 
 const prisma = new PrismaClient();
 
@@ -80,6 +81,8 @@ async function main() {
       });
     }
   }
+
+  await seedDemoProducts(prisma);
 
   const [categoryCount, productCount] = await Promise.all([
     prisma.category.count(),

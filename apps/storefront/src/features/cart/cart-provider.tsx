@@ -21,7 +21,7 @@ interface CartState {
   error: string | null;
   notice: string;
   refresh: () => Promise<void>;
-  add: (productId: string) => Promise<void>;
+  add: (productId: string, quantity?: number) => Promise<void>;
   update: (productId: string, quantity: number) => Promise<void>;
   remove: (productId: string) => Promise<void>;
   clear: () => Promise<void>;
@@ -148,11 +148,8 @@ export function CartProvider({
         error,
         notice,
         refresh,
-        add: (productId) =>
-          mutate(
-            () => cartClient.add({ productId, quantity: 1 }),
-            'Produto adicionado ao carrinho.',
-          ),
+        add: (productId, quantity = 1) =>
+          mutate(() => cartClient.add({ productId, quantity }), 'Produto adicionado ao carrinho.'),
         update: (id, quantity) =>
           mutate(() => cartClient.update(id, quantity), 'Quantidade atualizada.'),
         remove: (id) => mutate(() => cartClient.remove(id), 'Produto removido do carrinho.'),

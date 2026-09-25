@@ -15,7 +15,7 @@ features:
 
   productDetails:
     enabled: false
-    description: Product detail page
+    description: Dynamic product details with catalog data and cart integration
 
   cart:
     enabled: false

@@ -216,6 +216,40 @@
         ]
       }
     },
+    "/api/v1/catalog/products/{productId}": {
+      "get": {
+        "operationId": "CatalogController_detail",
+        "parameters": [
+          {
+            "name": "productId",
+            "required": true,
+            "in": "path",
+            "description": "Product UUID or slug",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogProductDetailsDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Product not found"
+          }
+        },
+        "tags": [
+          "catalog"
+        ]
+      }
+    },
     "/api/v1/catalog/products": {
       "get": {
         "operationId": "CatalogController_list",
@@ -816,6 +850,80 @@
         },
         "required": [
           "success"
+        ]
+      },
+      "CatalogCategoryDto": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug",
+          "name"
+        ]
+      },
+      "CatalogProductDetailsDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sku": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "priceMinor": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "currency": {
+            "type": "string",
+            "example": "BRL"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "availableQuantity": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "inStock": {
+            "type": "boolean"
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CatalogCategoryDto"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "sku",
+          "slug",
+          "name",
+          "description",
+          "priceMinor",
+          "currency",
+          "active",
+          "availableQuantity",
+          "inStock",
+          "categories"
         ]
       },
       "CatalogItemDto": {

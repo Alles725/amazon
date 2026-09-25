@@ -5,6 +5,7 @@ import { CatalogItem, MAX_CART_QUANTITY } from '@amazon-mvp/api-contract';
 import { HorizontalRail } from '@/components/amazon/horizontal-rail';
 import { ProductCard } from '@/components/amazon/product-card';
 import { ProductImage } from '@/components/amazon/product-image';
+import { productPresentation } from '@/features/product/product-presentation';
 import { useCart } from './cart-provider';
 import { formatCartMoney } from './money';
 
@@ -102,10 +103,12 @@ export function CartContent({
                       aria-label={line.product.name}
                     >
                       <div className="az-cart-item__image">
-                        <ProductImage />
+                        <ProductImage image={productPresentation(line.product).images[0]} />
                       </div>
                       <div className="az-cart-item__details">
-                        <h2>{line.product.name}</h2>
+                        <h2>
+                          <Link href={`/products/${line.productId}`}>{line.product.name}</Link>
+                        </h2>
                         <p
                           className={`az-cart-stock${!line.product.inStock || line.quantity > line.product.availableQuantity ? ' az-cart-stock--unavailable' : ''}`}
                         >

@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsInt, IsOptional, IsString, Max, MaxLength, Min } from 'class-validator';
-import { CatalogItem, CatalogPage } from '@amazon-mvp/api-contract';
+import { CatalogItem, CatalogPage, CatalogProductDetails } from '@amazon-mvp/api-contract';
 
 export class CatalogQueryDto {
   @ApiPropertyOptional({ minimum: 1, maximum: 10000, default: 1 })
@@ -41,4 +41,20 @@ export class CatalogItemDto implements CatalogItem {
 export class CatalogPageDto implements CatalogPage {
   @ApiProperty({ type: [CatalogItemDto] }) items: CatalogItemDto[];
   @ApiProperty({ type: 'integer' }) total: number;
+}
+
+export class CatalogProductParamsDto {
+  @ApiProperty({ description: 'Product UUID or slug' })
+  @IsString()
+  @MaxLength(200)
+  productId: string;
+}
+
+export class CatalogCategoryDto {
+  @ApiProperty() slug: string;
+  @ApiProperty() name: string;
+}
+
+export class CatalogProductDetailsDto extends CatalogItemDto implements CatalogProductDetails {
+  @ApiProperty({ type: [CatalogCategoryDto] }) categories: CatalogCategoryDto[];
 }
