@@ -99,3 +99,63 @@ temporary; the normal development database is never reset.
 Final checks for CART-001: frozen install, Prisma generation, all shared builds,
 workspace lint/typecheck/unit tests and production builds passed. OpenAPI regenerated
 and all three Kustomize overlays rendered. No Docker image/deployment or drift run.
+
+
+## 2026-09-25 — PRODUCT-001
+
+Implemented dynamic product details by UUID/slug with the existing catalog,
+inventory and category tables. Extended the shared contract/OpenAPI with a public,
+read-only detail endpoint; inactive/absent products return standard 404 errors.
+Reused storefront header/navbar/footer, product cards, image fallback and rails.
+Added responsive three-column presentation, specifications and related categories.
+CartProvider accepts a chosen quantity with a backward-compatible default of one;
+real cart cards and item titles now link to details. Checkout remains unavailable.
+
+No schema/auth/dependency changes, fabricated reviews/deals, or reassignment of
+mock photos. The gallery is implemented and tested with fixtures, but current
+catalog records lack images; the live page honestly shows image unavailable.
+The new feature remains disabled in shared config, enabled in ignored local config.
+
+Validation: frozen install, Prisma generation, shared builds, workspace lint/types,
+51 unit tests, production builds, OpenAPI generation and three overlays passed.
+22 integration tests passed against a disposable database, removed afterward.
+Browser: four real products, ID/slug/related links, selected quantities, cart
+product/subtotal/header and reload; eight widths without overflow. Fixed a React
+sibling-key warning identified by this run. Rechecked the existing cart lifecycle,
+homepage baseline in six widths and 22 footer routes; no new normal-flow errors.
+No drift, Docker image build or deployment. Work is on feat/product-details,
+based on the previously published cart commit 464f044 (PR #10).
+
+
+## 2026-09-25 — PRODUCT-001 follow-up: unify demo and database products
+
+Diagnosed two disconnected catalogs: homepage-only p1–p20 records and four seeded
+PostgreSQL products. The detail template had no four-ID whitelist. Moved existing
+demo data to config/demo-products.json and added idempotent seed:demo registration
+in the existing Product/Inventory schema, preserving slugs and assigning real UUIDs.
+Demo stock is explicit fixture data (10), never a default for missing inventory.
+The import does not overwrite any existing product or inventory changes.
+
+All products resolve via the same UUID/slug lookup and authenticated cart. Optional
+fixture presentation uses SKU+slug; current price/name/stock stay API-authoritative.
+Added neutral description/review/photo/specification/discount fallbacks. Inactive
+products now open via direct links but remain unavailable for cart additions.
+No schema/migration/dependency or authentication change.
+
+Validation: 56 unit tests, 26 isolated PostgreSQL integrations, workspace lint/types,
+production builds, deterministic OpenAPI and three manifests passed. Integration
+covers every demo in the cart, incomplete arbitrary products, UUID-shaped slugs,
+inactive/missing inventory and seed reruns preserving edits. Browser checked 27
+records, 20 homepage links, 25 available products in one cart with exact subtotal,
+count/reload and responsive photo/placeholder cases without new errors. Temporary
+users/products/database removed; the 20 demo catalog records intentionally remain.
+
+
+PR preparation for PRODUCT-001: moved the reviewed changes onto a new branch,
+feat/unified-product-pages, based on origin/main at 3b2419f. The cart PR #10 is
+already merged. A local Finder metadata checkout conflict was preserved via a
+backup outside the repository; no application code conflicted. Re-ran frozen
+install, Prisma generation, shared builds, lint/types, 56 unit tests, production
+builds, OpenAPI and all overlays successfully. Integration/browser results above
+remain applicable to the same code; they were not needlessly repeated here.
+Review found no blockers. Commit/push/PR await final create-pr approval.

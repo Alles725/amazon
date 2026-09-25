@@ -122,6 +122,11 @@ export interface CatalogItem {
   inStock: boolean;
 }
 
+/** Product details expose only information currently stored by catalog. */
+export interface CatalogProductDetails extends CatalogItem {
+  categories: Array<{ slug: string; name: string }>;
+}
+
 export interface CatalogPage {
   items: CatalogItem[];
   total: number;

@@ -1,0 +1,280 @@
+[
+  {
+    "id": "p1",
+    "image": {
+      "src": "/images/products/echo-dot.jpg",
+      "alt": "Echo Dot preto"
+    },
+    "name": "Echo Dot (5ª geração) com Alexa, Preto",
+    "rating": 4.7,
+    "reviewCount": 48213,
+    "glyph": "echo",
+    "sku": "DEMO-p1",
+    "priceMinor": 27900,
+    "oldPriceMinor": 34900,
+    "inventoryQuantity": 10
+  },
+  {
+    "id": "p2",
+    "image": {
+      "src": "/images/products/jbl-tune-510bt.jpg",
+      "alt": "JBL Tune 510BT preto"
+    },
+    "name": "Fone de Ouvido Bluetooth JBL Tune 510BT",
+    "rating": 4.6,
+    "reviewCount": 15342,
+    "glyph": "headphones",
+    "sku": "DEMO-p2",
+    "priceMinor": 19990,
+    "oldPriceMinor": 27990,
+    "inventoryQuantity": 10
+  },
+  {
+    "id": "p3",
+    "image": {
+      "src": "/images/products/kindle.jpg",
+      "alt": "Kindle preto"
+    },
+    "name": "Kindle 11ª Geração, 16GB, à prova d'água",
+    "rating": 4.8,
+    "reviewCount": 9871,
+    "glyph": "ereader",
+    "sku": "DEMO-p3",
+    "priceMinor": 44900,
+    "oldPriceMinor": 59900,
+    "inventoryQuantity": 10
+  },
+  {
+    "id": "p4",
+    "image": {
+      "src": "/images/products/air-fryer.jpg",
+      "alt": "Foto ilustrativa de air fryer digital"
+    },
+    "name": "Air Fryer Elétrica 4L Digital 127V",
+    "rating": 4.5,
+    "reviewCount": 20044,
+    "glyph": "airfryer",
+    "sku": "DEMO-p4",
+    "priceMinor": 25900,
+    "oldPriceMinor": 39900,
+    "inventoryQuantity": 10
+  },
+  {
+    "id": "p5",
+    "image": {
+      "src": "/images/products/sneakers.webp",
+      "alt": "Foto ilustrativa de tênis esportivo"
+    },
+    "name": "Tênis Esportivo Confort Run",
+    "rating": 4.3,
+    "reviewCount": 3021,
+    "glyph": "sneaker",
+    "sku": "DEMO-p5",
+    "priceMinor": 15990,
+    "oldPriceMinor": 21990,
+    "inventoryQuantity": 10
+  },
+  {
+    "id": "p6",
+    "image": {
+      "src": "/images/products/controller.jpg",
+      "alt": "Foto ilustrativa de controle sem fio"
+    },
+    "name": "Controle Sem Fio para Console, Preto",
+    "rating": 4.7,
+    "reviewCount": 8842,
+    "glyph": "controller",
+    "sku": "DEMO-p6",
+    "priceMinor": 32900,
+    "inventoryQuantity": 10
+  },
+  {
+    "id": "p7",
+    "image": {
+      "src": "/images/products/plant.webp",
+      "alt": "Foto ilustrativa de vaso com planta"
+    },
+    "name": "Vaso Autoirrigável com Suculenta Artificial",
+    "rating": 4.4,
+    "reviewCount": 612,
+    "glyph": "plant",
+    "sku": "DEMO-p7",
+    "priceMinor": 3990,
+    "inventoryQuantity": 10
+  },
+  {
+    "id": "p8",
+    "image": {
+      "src": "/images/products/lipstick-kit.png",
+      "alt": "Foto ilustrativa de kit com três batons"
+    },
+    "name": "Kit Batom Matte Longa Duração, 3 unidades",
+    "rating": 4.5,
+    "reviewCount": 2210,
+    "glyph": "beauty",
+    "sku": "DEMO-p8",
+    "priceMinor": 4990,
+    "oldPriceMinor": 7990,
+    "inventoryQuantity": 10
+  },
+  {
+    "id": "p9",
+    "image": {
+      "src": "/images/home/huawei-matebook-x-pro.webp",
+      "alt": "Foto ilustrativa de notebook"
+    },
+    "name": "Notebook Ultrafino 15.6\" 8GB 256GB SSD",
+    "rating": 4.4,
+    "reviewCount": 1523,
+    "glyph": "laptop",
+    "sku": "DEMO-p9",
+    "priceMinor": 239900,
+    "oldPriceMinor": 289900,
+    "inventoryQuantity": 10
+  },
+  {
+    "id": "p10",
+    "image": {
+      "src": "/images/products/watch.webp",
+      "alt": "Foto ilustrativa de smartwatch"
+    },
+    "name": "Smartwatch Esportivo com Monitor Cardíaco",
+    "rating": 4.2,
+    "reviewCount": 4210,
+    "glyph": "watch",
+    "sku": "DEMO-p10",
+    "priceMinor": 18990,
+    "oldPriceMinor": 25990,
+    "inventoryQuantity": 10
+  },
+  {
+    "id": "p11",
+    "image": {
+      "src": "/images/products/backpack.png",
+      "alt": "Foto ilustrativa de mochila para notebook"
+    },
+    "name": "Mochila para Notebook até 15.6\", Resistente à Água",
+    "rating": 4.6,
+    "reviewCount": 5471,
+    "glyph": "backpack",
+    "sku": "DEMO-p11",
+    "priceMinor": 12990,
+    "inventoryQuantity": 10
+  },
+  {
+    "id": "p12",
+    "name": "Câmera de Segurança Wi-Fi Full HD",
+    "rating": 4.3,
+    "reviewCount": 3389,
+    "glyph": "camera",
+    "sku": "DEMO-p12",
+    "priceMinor": 14990,
+    "oldPriceMinor": 21990,
+    "inventoryQuantity": 10
+  },
+  {
+    "id": "p13",
+    "image": {
+      "src": "/images/products/hobbit.jpg",
+      "alt": "Capa do livro O Hobbit"
+    },
+    "name": "O Hobbit - Edição de Colecionador",
+    "rating": 4.9,
+    "reviewCount": 12043,
+    "glyph": "book",
+    "sku": "DEMO-p13",
+    "priceMinor": 5490,
+    "inventoryQuantity": 10
+  },
+  {
+    "id": "p14",
+    "name": "Luminária de Mesa LED Regulável",
+    "rating": 4.5,
+    "reviewCount": 1876,
+    "glyph": "lamp",
+    "sku": "DEMO-p14",
+    "priceMinor": 8990,
+    "oldPriceMinor": 11990,
+    "inventoryQuantity": 10
+  },
+  {
+    "id": "p15",
+    "name": "Garrafa Térmica Inox 1L à Prova de Vazamento",
+    "rating": 4.6,
+    "reviewCount": 2650,
+    "glyph": "bottle",
+    "sku": "DEMO-p15",
+    "priceMinor": 6990,
+    "inventoryQuantity": 10
+  },
+  {
+    "id": "p16",
+    "image": {
+      "src": "/images/products/blender.jpg",
+      "alt": "Foto ilustrativa de liquidificador"
+    },
+    "name": "Liquidificador Turbo 1200W 6 Velocidades",
+    "rating": 4.4,
+    "reviewCount": 3987,
+    "glyph": "blender",
+    "sku": "DEMO-p16",
+    "priceMinor": 17990,
+    "oldPriceMinor": 24990,
+    "inventoryQuantity": 10
+  },
+  {
+    "id": "p17",
+    "image": {
+      "src": "/images/products/earphones.webp",
+      "alt": "Foto ilustrativa de fone Bluetooth"
+    },
+    "name": "Fone Bluetooth Esportivo à Prova de Suor",
+    "rating": 4.1,
+    "reviewCount": 1765,
+    "glyph": "headphones",
+    "sku": "DEMO-p17",
+    "priceMinor": 8990,
+    "oldPriceMinor": 13990,
+    "inventoryQuantity": 10
+  },
+  {
+    "id": "p18",
+    "image": {
+      "src": "/images/products/echo-show.jpg",
+      "alt": "Echo Show 5 preto"
+    },
+    "name": "Echo Show 5, Tela Inteligente com Alexa",
+    "rating": 4.6,
+    "reviewCount": 6234,
+    "glyph": "echo",
+    "sku": "DEMO-p18",
+    "priceMinor": 39900,
+    "oldPriceMinor": 49900,
+    "inventoryQuantity": 10
+  },
+  {
+    "id": "p19",
+    "image": {
+      "src": "/images/products/sneakers.webp",
+      "alt": "Foto ilustrativa de tênis casual"
+    },
+    "name": "Tênis Casual Unissex Leve",
+    "rating": 4.2,
+    "reviewCount": 987,
+    "glyph": "sneaker",
+    "sku": "DEMO-p19",
+    "priceMinor": 13990,
+    "inventoryQuantity": 10
+  },
+  {
+    "id": "p20",
+    "name": "Kit 3 Livros Best-sellers de Ficção",
+    "rating": 4.8,
+    "reviewCount": 4102,
+    "glyph": "book",
+    "sku": "DEMO-p20",
+    "priceMinor": 9990,
+    "oldPriceMinor": 14990,
+    "inventoryQuantity": 10
+  }
+]

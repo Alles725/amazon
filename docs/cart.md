@@ -20,11 +20,16 @@ carregado. A sessão de implementação já deixou essa configuração local pro
 4. Recarregue, navegue para a homepage e volte: o carrinho permanece na conta.
 5. Use “Excluir” ou “Esvaziar carrinho”; remover o último item mostra o estado vazio.
 
-O seed atual contém quatro produtos, sem fotos cadastradas. A interface mostra
-“Imagem indisponível”; não associa fotos de outros produtos a esses registros.
-A homepage mantém seus dados demonstrativos e links anteriores. Como as páginas
-de catálogo/detalhe ainda são placeholders, a seleção real para adicionar fica
-no próprio carrinho. Não existe histórico de navegação nem recomendação pessoal.
+O seed inclui os quatro produtos originais e as 20 demonstrações da homepage.
+Estas usam seus próprios arquivos de imagem; os demais mostram “Imagem
+indisponível” quando não há foto. Todos usam UUIDs persistidos no mesmo carrinho.
+Para uma base anterior, execute `pnpm --filter @amazon-mvp/database seed:demo`
+com DATABASE_URL carregado; o comando preserva os registros existentes.
+A homepage mantém seus dados demonstrativos e links anteriores. Produtos reais
+podem ser adicionados no próprio carrinho e na página individual, quando
+`productDetails` estiver habilitada; veja [product-details.md](product-details.md).
+A listagem geral ainda é um placeholder. Não existe histórico de navegação nem
+recomendação pessoal.
 Checkout permanece desativado; o resumo informa que ainda não é possível finalizar.
 
 ## API
