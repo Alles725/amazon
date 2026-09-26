@@ -73,3 +73,10 @@ transmitida pelo canal. Erros de leitura têm estado próprio, distinto de vazio
 - Navegador: adicionar, abrir, alterar quantidade, excluir, esvaziar, recarregar,
   conferir contador na homepage, testar duas abas, sessão expirada e falhas da API.
 - Responsividade verificada em 320, 390, 600, 768, 1024, 1440 e 1920 px.
+
+## Checkout — 2026-09-26
+
+O resumo do carrinho habilita seu link existente quando a flag checkout estiver
+ativa. A finalização usa o mesmo carrinho persistido, converte-o e remove seus
+itens apenas na transação bem-sucedida do pedido. O provider é atualizado depois
+do sucesso. Regras de estoque, revisão e repetição: [checkout.md](checkout.md).

@@ -1,6 +1,7 @@
-import { CatalogProductDetails } from '@amazon-mvp/api-contract';
-import { Injectable } from '@nestjs/common';
-import { Inventory, Product } from '@amazon-mvp/database';
+import { ApiError } from '../../common/api-error';
+import { CatalogProductDetails, ErrorCode, MAX_CART_QUANTITY } from '@amazon-mvp/api-contract';
+import { HttpStatus, Injectable } from '@nestjs/common';
+import { Inventory, Product, Prisma } from '@amazon-mvp/database';
 import { PrismaService } from '../../common/prisma.service';
 import { CatalogApi, CatalogProduct, ProductPage } from './catalog.api';
 
@@ -30,6 +31,42 @@ export class CatalogService implements CatalogApi {
       this.prisma.product.count({ where }),
     ]);
     return { items: products.map(toCatalogProduct), total };
+  }
+
+  async consumeForOrder(
+    items: Array<{ productId: string; quantity: number }>,
+    tx: Prisma.TransactionClient,
+  ): Promise<CatalogProduct[]> {
+    const products: CatalogProduct[] = [];
+    // Same order across checkouts prevents lock inversion for shared products.
+    for (const item of [...items].sort((a, b) => a.productId.localeCompare(b.productId))) {
+      await tx.$queryRaw`SELECT id FROM products WHERE id = ${item.productId}::uuid FOR UPDATE`;
+      const product = await tx.product.findUnique({
+        where: { id: item.productId },
+        include: { inventory: true },
+      });
+      if (
+        !product?.active ||
+        !Number.isInteger(item.quantity) ||
+        item.quantity < 1 ||
+        item.quantity > MAX_CART_QUANTITY
+      )
+        throw new ApiError(
+          ErrorCode.CART_ITEM_UNAVAILABLE,
+          'Um produto não está mais disponível. Revise o carrinho.',
+          HttpStatus.CONFLICT,
+        );
+      const changed =
+        await tx.$executeRaw`UPDATE inventory SET quantity = quantity - ${item.quantity}, updated_at = NOW() WHERE product_id = ${item.productId}::uuid AND quantity - reserved >= ${item.quantity}`;
+      if (changed !== 1)
+        throw new ApiError(
+          ErrorCode.CART_ITEM_UNAVAILABLE,
+          'Estoque insuficiente. Revise as quantidades do carrinho.',
+          HttpStatus.CONFLICT,
+        );
+      products.push(toCatalogProduct(product));
+    }
+    return products;
   }
 
   async getProduct(identifier: string): Promise<CatalogProductDetails | null> {

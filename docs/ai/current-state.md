@@ -98,8 +98,8 @@ This records observed local results, not an assertion that CI or deployment pass
 - Homepage keeps its curated demo presentation from shared fixtures, not a live
   API feed. Its 20 stable IDs now resolve to database slugs; details and cart use
   persisted UUIDs and current prices. Demo review counts remain homepage-only.
-- Product listing, checkout and orders remain placeholders. Product details and
-  cart are implemented and enabled locally; their shipped flags stay false.
+- Product listing and the orders list page remain placeholders. Checkout, product
+  details and cart are implemented and enabled locally; shipped flags stay false.
   A responding route is not evidence of a working purchase flow.
 - Authentication and the account hub/dropdown are preserved. Cart browser checks
   use real authenticated sessions; the existing authentication integration suite
@@ -118,8 +118,7 @@ This records observed local results, not an assertion that CI or deployment pass
 
 ## Not verified in this run
 
-- Shadow-database drift checks were not run. Never use the development database
-  as a disposable shadow database.
+- Checkout drift checks passed using an isolated disposable shadow database.
 - Docker image builds, Kubernetes deployment, migration Job and ingress smoke.
 - Current GitHub CI outcome. Local checks are not a substitute for CI results.
 
@@ -131,6 +130,30 @@ This records observed local results, not an assertion that CI or deployment pass
 ## Enabled features
 
 Only home and authentication are enabled in shared config/features.yaml; the
-local ignored configuration also enables cart. Checkout
-renders 404; other unimplemented destinations render Coming Soon. The account
+local ignored configuration also enables cart, productDetails and checkout.
+Unimplemented destinations render Coming Soon. The account
 hub is part of the authenticated shell and does not enable account management.
+
+## Academic checkout — 2026-09-26
+
+- Reuses CartProvider, session cookies and existing Order/OrderItem tables.
+- Adds saved addresses and immutable order address/payment/cost snapshots through
+  migration 20260926000000_checkout, preserving previous data. Applied locally;
+  schema/migration drift verified in a disposable shadow database.
+- Prices and quantities validated server-side. One transaction locks the cart,
+  checks/decrements inventory, persists order/items and converts/empties the cart.
+  Stale revisions fail; sourceCartId makes retries idempotent. No real card data.
+- Two-column responsive checkout and persisted owner-only confirmation page.
+  Existing product purchase panel links to checkout after adding the product.
+- Details and operational limitations: docs/checkout.md. No production deployment.
+- Validation: 62 unit tests (13 configuration, 12 API, 37 storefront) and 35
+  isolated PostgreSQL integration tests passed. Full lint/typecheck/build,
+  OpenAPI generation and all three Kustomize overlays passed.
+- Browser: real login → product → cart → checkout → confirmed order → empty cart;
+  required fields, saved-address create/edit/select, both simulated payments,
+  quantity/removal/reload, image/placeholder and 320–1920px layouts verified.
+  Lost-response retry returned the same persisted order without duplicates.
+- Database verified exact inventory/totals/snapshots. Temporary users, orders,
+  addresses, products and integration database removed. Homepage geometry and
+  22 footer destinations preserved. No new normal-flow console/backend/DB errors;
+  deliberate failure tests and pre-existing toolchain/favicon warnings excluded.

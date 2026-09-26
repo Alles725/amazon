@@ -9,9 +9,11 @@ import { ProductPrice } from './product-price';
 export function ProductPurchase({
   product,
   cartEnabled,
+  checkoutEnabled = false,
 }: {
   product: CatalogItem;
   cartEnabled: boolean;
+  checkoutEnabled?: boolean;
 }) {
   const { cart, status, pending, error, notice, add, refresh } = useCart();
   const [quantity, setQuantity] = useState(1);
@@ -63,17 +65,27 @@ export function ProductPurchase({
       >
         {pending ? 'Adicionando…' : 'Adicionar ao carrinho'}
       </button>
-      <button
-        type="button"
-        className="az-detail-button az-detail-button--buy"
-        disabled
-        aria-describedby="checkout-unavailable"
-      >
-        Comprar agora
-      </button>
-      <p id="checkout-unavailable" className="az-detail-muted">
-        A finalização da compra ainda não está disponível.
-      </p>
+      {checkoutEnabled && cartEnabled && inCart > 0 && status === 'ready' ? (
+        <Link className="az-detail-button az-detail-button--buy" href="/checkout">
+          Finalizar compra
+        </Link>
+      ) : (
+        <>
+          <button
+            type="button"
+            className="az-detail-button az-detail-button--buy"
+            disabled
+            aria-describedby="checkout-unavailable"
+          >
+            Comprar agora
+          </button>
+          <p id="checkout-unavailable" className="az-detail-muted">
+            {checkoutEnabled
+              ? 'Adicione o produto ao carrinho para finalizar a compra.'
+              : 'A finalização da compra ainda não está disponível.'}
+          </p>
+        </>
+      )}
       {!cartEnabled ? (
         <p className="az-detail-muted">O carrinho ainda não está disponível.</p>
       ) : status === 'guest' ? (

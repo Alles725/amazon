@@ -1,3 +1,5 @@
+import { AddressInput, SavedAddress } from '@amazon-mvp/api-contract';
+import { Prisma } from '@amazon-mvp/database';
 /**
  * Cross-module application interface. Other modules (auth, orders, ...) depend on
  * this token, never on UsersRepository or the Prisma model.
@@ -13,6 +15,17 @@ export interface UserRecord {
 
 export interface UserWithSecret extends UserRecord {
   passwordHash: string;
+}
+
+export const USER_ADDRESSES_API = 'USER_ADDRESSES_API';
+export interface UserAddressesApi {
+  listAddresses(userId: string): Promise<SavedAddress[]>;
+  saveAddress(userId: string, input: AddressInput, id?: string): Promise<SavedAddress>;
+  findAddress(
+    userId: string,
+    id: string,
+    tx?: Prisma.TransactionClient,
+  ): Promise<SavedAddress | null>;
 }
 
 export interface UsersApi {

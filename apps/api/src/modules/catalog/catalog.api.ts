@@ -1,3 +1,4 @@
+import { Prisma } from '@amazon-mvp/database';
 import { CatalogItem, CatalogPage, CatalogProductDetails } from '@amazon-mvp/api-contract';
 
 export const CATALOG_API = 'CATALOG_API';
@@ -6,6 +7,10 @@ export type ProductPage = CatalogPage;
 
 /** Catalog owns products, categories and inventory. */
 export interface CatalogApi {
+  consumeForOrder(
+    items: Array<{ productId: string; quantity: number }>,
+    tx: Prisma.TransactionClient,
+  ): Promise<CatalogProduct[]>;
   listProducts(query: {
     page?: number;
     pageSize?: number;

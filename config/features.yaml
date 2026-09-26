@@ -23,7 +23,7 @@ features:
 
   checkout:
     enabled: false
-    description: Checkout and order placement
+    description: Academic checkout with saved addresses and persisted orders
 
   orders:
     enabled: false

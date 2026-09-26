@@ -12,18 +12,38 @@ datasource db {
 }
 
 model User {
-  id           String    @id @default(uuid()) @db.Uuid
-  email        String    @unique
-  passwordHash String    @map("password_hash")
-  displayName  String    @map("display_name")
-  createdAt    DateTime  @default(now()) @map("created_at")
-  updatedAt    DateTime  @updatedAt @map("updated_at")
+  id           String   @id @default(uuid()) @db.Uuid
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  displayName  String   @map("display_name")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
 
-  sessions Session[]
-  carts    Cart[]
-  orders   Order[]
+  sessions  Session[]
+  carts     Cart[]
+  orders    Order[]
+  addresses Address[]
 
   @@map("users")
+}
+
+model Address {
+  id           String   @id @default(uuid()) @db.Uuid
+  userId       String   @map("user_id") @db.Uuid
+  recipient    String
+  postalCode   String   @map("postal_code")
+  street       String
+  number       String
+  complement   String?
+  neighborhood String
+  city         String
+  state        String   @db.Char(2)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("addresses")
 }
 
 model Session {
@@ -90,10 +110,10 @@ model ProductCategory {
 }
 
 model Inventory {
-  productId  String   @id @map("product_id") @db.Uuid
-  quantity   Int      @default(0)
-  reserved   Int      @default(0)
-  updatedAt  DateTime @updatedAt @map("updated_at")
+  productId String   @id @map("product_id") @db.Uuid
+  quantity  Int      @default(0)
+  reserved  Int      @default(0)
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
@@ -156,6 +176,13 @@ model Order {
   placedAt    DateTime    @default(now()) @map("placed_at")
   createdAt   DateTime    @default(now()) @map("created_at")
   updatedAt   DateTime    @updatedAt @map("updated_at")
+
+  sourceCartId    String? @unique @map("source_cart_id") @db.Uuid
+  subtotalMinor   Int     @default(0) @map("subtotal_minor")
+  shippingMinor   Int     @default(0) @map("shipping_minor")
+  discountMinor   Int     @default(0) @map("discount_minor")
+  shippingAddress Json?   @map("shipping_address")
+  paymentMethod   String? @map("payment_method")
 
   user  User        @relation(fields: [userId], references: [id], onDelete: Restrict)
   items OrderItem[]

@@ -74,3 +74,10 @@ tem no máximo uma; a troca de miniaturas continua coberta por teste de componen
   produtos completos/incompletos em quatro larguras sem overflow e sem novos erros.
 - Contas e produtos temporários dos testes são removidos. Os 20 registros de
   demonstração permanecem no catálogo para os links da aplicação funcionarem.
+
+## Checkout integration — 2026-09-26
+
+When checkout is enabled and this product is already in the cart, the purchase
+panel links to the real `/checkout` flow. Otherwise it explains that the product
+must be added first; disabled deployments retain the unavailable message.
+See [checkout.md](checkout.md).

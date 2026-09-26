@@ -179,6 +179,18 @@ iterations:
           products share details/cart. Photo and empty-data fallbacks verified.
           Shared productDetails flag remains off; local override enables it.
 
+  - id: 7
+    name: Academic checkout
+    stories:
+      - id: CHECKOUT-001
+        owner: dev2
+        status: done
+        title: Authenticated checkout with saved addresses and transactional orders
+        note: >-
+          Existing cart/session/order models reused. Simulated payment, server totals,
+          immutable order snapshots, inventory rollback and idempotent confirmation.
+          New migration applied locally; shared checkout flag stays disabled.
+
 next_up:
   - id: FIRSTRUN-001
     title: First cluster run

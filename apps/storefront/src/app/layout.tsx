@@ -23,7 +23,11 @@ const BARE_ROUTES = ['/login', '/', '/account', '/cart'];
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const pathname = headers().get('x-pathname') ?? '';
-  const bare = BARE_ROUTES.includes(pathname) || /^\/products\/[^/]+\/?$/.test(pathname);
+  const bare =
+    BARE_ROUTES.includes(pathname) ||
+    pathname === '/checkout' ||
+    pathname.startsWith('/checkout/') ||
+    /^\/products\/[^/]+\/?$/.test(pathname);
 
   const cartEnabled = isFeatureEnabled('cart');
   const session = cartEnabled ? await getServerSession() : null;

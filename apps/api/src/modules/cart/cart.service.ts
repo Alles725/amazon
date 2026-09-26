@@ -167,6 +167,37 @@ export class CartService implements CartApi {
     return this.view(userId, result);
   }
 
+  async lockForCheckout(userId: string, tx: Prisma.TransactionClient): Promise<void> {
+    await tx.$queryRaw`SELECT pg_advisory_xact_lock(hashtext(${userId}))::text`;
+  }
+
+  async checkoutItems(userId: string, cartId: string, tx: Prisma.TransactionClient) {
+    const cart = await tx.cart.findFirst({
+      where: { id: cartId, userId, status: 'ACTIVE' },
+      include: { items: true },
+    });
+    if (!cart?.items.length)
+      throw new ApiError(
+        ErrorCode.CART_ITEM_UNAVAILABLE,
+        'Seu carrinho está vazio ou já foi finalizado.',
+        HttpStatus.CONFLICT,
+      );
+    return cart.items.map(({ productId, quantity }) => ({ productId, quantity }));
+  }
+
+  async convertForCheckout(
+    userId: string,
+    cartId: string,
+    tx: Prisma.TransactionClient,
+  ): Promise<void> {
+    const converted = await tx.cart.updateMany({
+      where: { id: cartId, userId, status: 'ACTIVE' },
+      data: { status: 'CONVERTED' },
+    });
+    if (!converted.count) throw ApiError.notFound('Cart');
+    await tx.cartItem.deleteMany({ where: { cartId } });
+  }
+
   async markConverted(cartId: string): Promise<void> {
     const cart = await this.prisma.cart.findUnique({ where: { id: cartId } });
     if (!cart) throw ApiError.notFound('Cart');
