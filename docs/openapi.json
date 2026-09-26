@@ -31,6 +31,115 @@
         ]
       }
     },
+    "/api/v1/addresses": {
+      "get": {
+        "operationId": "AddressesController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SavedAddressDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "addresses"
+        ]
+      },
+      "post": {
+        "operationId": "AddressesController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddressInputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavedAddressDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "addresses"
+        ]
+      }
+    },
+    "/api/v1/addresses/{addressId}": {
+      "put": {
+        "operationId": "AddressesController_update",
+        "parameters": [
+          {
+            "name": "addressId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddressInputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavedAddressDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "addresses"
+        ]
+      }
+    },
     "/api/v1/auth/identify": {
       "post": {
         "operationId": "AuthController_identify",
@@ -667,6 +776,131 @@
           "cart"
         ]
       }
+    },
+    "/api/v1/orders/quote": {
+      "get": {
+        "operationId": "OrdersController_quote",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckoutQuoteDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "orders"
+        ]
+      }
+    },
+    "/api/v1/orders": {
+      "post": {
+        "operationId": "OrdersController_place",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlaceOrderDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "orders"
+        ]
+      },
+      "get": {
+        "operationId": "OrdersController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrderResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "orders"
+        ]
+      }
+    },
+    "/api/v1/orders/{orderId}": {
+      "get": {
+        "operationId": "OrdersController_get",
+        "parameters": [
+          {
+            "name": "orderId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "orders"
+        ]
+      }
     }
   },
   "info": {
@@ -699,6 +933,89 @@
       }
     },
     "schemas": {
+      "SavedAddressDto": {
+        "type": "object",
+        "properties": {
+          "recipient": {
+            "type": "string"
+          },
+          "postalCode": {
+            "type": "string",
+            "example": "90020060"
+          },
+          "street": {
+            "type": "string"
+          },
+          "number": {
+            "type": "string"
+          },
+          "complement": {
+            "type": "string"
+          },
+          "neighborhood": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "recipient",
+          "postalCode",
+          "street",
+          "number",
+          "neighborhood",
+          "city",
+          "state",
+          "id"
+        ]
+      },
+      "AddressInputDto": {
+        "type": "object",
+        "properties": {
+          "recipient": {
+            "type": "string"
+          },
+          "postalCode": {
+            "type": "string",
+            "example": "90020060"
+          },
+          "street": {
+            "type": "string"
+          },
+          "number": {
+            "type": "string"
+          },
+          "complement": {
+            "type": "string"
+          },
+          "neighborhood": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "recipient",
+          "postalCode",
+          "street",
+          "number",
+          "neighborhood",
+          "city",
+          "state"
+        ]
+      },
       "IdentifyDto": {
         "type": "object",
         "properties": {
@@ -1091,6 +1408,175 @@
         },
         "required": [
           "quantity"
+        ]
+      },
+      "CheckoutQuoteDto": {
+        "type": "object",
+        "properties": {
+          "cart": {
+            "$ref": "#/components/schemas/CartResponseDto"
+          },
+          "revision": {
+            "type": "string"
+          },
+          "subtotalMinor": {
+            "type": "number"
+          },
+          "shippingMinor": {
+            "type": "number"
+          },
+          "discountMinor": {
+            "type": "number"
+          },
+          "totalMinor": {
+            "type": "number"
+          },
+          "currency": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "cart",
+          "revision",
+          "subtotalMinor",
+          "shippingMinor",
+          "discountMinor",
+          "totalMinor",
+          "currency"
+        ]
+      },
+      "PlaceOrderDto": {
+        "type": "object",
+        "properties": {
+          "cartId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "revision": {
+            "type": "string"
+          },
+          "addressId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "paymentMethod": {
+            "type": "string",
+            "enum": [
+              "SIMULATED_CARD",
+              "SIMULATED_PIX"
+            ]
+          }
+        },
+        "required": [
+          "cartId",
+          "revision",
+          "addressId",
+          "paymentMethod"
+        ]
+      },
+      "OrderLineDto": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "string"
+          },
+          "productName": {
+            "type": "string"
+          },
+          "sku": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "unitPriceMinor": {
+            "type": "number"
+          },
+          "lineTotalMinor": {
+            "type": "number"
+          },
+          "currency": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "productId",
+          "productName",
+          "sku",
+          "quantity",
+          "unitPriceMinor",
+          "lineTotalMinor",
+          "currency"
+        ]
+      },
+      "OrderResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "orderNumber": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "PAID",
+              "CANCELLED",
+              "FULFILLED"
+            ]
+          },
+          "subtotalMinor": {
+            "type": "number"
+          },
+          "shippingMinor": {
+            "type": "number"
+          },
+          "discountMinor": {
+            "type": "number"
+          },
+          "totalMinor": {
+            "type": "number"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "shippingAddress": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AddressInputDto"
+              }
+            ]
+          },
+          "paymentMethod": {
+            "type": "string",
+            "nullable": true
+          },
+          "placedAt": {
+            "type": "string"
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderLineDto"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "orderNumber",
+          "status",
+          "subtotalMinor",
+          "shippingMinor",
+          "discountMinor",
+          "totalMinor",
+          "currency",
+          "shippingAddress",
+          "paymentMethod",
+          "placedAt",
+          "lines"
         ]
       }
     }

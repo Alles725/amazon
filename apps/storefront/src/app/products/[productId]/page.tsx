@@ -108,6 +108,7 @@ export default async function ProductDetailPage({ params }: { params: { productI
           key={`purchase-${product.id}`}
           product={product}
           cartEnabled={isFeatureEnabled('cart')}
+          checkoutEnabled={isFeatureEnabled('checkout')}
         />
       </div>
       {related.length > 0 && (

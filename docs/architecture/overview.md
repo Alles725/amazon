@@ -37,6 +37,7 @@ Modules communicate only through injection tokens backed by interfaces:
 | Token | Interface | Owns |
 | --- | --- | --- |
 | `USERS_API` | `UsersApi` | `users` |
+| `USER_ADDRESSES_API` | `UserAddressesApi` | `addresses` (Users module) |
 | `SESSIONS_API` | `SessionsApi` | `sessions` |
 | `CATALOG_API` | `CatalogApi` | `products`, `categories`, `product_categories`, `inventory` |
 | `CART_API` | `CartApi` | `carts`, `cart_items` |
@@ -81,3 +82,12 @@ by name mangling.
 route bound to an undeclared feature fails validation rather than silently
 behaving as disabled. The same file is mounted into the storefront pod through a
 Kustomize `configMapGenerator`, so cluster and repository cannot disagree.
+
+## Checkout transaction
+
+Orders orchestrates one Prisma transaction via CART_API, CATALOG_API and
+USER_ADDRESSES_API. Cart owns its user lock and conversion, Catalog owns stock
+locking/decrements, Users owns address lookup; Orders only queries orders/items.
+The transaction client is passed through internal interfaces, without a second
+connection or cross-module table access. See [checkout](../checkout.md) for
+idempotency, snapshot, price-revision and academic-payment semantics.

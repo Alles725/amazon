@@ -83,7 +83,7 @@ export function LoginIdentifierForm() {
       // Argon2id verification against the stored hash and a Postgres-backed
       // session, delivered as an httpOnly cookie. Nothing here is mocked.
       await authClient.login({ email, password });
-      router.push('/account');
+      router.push(searchParams.get('next') === 'checkout' ? '/checkout' : '/account');
       router.refresh();
     } catch (error) {
       if (error instanceof AuthRequestError && error.code === 'AUTH_INVALID_CREDENTIALS') {

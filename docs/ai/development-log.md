@@ -159,3 +159,36 @@ install, Prisma generation, shared builds, lint/types, 56 unit tests, production
 builds, OpenAPI and all overlays successfully. Integration/browser results above
 remain applicable to the same code; they were not needlessly repeated here.
 Review found no blockers. Commit/push/PR await final create-pr approval.
+
+## 2026-09-26 — CHECKOUT-001
+
+Implemented Amazon-style academic checkout after inspecting cart/session/models
+and docs/reference/Checkout. Reused existing Order/OrderItem, adding saved user
+addresses, cost/address/payment snapshots and source-cart uniqueness through one
+compatible migration. No real card input or payment gateway.
+
+Orders orchestrates existing module interfaces in one database transaction for
+authoritative prices, inventory checks, immutable order items and cart conversion.
+Revision checks prevent silently buying an altered cart. Duplicate/lost-response
+retries return the original order and preserve any subsequent cart.
+
+Added two-column checkout, responsive address editor/selector, simulated card/Pix,
+existing cart controls, dynamic summary and persisted owner-only confirmation.
+Login returns to checkout through a fixed allowlisted destination. Product panel
+exposes a checkout link for an item already in the cart when enabled.
+
+Validation: 62 unit tests and 35 isolated database integrations pass, including
+concurrent stock competition, duplicate confirmation and forced rollback. Full
+install/generate/shared builds/lint/types/unit/build/OpenAPI/manifests passed;
+local migration applied and isolated-shadow drift check passed. Browser exercised
+complete real login-to-order flow, negative validation, address editing/selection,
+qty/remove/reload, empty cart, both payment options, image and placeholder layouts,
+and lost HTTP response recovery. Seven viewport widths, homepage regression and
+22 footer routes passed. Direct DB checks confirmed quantities/totals/snapshots.
+Temporary test data removed; normal-flow logs had no new application/DB errors.
+
+Implementation initially completed without publication or deployment. A subsequent
+create-pr request prepared feat/academic-checkout from updated main; publication
+awaits final approval. Shared flags stay false;
+local ignored config enables checkout alongside cart/productDetails. Application
+left running locally. See docs/checkout.md for limits and operating details.

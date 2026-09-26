@@ -162,3 +162,61 @@ export const CART_ROUTES = {
   items: `${API_PREFIX}/cart/items`,
 } as const;
 export const CATALOG_ROUTES = { products: `${API_PREFIX}/catalog/products` } as const;
+
+export interface AddressInput {
+  recipient: string;
+  postalCode: string;
+  street: string;
+  number: string;
+  complement?: string;
+  neighborhood: string;
+  city: string;
+  state: string;
+}
+export interface SavedAddress extends AddressInput {
+  id: string;
+}
+export type SimulatedPayment = 'SIMULATED_CARD' | 'SIMULATED_PIX';
+export interface CheckoutQuote {
+  cart: CartResponse;
+  revision: string;
+  subtotalMinor: number;
+  shippingMinor: number;
+  discountMinor: number;
+  totalMinor: number;
+  currency: string;
+}
+export interface PlaceOrderRequest {
+  cartId: string;
+  revision: string;
+  addressId: string;
+  paymentMethod: SimulatedPayment;
+}
+export interface OrderLineResponse {
+  productId: string;
+  productName: string;
+  sku: string;
+  quantity: number;
+  unitPriceMinor: number;
+  lineTotalMinor: number;
+  currency: string;
+}
+export interface OrderResponse {
+  id: string;
+  orderNumber: string;
+  status: 'PENDING' | 'PAID' | 'CANCELLED' | 'FULFILLED';
+  subtotalMinor: number;
+  shippingMinor: number;
+  discountMinor: number;
+  totalMinor: number;
+  currency: string;
+  shippingAddress: AddressInput | null;
+  paymentMethod: SimulatedPayment | null;
+  placedAt: string;
+  lines: OrderLineResponse[];
+}
+export const CHECKOUT_ROUTES = {
+  addresses: `${API_PREFIX}/addresses`,
+  quote: `${API_PREFIX}/orders/quote`,
+  orders: `${API_PREFIX}/orders`,
+} as const;
