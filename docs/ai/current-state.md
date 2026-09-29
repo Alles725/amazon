@@ -302,3 +302,15 @@ hub is part of the authenticated shell and does not enable account management.
   with all stock already in the cart it opens checkout directly. Both covered by unit tests.
 - Remaining review items recorded in backlog.yaml (CATALOG-BATCH-001, PDP-A11Y-001,
   PDP-META-001, CATALOG-PATH-001).
+
+## Catalog expansion (CATALOG-002) — 2026-09-29
+
+- Local database seeded: 150 products (23 original demo + 123 new + 4 base seed), 89
+  categories, 160 category links, 150 inventory rows; no duplicated SKU/slug; orders and
+  users preserved; 8BitDo family rows identical before/after. Seed rerun: identical counts.
+- Executed: lint, typecheck, unit tests, 39 API integration tests (disposable DB, removed),
+  OpenAPI regenerated, browser journey and a render check of all 147 product pages.
+- Not executed: prisma generate while the local API on :3001 held the query engine DLL
+  (schema unchanged); storefront standalone output (Windows EPERM on symlinks); Kustomize
+  (not installed); Docker images. The API on :3001 still runs the old code and must be
+  restarted for the Home's ?slugs= call.

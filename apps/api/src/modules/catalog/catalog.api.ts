@@ -15,6 +15,7 @@ export interface CatalogApi {
     page?: number;
     pageSize?: number;
     category?: string;
+    slugs?: string[];
   }): Promise<ProductPage>;
   getProduct(identifier: string): Promise<CatalogProductDetails | null>;
   findBySlug(slug: string): Promise<CatalogProduct | null>;

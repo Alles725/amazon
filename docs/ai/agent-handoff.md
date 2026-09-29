@@ -2,10 +2,10 @@
 
 ## Current objective
 
-PRODUCT-002 + INTEGRATION-001 — Amazon-style product detail page for every catalog product
-and the end-to-end integration audit (see current-state.md, docs/product-details.md).
-PR preparation is on feat/pagina-de-produto, created from origin/main at 9433c8c (orders
-PR #17 merged). Commit, push and PR await the final explicit approval.
+CATALOG-002 — demo catalog expanded to 150 products with ranked related products (see
+current-state.md, docs/product-details.md "Produtos relacionados"). PR preparation is on
+feat/catalogo-expandido, created from origin/main at 6ba058b (product page PR #18 merged).
+Commit, push and PR await the final explicit approval.
 
 ## Implementation
 
@@ -17,7 +17,9 @@ PR #17 merged). Commit, push and PR await the final explicit approval.
 - API: categories.parent_id (migration 20260930000000_category_hierarchy), categoryPath,
   category filter over the subtree. Seed: demo taxonomy, p21–p23, guarded p6 upgrade.
 - New flag productReviews (false → Coming Soon on /products/[id]/review).
-- Previous objective ORDERS-001 merged (PR #17).
+- CATALOG-002: p24-p146 in the demo fixtures, images in public/images/products/catalog,
+  related-products.ts (ranking), listBySlugs + API ?slugs= for the Home.
+- Previous objective PRODUCT-002 merged (PR #18).
 
 ## Configuration and limits
 

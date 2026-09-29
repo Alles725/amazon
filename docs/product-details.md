@@ -17,7 +17,7 @@ sem cache. Não existe página, `if` ou rota específica por produto: o 8BitDo U
 | Avaliações individuais e mídia de clientes | `features/product/reviews/product-reviews.ts` ← `config/demo-reviews.json` |
 | "Você comprou este produto…" | Pedidos reais do usuário (`fetchOrders()`, mesma fonte de "Seus pedidos") |
 | "Enviar para …" | Primeiro endereço salvo do usuário (`GET /addresses`, mesma ordem do checkout) |
-| Relacionados | Produtos ativos da mesma categoria, ampliando um nível do breadcrumb por vez |
+| Relacionados | `relatedProducts` + `rankRelated` (ver "Produtos relacionados" abaixo) |
 | Cards da Home | Curadoria (quais produtos, em que vitrine) do fixture; nome, preço e estoque do registro do catálogo (`features/home/home-catalog.ts`) |
 
 Conteúdo de apresentação **nunca** sobrescreve identidade, preço, estoque, descrição ou
@@ -33,6 +33,24 @@ navega para a URL daquele registro, então imagem, preço, estoque, título, met
 linha do carrinho trocam juntos. A matriz (`variantDimensions`) mantém as outras opções
 selecionadas quando possível. Variações indisponíveis aparecem tracejadas. A Home mostra
 um card por família (`variantOf` fica fora das vitrines).
+
+## Produtos relacionados
+
+`features/product/product-server.ts` (`relatedProducts`) busca candidatos por categoria e
+`features/product/related-products.ts` (`rankRelated`, função pura) os ordena:
+
+1. **Distância de categoria**: primeiro todas as categorias do próprio produto (um teclado
+   gamer está em "Teclados" e em "Periféricos Gamer"), depois os ancestrais do breadcrumb, um
+   nível por vez. Cada nível é uma requisição `?category=` limitada (24 itens, filtrada no
+   banco) e a busca só sobe enquanto o carrossel não tem 12 cards — nunca sai do departamento.
+2. **Categorias em comum**: quem aparece em mais categorias do produto vem antes (outro headset
+   antes de um teclado gamer).
+3. **Disponibilidade**: esgotados vão para o fim.
+4. **Afinidade**: mesma marca (+4), atributos iguais como a cor (+1 cada, até 3) e preço
+   parecido (até +3; 4x mais caro/barato já não conta).
+5. **Famílias**: a própria família nunca aparece (ela está nas amostras de cor); cada outra
+   família aparece uma vez — o membro que combina (ex.: a variação preta para um tênis preto)
+   ou, sem preferência, a cabeça da família, como na Home.
 
 ## Carrinho e checkout (fluxos existentes)
 
@@ -70,6 +88,15 @@ um card por família (`variantOf` fica fora das vitrines).
 Migration `20260930000000_category_hierarchy` adiciona `categories.parent_id` (FK para a
 própria tabela, `ON DELETE SET NULL`, indexada). A API passa a devolver `categoryPath` e o
 filtro `?category=` inclui a subárvore inteira.
+
+### Catálogo demo (150 produtos)
+
+`config/demo-products.json` + `config/demo-product-content.json` descrevem p1–p146 (p1–p23
+originais, p24–p146 da expansão), e o `seed.ts` base adiciona 4 produtos legados. São 24
+famílias de cor novas (além do 8BitDo), 86 categorias demo e mais de 30 marcas. Imagens dos
+novos produtos ficam em `apps/storefront/public/images/products/catalog/` (uma por produto
+ou por cor; origem em `SOURCES.md`). A Home resolve todas as vitrines numa única consulta
+`GET /catalog/products?slugs=...` (até 48 slugs por requisição) em vez de uma por card.
 
 `pnpm --filter @amazon-mvp/database seed:demo` (idempotente):
 

@@ -320,12 +320,31 @@ iterations:
 
       - id: CATALOG-BATCH-001
         owner: dev1
-        status: planned
+        status: done
         title: Batch catalog read for the Home (GET /catalog/products?slugs=...)
         note: >-
-          features/home/home-catalog.ts resolves ~20 curated cards with one API call each
-          (each doing a product query plus a breadcrumb query per category). Add a slugs
-          filter to the list endpoint (DTO, api-contract, openapi.json) and use one call.
+          Delivered with CATALOG-002: ?slugs= (comma-separated, max 48, validated) on the
+          list endpoint, openapi.json regenerated; the Home resolves every rail with one
+          call (listBySlugs in product-server.ts). Covered by catalog.e2e and home-catalog.spec.
+      - id: CATALOG-002
+        owner: dev2
+        status: done
+        title: Expand the demo catalog to ~150 products and rank related products
+        note: >-
+          123 new demo records (p24-p146) in the existing fixtures/seed: 48 new categories
+          (new root Esportes), 30 new brands, 24 colour families in the 8BitDo pattern,
+          one image per product/colour (generated SVG or DummyJSON photo, see
+          public/images/products/catalog/SOURCES.md), mixed stock. relatedProducts ranks
+          by category distance, shared categories, stock, brand/attributes/price and
+          collapses families (related-products.ts). Seed run on the local DB (27 -> 150).
+      - id: CATALOG-LEGACY-001
+        owner: dev1
+        status: planned
+        title: Move the 4 base-seed products (seed.ts) into the demo taxonomy
+        note: >-
+          usb-c-charger-65w, wireless-mouse-quiet, the book and the kettle live in the
+          English categories electronics/books/home-kitchen, so their related rail only
+          sees each other (2 cards).
       - id: PDP-A11Y-001
         owner: dev2
         status: planned

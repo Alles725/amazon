@@ -321,5 +321,1826 @@
     "priceMinor": 20010,
     "inventoryQuantity": 10,
     "variantOf": "p6"
+  },
+
+  {
+    "id": "p24",
+    "image": {
+      "src": "/images/products/catalog/stride-aero-3-preto.svg",
+      "alt": "Ilustração: Tênis de Corrida Stride Aero 3 Masculino na cor preto"
+    },
+    "name": "Tênis de Corrida Stride Aero 3 Masculino, Preto",
+    "rating": 4.6,
+    "reviewCount": 2841,
+    "glyph": "sneaker",
+    "sku": "DEMO-p24",
+    "priceMinor": 34990,
+    "oldPriceMinor": 42990,
+    "inventoryQuantity": 48
+  },
+  {
+    "id": "p25",
+    "image": {
+      "src": "/images/products/catalog/stride-aero-3-branco.svg",
+      "alt": "Ilustração: Tênis de Corrida Stride Aero 3 Masculino na cor branco"
+    },
+    "name": "Tênis de Corrida Stride Aero 3 Masculino, Branco",
+    "rating": 4.6,
+    "reviewCount": 2841,
+    "glyph": "sneaker",
+    "sku": "DEMO-p25",
+    "priceMinor": 34990,
+    "oldPriceMinor": 42990,
+    "inventoryQuantity": 22,
+    "variantOf": "p24"
+  },
+  {
+    "id": "p26",
+    "image": {
+      "src": "/images/products/catalog/stride-aero-3-azul.svg",
+      "alt": "Ilustração: Tênis de Corrida Stride Aero 3 Masculino na cor azul"
+    },
+    "name": "Tênis de Corrida Stride Aero 3 Masculino, Azul",
+    "rating": 4.6,
+    "reviewCount": 2841,
+    "glyph": "sneaker",
+    "sku": "DEMO-p26",
+    "priceMinor": 34990,
+    "oldPriceMinor": 42990,
+    "inventoryQuantity": 3,
+    "variantOf": "p24"
+  },
+  {
+    "id": "p27",
+    "image": {
+      "src": "/images/products/catalog/stride-aero-3-vermelho.svg",
+      "alt": "Ilustração: Tênis de Corrida Stride Aero 3 Masculino na cor vermelho"
+    },
+    "name": "Tênis de Corrida Stride Aero 3 Masculino, Vermelho",
+    "rating": 4.6,
+    "reviewCount": 2841,
+    "glyph": "sneaker",
+    "sku": "DEMO-p27",
+    "priceMinor": 34990,
+    "oldPriceMinor": 42990,
+    "inventoryQuantity": 0,
+    "variantOf": "p24"
+  },
+  {
+    "id": "p28",
+    "image": {
+      "src": "/images/products/catalog/veloce-pulse-cinza.svg",
+      "alt": "Ilustração: Tênis de Corrida Veloce Pulse Unissex na cor cinza"
+    },
+    "name": "Tênis de Corrida Veloce Pulse Unissex, Cinza",
+    "rating": 4.4,
+    "reviewCount": 1320,
+    "glyph": "sneaker",
+    "sku": "DEMO-p28",
+    "priceMinor": 27990,
+    "inventoryQuantity": 35
+  },
+  {
+    "id": "p29",
+    "image": {
+      "src": "/images/products/catalog/veloce-pulse-verde.svg",
+      "alt": "Ilustração: Tênis de Corrida Veloce Pulse Unissex na cor verde"
+    },
+    "name": "Tênis de Corrida Veloce Pulse Unissex, Verde",
+    "rating": 4.4,
+    "reviewCount": 1320,
+    "glyph": "sneaker",
+    "sku": "DEMO-p29",
+    "priceMinor": 27990,
+    "inventoryQuantity": 27,
+    "variantOf": "p28"
+  },
+  {
+    "id": "p30",
+    "image": {
+      "src": "/images/products/catalog/veloce-pulse-azul.svg",
+      "alt": "Ilustração: Tênis de Corrida Veloce Pulse Unissex na cor azul"
+    },
+    "name": "Tênis de Corrida Veloce Pulse Unissex, Azul",
+    "rating": 4.4,
+    "reviewCount": 1320,
+    "glyph": "sneaker",
+    "sku": "DEMO-p30",
+    "priceMinor": 27990,
+    "inventoryQuantity": 31,
+    "variantOf": "p28"
+  },
+  {
+    "id": "p31",
+    "image": {
+      "src": "/images/products/catalog/kinetik-marathon-carbon.svg",
+      "alt": "Ilustração: Tênis de Corrida Kinetik Marathon Carbon com Placa de Carbono"
+    },
+    "name": "Tênis de Corrida Kinetik Marathon Carbon com Placa de Carbono",
+    "rating": 4.7,
+    "reviewCount": 612,
+    "glyph": "sneaker",
+    "sku": "DEMO-p31",
+    "priceMinor": 79990,
+    "oldPriceMinor": 99990,
+    "inventoryQuantity": 14
+  },
+  {
+    "id": "p32",
+    "image": {
+      "src": "/images/products/catalog/puma-future-rider-1.webp",
+      "alt": "Tênis Puma Future Rider Trainers, foto principal"
+    },
+    "name": "Tênis Puma Future Rider Trainers",
+    "rating": 4.5,
+    "reviewCount": 3877,
+    "glyph": "sneaker",
+    "sku": "DEMO-p32",
+    "priceMinor": 39990,
+    "oldPriceMinor": 49990,
+    "inventoryQuantity": 26
+  },
+  {
+    "id": "p33",
+    "image": {
+      "src": "/images/products/catalog/nike-air-jordan-1-1.webp",
+      "alt": "Tênis Nike Air Jordan 1 Vermelho e Preto, foto principal"
+    },
+    "name": "Tênis Nike Air Jordan 1 Vermelho e Preto",
+    "rating": 4.8,
+    "reviewCount": 9214,
+    "glyph": "sneaker",
+    "sku": "DEMO-p33",
+    "priceMinor": 99990,
+    "inventoryQuantity": 2
+  },
+  {
+    "id": "p34",
+    "image": {
+      "src": "/images/products/catalog/urbano-classic-branco.svg",
+      "alt": "Ilustração: Tênis Casual Urbano Classic em Couro na cor branco"
+    },
+    "name": "Tênis Casual Urbano Classic em Couro, Branco",
+    "rating": 4.5,
+    "reviewCount": 1984,
+    "glyph": "sneaker",
+    "sku": "DEMO-p34",
+    "priceMinor": 22990,
+    "oldPriceMinor": 27990,
+    "inventoryQuantity": 41
+  },
+  {
+    "id": "p35",
+    "image": {
+      "src": "/images/products/catalog/urbano-classic-preto.svg",
+      "alt": "Ilustração: Tênis Casual Urbano Classic em Couro na cor preto"
+    },
+    "name": "Tênis Casual Urbano Classic em Couro, Preto",
+    "rating": 4.5,
+    "reviewCount": 1984,
+    "glyph": "sneaker",
+    "sku": "DEMO-p35",
+    "priceMinor": 22990,
+    "oldPriceMinor": 27990,
+    "inventoryQuantity": 30,
+    "variantOf": "p34"
+  },
+  {
+    "id": "p36",
+    "image": {
+      "src": "/images/products/catalog/urbano-classic-vermelho.svg",
+      "alt": "Ilustração: Tênis Casual Urbano Classic em Couro na cor vermelho"
+    },
+    "name": "Tênis Casual Urbano Classic em Couro, Vermelho",
+    "rating": 4.5,
+    "reviewCount": 1984,
+    "glyph": "sneaker",
+    "sku": "DEMO-p36",
+    "priceMinor": 22990,
+    "oldPriceMinor": 27990,
+    "inventoryQuantity": 12,
+    "variantOf": "p34"
+  },
+  {
+    "id": "p37",
+    "image": {
+      "src": "/images/products/catalog/kairo-canvas-low-preto.svg",
+      "alt": "Ilustração: Tênis Kairo Canvas Low Unissex na cor preto"
+    },
+    "name": "Tênis Kairo Canvas Low Unissex, Preto",
+    "rating": 4.3,
+    "reviewCount": 5120,
+    "glyph": "sneaker",
+    "sku": "DEMO-p37",
+    "priceMinor": 12990,
+    "inventoryQuantity": 64
+  },
+  {
+    "id": "p38",
+    "image": {
+      "src": "/images/products/catalog/kairo-canvas-low-branco.svg",
+      "alt": "Ilustração: Tênis Kairo Canvas Low Unissex na cor branco"
+    },
+    "name": "Tênis Kairo Canvas Low Unissex, Branco",
+    "rating": 4.3,
+    "reviewCount": 5120,
+    "glyph": "sneaker",
+    "sku": "DEMO-p38",
+    "priceMinor": 12990,
+    "inventoryQuantity": 58,
+    "variantOf": "p37"
+  },
+  {
+    "id": "p39",
+    "image": {
+      "src": "/images/products/catalog/kairo-canvas-low-azul-marinho.svg",
+      "alt": "Ilustração: Tênis Kairo Canvas Low Unissex na cor azul-marinho"
+    },
+    "name": "Tênis Kairo Canvas Low Unissex, Azul-marinho",
+    "rating": 4.3,
+    "reviewCount": 5120,
+    "glyph": "sneaker",
+    "sku": "DEMO-p39",
+    "priceMinor": 12990,
+    "inventoryQuantity": 37,
+    "variantOf": "p37"
+  },
+  {
+    "id": "p40",
+    "image": {
+      "src": "/images/products/catalog/kinetik-force-cross-preto.svg",
+      "alt": "Ilustração: Tênis de Treino Kinetik Force Cross para Academia na cor preto"
+    },
+    "name": "Tênis de Treino Kinetik Force Cross para Academia, Preto",
+    "rating": 4.6,
+    "reviewCount": 1476,
+    "glyph": "sneaker",
+    "sku": "DEMO-p40",
+    "priceMinor": 31990,
+    "oldPriceMinor": 36990,
+    "inventoryQuantity": 33
+  },
+  {
+    "id": "p41",
+    "image": {
+      "src": "/images/products/catalog/kinetik-force-cross-cinza.svg",
+      "alt": "Ilustração: Tênis de Treino Kinetik Force Cross para Academia na cor cinza"
+    },
+    "name": "Tênis de Treino Kinetik Force Cross para Academia, Cinza",
+    "rating": 4.6,
+    "reviewCount": 1476,
+    "glyph": "sneaker",
+    "sku": "DEMO-p41",
+    "priceMinor": 31990,
+    "oldPriceMinor": 36990,
+    "inventoryQuantity": 19,
+    "variantOf": "p40"
+  },
+  {
+    "id": "p42",
+    "image": {
+      "src": "/images/products/catalog/terrah-comfort-slide-preto.svg",
+      "alt": "Ilustração: Chinelo Slide Terrah Comfort Unissex na cor preto"
+    },
+    "name": "Chinelo Slide Terrah Comfort Unissex, Preto",
+    "rating": 4.4,
+    "reviewCount": 8321,
+    "glyph": "sandal",
+    "sku": "DEMO-p42",
+    "priceMinor": 7990,
+    "inventoryQuantity": 70
+  },
+  {
+    "id": "p43",
+    "image": {
+      "src": "/images/products/catalog/terrah-comfort-slide-branco.svg",
+      "alt": "Ilustração: Chinelo Slide Terrah Comfort Unissex na cor branco"
+    },
+    "name": "Chinelo Slide Terrah Comfort Unissex, Branco",
+    "rating": 4.4,
+    "reviewCount": 8321,
+    "glyph": "sandal",
+    "sku": "DEMO-p43",
+    "priceMinor": 7990,
+    "inventoryQuantity": 44,
+    "variantOf": "p42"
+  },
+  {
+    "id": "p44",
+    "image": {
+      "src": "/images/products/catalog/terrah-comfort-slide-azul.svg",
+      "alt": "Ilustração: Chinelo Slide Terrah Comfort Unissex na cor azul"
+    },
+    "name": "Chinelo Slide Terrah Comfort Unissex, Azul",
+    "rating": 4.4,
+    "reviewCount": 8321,
+    "glyph": "sandal",
+    "sku": "DEMO-p44",
+    "priceMinor": 7990,
+    "inventoryQuantity": 39,
+    "variantOf": "p42"
+  },
+  {
+    "id": "p45",
+    "image": {
+      "src": "/images/products/catalog/kairo-brasil.svg",
+      "alt": "Ilustração: Chinelo de Dedo Kairo Brasil"
+    },
+    "name": "Chinelo de Dedo Kairo Brasil",
+    "rating": 4.6,
+    "reviewCount": 15230,
+    "glyph": "sandal",
+    "sku": "DEMO-p45",
+    "priceMinor": 3990,
+    "inventoryQuantity": 120
+  },
+  {
+    "id": "p46",
+    "image": {
+      "src": "/images/products/catalog/urbano-coturno.svg",
+      "alt": "Ilustração: Bota Coturno Urbano Adventure em Couro"
+    },
+    "name": "Bota Coturno Urbano Adventure em Couro",
+    "rating": 4.5,
+    "reviewCount": 902,
+    "glyph": "boot",
+    "sku": "DEMO-p46",
+    "priceMinor": 38990,
+    "oldPriceMinor": 45990,
+    "inventoryQuantity": 17
+  },
+  {
+    "id": "p47",
+    "image": {
+      "src": "/images/products/catalog/nimbus-wave-700-preto.svg",
+      "alt": "Ilustração: Fone de Ouvido Bluetooth Nimbus Wave 700 com Cancelamento de Ruído na cor preto"
+    },
+    "name": "Fone de Ouvido Bluetooth Nimbus Wave 700 com Cancelamento de Ruído, Preto",
+    "rating": 4.6,
+    "reviewCount": 3412,
+    "glyph": "headphones",
+    "sku": "DEMO-p47",
+    "priceMinor": 59990,
+    "oldPriceMinor": 79990,
+    "inventoryQuantity": 38
+  },
+  {
+    "id": "p48",
+    "image": {
+      "src": "/images/products/catalog/nimbus-wave-700-branco.svg",
+      "alt": "Ilustração: Fone de Ouvido Bluetooth Nimbus Wave 700 com Cancelamento de Ruído na cor branco"
+    },
+    "name": "Fone de Ouvido Bluetooth Nimbus Wave 700 com Cancelamento de Ruído, Branco",
+    "rating": 4.6,
+    "reviewCount": 3412,
+    "glyph": "headphones",
+    "sku": "DEMO-p48",
+    "priceMinor": 59990,
+    "oldPriceMinor": 79990,
+    "inventoryQuantity": 21,
+    "variantOf": "p47"
+  },
+  {
+    "id": "p49",
+    "image": {
+      "src": "/images/products/catalog/nimbus-wave-700-azul.svg",
+      "alt": "Ilustração: Fone de Ouvido Bluetooth Nimbus Wave 700 com Cancelamento de Ruído na cor azul"
+    },
+    "name": "Fone de Ouvido Bluetooth Nimbus Wave 700 com Cancelamento de Ruído, Azul",
+    "rating": 4.6,
+    "reviewCount": 3412,
+    "glyph": "headphones",
+    "sku": "DEMO-p49",
+    "priceMinor": 59990,
+    "oldPriceMinor": 79990,
+    "inventoryQuantity": 16,
+    "variantOf": "p47"
+  },
+  {
+    "id": "p50",
+    "image": {
+      "src": "/images/products/catalog/apple-airpods-max-1.webp",
+      "alt": "Apple AirPods Max Prateado, foto principal"
+    },
+    "name": "Apple AirPods Max Prateado",
+    "rating": 4.7,
+    "reviewCount": 2210,
+    "glyph": "headphones",
+    "sku": "DEMO-p50",
+    "priceMinor": 449900,
+    "inventoryQuantity": 9
+  },
+  {
+    "id": "p51",
+    "image": {
+      "src": "/images/products/catalog/nimbus-buds-2-preto.svg",
+      "alt": "Ilustração: Fone de Ouvido TWS Nimbus Buds 2 Bluetooth 5.3 na cor preto"
+    },
+    "name": "Fone de Ouvido TWS Nimbus Buds 2 Bluetooth 5.3, Preto",
+    "rating": 4.3,
+    "reviewCount": 6120,
+    "glyph": "headphones",
+    "sku": "DEMO-p51",
+    "priceMinor": 19990,
+    "oldPriceMinor": 24990,
+    "inventoryQuantity": 55
+  },
+  {
+    "id": "p52",
+    "image": {
+      "src": "/images/products/catalog/nimbus-buds-2-branco.svg",
+      "alt": "Ilustração: Fone de Ouvido TWS Nimbus Buds 2 Bluetooth 5.3 na cor branco"
+    },
+    "name": "Fone de Ouvido TWS Nimbus Buds 2 Bluetooth 5.3, Branco",
+    "rating": 4.3,
+    "reviewCount": 6120,
+    "glyph": "headphones",
+    "sku": "DEMO-p52",
+    "priceMinor": 19990,
+    "oldPriceMinor": 24990,
+    "inventoryQuantity": 47,
+    "variantOf": "p51"
+  },
+  {
+    "id": "p53",
+    "image": {
+      "src": "/images/products/catalog/nimbus-buds-2-verde.svg",
+      "alt": "Ilustração: Fone de Ouvido TWS Nimbus Buds 2 Bluetooth 5.3 na cor verde"
+    },
+    "name": "Fone de Ouvido TWS Nimbus Buds 2 Bluetooth 5.3, Verde",
+    "rating": 4.3,
+    "reviewCount": 6120,
+    "glyph": "headphones",
+    "sku": "DEMO-p53",
+    "priceMinor": 19990,
+    "oldPriceMinor": 24990,
+    "inventoryQuantity": 0,
+    "variantOf": "p51"
+  },
+  {
+    "id": "p54",
+    "image": {
+      "src": "/images/products/catalog/apple-airpods-3-1.webp",
+      "alt": "Apple AirPods (3ª geração) com Estojo de Recarga, foto principal"
+    },
+    "name": "Apple AirPods (3ª geração) com Estojo de Recarga",
+    "rating": 4.8,
+    "reviewCount": 18540,
+    "glyph": "headphones",
+    "sku": "DEMO-p54",
+    "priceMinor": 109900,
+    "inventoryQuantity": 40
+  },
+  {
+    "id": "p55",
+    "image": {
+      "src": "/images/products/catalog/vortex-h5-preto.svg",
+      "alt": "Ilustração: Headset Gamer Vortex H5 RGB Som Surround 7.1 USB na cor preto"
+    },
+    "name": "Headset Gamer Vortex H5 RGB Som Surround 7.1 USB, Preto",
+    "rating": 4.5,
+    "reviewCount": 4230,
+    "glyph": "headphones",
+    "sku": "DEMO-p55",
+    "priceMinor": 24990,
+    "oldPriceMinor": 29990,
+    "inventoryQuantity": 46
+  },
+  {
+    "id": "p56",
+    "image": {
+      "src": "/images/products/catalog/vortex-h5-branco.svg",
+      "alt": "Ilustração: Headset Gamer Vortex H5 RGB Som Surround 7.1 USB na cor branco"
+    },
+    "name": "Headset Gamer Vortex H5 RGB Som Surround 7.1 USB, Branco",
+    "rating": 4.5,
+    "reviewCount": 4230,
+    "glyph": "headphones",
+    "sku": "DEMO-p56",
+    "priceMinor": 24990,
+    "oldPriceMinor": 29990,
+    "inventoryQuantity": 18,
+    "variantOf": "p55"
+  },
+  {
+    "id": "p57",
+    "image": {
+      "src": "/images/products/catalog/vortex-h9.svg",
+      "alt": "Ilustração: Headset Gamer Sem Fio Vortex H9 Wireless 2.4 GHz"
+    },
+    "name": "Headset Gamer Sem Fio Vortex H9 Wireless 2.4 GHz",
+    "rating": 4.6,
+    "reviewCount": 980,
+    "glyph": "headphones",
+    "sku": "DEMO-p57",
+    "priceMinor": 64990,
+    "inventoryQuantity": 12
+  },
+  {
+    "id": "p58",
+    "image": {
+      "src": "/images/products/catalog/sonora-boom-mini-preto.svg",
+      "alt": "Ilustração: Caixa de Som Bluetooth Sonora Boom Mini à Prova d'Água IP67 na cor preto"
+    },
+    "name": "Caixa de Som Bluetooth Sonora Boom Mini à Prova d'Água IP67, Preto",
+    "rating": 4.5,
+    "reviewCount": 7340,
+    "glyph": "speaker",
+    "sku": "DEMO-p58",
+    "priceMinor": 14990,
+    "oldPriceMinor": 19990,
+    "inventoryQuantity": 60
+  },
+  {
+    "id": "p59",
+    "image": {
+      "src": "/images/products/catalog/sonora-boom-mini-azul.svg",
+      "alt": "Ilustração: Caixa de Som Bluetooth Sonora Boom Mini à Prova d'Água IP67 na cor azul"
+    },
+    "name": "Caixa de Som Bluetooth Sonora Boom Mini à Prova d'Água IP67, Azul",
+    "rating": 4.5,
+    "reviewCount": 7340,
+    "glyph": "speaker",
+    "sku": "DEMO-p59",
+    "priceMinor": 14990,
+    "oldPriceMinor": 19990,
+    "inventoryQuantity": 34,
+    "variantOf": "p58"
+  },
+  {
+    "id": "p60",
+    "image": {
+      "src": "/images/products/catalog/sonora-boom-mini-vermelho.svg",
+      "alt": "Ilustração: Caixa de Som Bluetooth Sonora Boom Mini à Prova d'Água IP67 na cor vermelho"
+    },
+    "name": "Caixa de Som Bluetooth Sonora Boom Mini à Prova d'Água IP67, Vermelho",
+    "rating": 4.5,
+    "reviewCount": 7340,
+    "glyph": "speaker",
+    "sku": "DEMO-p60",
+    "priceMinor": 14990,
+    "oldPriceMinor": 19990,
+    "inventoryQuantity": 28,
+    "variantOf": "p58"
+  },
+  {
+    "id": "p61",
+    "image": {
+      "src": "/images/products/catalog/apple-homepod-mini-1.webp",
+      "alt": "Apple HomePod mini Cinza-espacial, foto principal"
+    },
+    "name": "Apple HomePod mini Cinza-espacial",
+    "rating": 4.6,
+    "reviewCount": 1520,
+    "glyph": "speaker",
+    "sku": "DEMO-p61",
+    "priceMinor": 99900,
+    "inventoryQuantity": 15
+  },
+  {
+    "id": "p62",
+    "image": {
+      "src": "/images/products/catalog/echo-pop-preto.svg",
+      "alt": "Ilustração: Echo Pop | Smart speaker compacto com Alexa na cor preto"
+    },
+    "name": "Echo Pop | Smart speaker compacto com Alexa, Preto",
+    "rating": 4.7,
+    "reviewCount": 21380,
+    "glyph": "echo",
+    "sku": "DEMO-p62",
+    "priceMinor": 37905,
+    "oldPriceMinor": 44900,
+    "inventoryQuantity": 44
+  },
+  {
+    "id": "p63",
+    "image": {
+      "src": "/images/products/catalog/echo-pop-branco.svg",
+      "alt": "Ilustração: Echo Pop | Smart speaker compacto com Alexa na cor branco"
+    },
+    "name": "Echo Pop | Smart speaker compacto com Alexa, Branco",
+    "rating": 4.7,
+    "reviewCount": 21380,
+    "glyph": "echo",
+    "sku": "DEMO-p63",
+    "priceMinor": 37905,
+    "oldPriceMinor": 44900,
+    "inventoryQuantity": 29,
+    "variantOf": "p62"
+  },
+  {
+    "id": "p64",
+    "image": {
+      "src": "/images/products/catalog/echo-show-8.svg",
+      "alt": "Ilustração: Echo Show 8 (3ª geração) | Tela inteligente HD de 8\" com Alexa"
+    },
+    "name": "Echo Show 8 (3ª geração) | Tela inteligente HD de 8\" com Alexa",
+    "rating": 4.7,
+    "reviewCount": 5870,
+    "glyph": "echo",
+    "sku": "DEMO-p64",
+    "priceMinor": 94905,
+    "oldPriceMinor": 109900,
+    "inventoryQuantity": 24
+  },
+  {
+    "id": "p65",
+    "image": {
+      "src": "/images/products/catalog/kindle-paperwhite.svg",
+      "alt": "Ilustração: Kindle Paperwhite 16 GB | Tela de 7\" e bateria de até 12 semanas"
+    },
+    "name": "Kindle Paperwhite 16 GB | Tela de 7\" e bateria de até 12 semanas",
+    "rating": 4.8,
+    "reviewCount": 12470,
+    "glyph": "ereader",
+    "sku": "DEMO-p65",
+    "priceMinor": 79900,
+    "inventoryQuantity": 31
+  },
+  {
+    "id": "p66",
+    "image": {
+      "src": "/images/products/catalog/fire-tv-stick-4k.svg",
+      "alt": "Ilustração: Fire TV Stick 4K | Streaming em 4K com Wi-Fi 6 e controle remoto por voz"
+    },
+    "name": "Fire TV Stick 4K | Streaming em 4K com Wi-Fi 6 e controle remoto por voz",
+    "rating": 4.8,
+    "reviewCount": 30210,
+    "glyph": "tv",
+    "sku": "DEMO-p66",
+    "priceMinor": 47405,
+    "oldPriceMinor": 54900,
+    "inventoryQuantity": 52
+  },
+  {
+    "id": "p67",
+    "image": {
+      "src": "/images/products/catalog/kairo-fit-3-preto.svg",
+      "alt": "Ilustração: Smartwatch Kairo Fit 3 com GPS e Monitor de Oxigenação na cor preto"
+    },
+    "name": "Smartwatch Kairo Fit 3 com GPS e Monitor de Oxigenação, Preto",
+    "rating": 4.4,
+    "reviewCount": 2890,
+    "glyph": "watch",
+    "sku": "DEMO-p67",
+    "priceMinor": 39990,
+    "oldPriceMinor": 49990,
+    "inventoryQuantity": 42
+  },
+  {
+    "id": "p68",
+    "image": {
+      "src": "/images/products/catalog/kairo-fit-3-cinza.svg",
+      "alt": "Ilustração: Smartwatch Kairo Fit 3 com GPS e Monitor de Oxigenação na cor cinza"
+    },
+    "name": "Smartwatch Kairo Fit 3 com GPS e Monitor de Oxigenação, Cinza",
+    "rating": 4.4,
+    "reviewCount": 2890,
+    "glyph": "watch",
+    "sku": "DEMO-p68",
+    "priceMinor": 39990,
+    "oldPriceMinor": 49990,
+    "inventoryQuantity": 3,
+    "variantOf": "p67"
+  },
+  {
+    "id": "p69",
+    "image": {
+      "src": "/images/products/catalog/kairo-fit-3-azul.svg",
+      "alt": "Ilustração: Smartwatch Kairo Fit 3 com GPS e Monitor de Oxigenação na cor azul"
+    },
+    "name": "Smartwatch Kairo Fit 3 com GPS e Monitor de Oxigenação, Azul",
+    "rating": 4.4,
+    "reviewCount": 2890,
+    "glyph": "watch",
+    "sku": "DEMO-p69",
+    "priceMinor": 39990,
+    "oldPriceMinor": 49990,
+    "inventoryQuantity": 25,
+    "variantOf": "p67"
+  },
+  {
+    "id": "p70",
+    "image": {
+      "src": "/images/products/catalog/voltra-gan-30w-branco.svg",
+      "alt": "Ilustração: Carregador Turbo USB-C Voltra 30W GaN na cor branco"
+    },
+    "name": "Carregador Turbo USB-C Voltra 30W GaN, Branco",
+    "rating": 4.6,
+    "reviewCount": 3120,
+    "glyph": "charger",
+    "sku": "DEMO-p70",
+    "priceMinor": 11990,
+    "inventoryQuantity": 70
+  },
+  {
+    "id": "p71",
+    "image": {
+      "src": "/images/products/catalog/voltra-gan-30w-preto.svg",
+      "alt": "Ilustração: Carregador Turbo USB-C Voltra 30W GaN na cor preto"
+    },
+    "name": "Carregador Turbo USB-C Voltra 30W GaN, Preto",
+    "rating": 4.6,
+    "reviewCount": 3120,
+    "glyph": "charger",
+    "sku": "DEMO-p71",
+    "priceMinor": 11990,
+    "inventoryQuantity": 52,
+    "variantOf": "p70"
+  },
+  {
+    "id": "p72",
+    "image": {
+      "src": "/images/products/catalog/apple-usb-lightning-1.webp",
+      "alt": "Carregador de Parede Apple USB com Cabo Lightning, foto principal"
+    },
+    "name": "Carregador de Parede Apple USB com Cabo Lightning",
+    "rating": 4.8,
+    "reviewCount": 22410,
+    "glyph": "charger",
+    "sku": "DEMO-p72",
+    "priceMinor": 14900,
+    "inventoryQuantity": 80
+  },
+  {
+    "id": "p73",
+    "image": {
+      "src": "/images/products/catalog/voltra-cabo-usbc-preto.svg",
+      "alt": "Ilustração: Cabo USB-C para USB-C Voltra em Nylon Trançado 2 m 100W na cor preto"
+    },
+    "name": "Cabo USB-C para USB-C Voltra em Nylon Trançado 2 m 100W, Preto",
+    "rating": 4.7,
+    "reviewCount": 5210,
+    "glyph": "charger",
+    "sku": "DEMO-p73",
+    "priceMinor": 5990,
+    "oldPriceMinor": 7990,
+    "inventoryQuantity": 90
+  },
+  {
+    "id": "p74",
+    "image": {
+      "src": "/images/products/catalog/voltra-cabo-usbc-vermelho.svg",
+      "alt": "Ilustração: Cabo USB-C para USB-C Voltra em Nylon Trançado 2 m 100W na cor vermelho"
+    },
+    "name": "Cabo USB-C para USB-C Voltra em Nylon Trançado 2 m 100W, Vermelho",
+    "rating": 4.7,
+    "reviewCount": 5210,
+    "glyph": "charger",
+    "sku": "DEMO-p74",
+    "priceMinor": 5990,
+    "oldPriceMinor": 7990,
+    "inventoryQuantity": 45,
+    "variantOf": "p73"
+  },
+  {
+    "id": "p75",
+    "image": {
+      "src": "/images/products/catalog/voltra-10000.svg",
+      "alt": "Ilustração: Carregador Portátil Voltra 10000 mAh com USB-C PD 20W"
+    },
+    "name": "Carregador Portátil Voltra 10000 mAh com USB-C PD 20W",
+    "rating": 4.5,
+    "reviewCount": 4480,
+    "glyph": "charger",
+    "sku": "DEMO-p75",
+    "priceMinor": 12990,
+    "inventoryQuantity": 38
+  },
+  {
+    "id": "p76",
+    "image": {
+      "src": "/images/products/catalog/apple-magsafe-battery-1.webp",
+      "alt": "Bateria Apple MagSafe para iPhone, foto principal"
+    },
+    "name": "Bateria Apple MagSafe para iPhone",
+    "rating": 4.4,
+    "reviewCount": 860,
+    "glyph": "charger",
+    "sku": "DEMO-p76",
+    "priceMinor": 94900,
+    "inventoryQuantity": 11
+  },
+  {
+    "id": "p77",
+    "image": {
+      "src": "/images/products/catalog/vortex-pro-pad.svg",
+      "alt": "Ilustração: Controle Sem Fio Vortex Pro para PC e Android com Gatilhos Hall"
+    },
+    "name": "Controle Sem Fio Vortex Pro para PC e Android com Gatilhos Hall",
+    "rating": 4.4,
+    "reviewCount": 1210,
+    "glyph": "controller",
+    "sku": "DEMO-p77",
+    "priceMinor": 24990,
+    "oldPriceMinor": 29990,
+    "inventoryQuantity": 29
+  },
+  {
+    "id": "p78",
+    "image": {
+      "src": "/images/products/catalog/arcadia-retro-pad.svg",
+      "alt": "Ilustração: Controle Bluetooth Arcadia Retro Pad para PC, Android e Switch"
+    },
+    "name": "Controle Bluetooth Arcadia Retro Pad para PC, Android e Switch",
+    "rating": 4.5,
+    "reviewCount": 2310,
+    "glyph": "controller",
+    "sku": "DEMO-p78",
+    "priceMinor": 17990,
+    "inventoryQuantity": 33
+  },
+  {
+    "id": "p79",
+    "image": {
+      "src": "/images/products/catalog/dell-xps-13-1.webp",
+      "alt": "Notebook Dell XPS 13 9300 Intel Core i7 16GB 512GB SSD Tela 13,4\", foto principal"
+    },
+    "name": "Notebook Dell XPS 13 9300 Intel Core i7 16GB 512GB SSD Tela 13,4\"",
+    "rating": 4.6,
+    "reviewCount": 412,
+    "glyph": "laptop",
+    "sku": "DEMO-p79",
+    "priceMinor": 899900,
+    "oldPriceMinor": 1049900,
+    "inventoryQuantity": 6
+  },
+  {
+    "id": "p80",
+    "image": {
+      "src": "/images/products/catalog/macbook-pro-14-1.webp",
+      "alt": "Apple MacBook Pro 14\" Chip M1 Pro 16GB 512GB Cinza-espacial, foto principal"
+    },
+    "name": "Apple MacBook Pro 14\" Chip M1 Pro 16GB 512GB Cinza-espacial",
+    "rating": 4.8,
+    "reviewCount": 1320,
+    "glyph": "laptop",
+    "sku": "DEMO-p80",
+    "priceMinor": 1499900,
+    "inventoryQuantity": 8
+  },
+  {
+    "id": "p81",
+    "image": {
+      "src": "/images/products/catalog/apple-ipad-mini-1.webp",
+      "alt": "Apple iPad mini (6ª geração) Wi-Fi 64GB Estelar, foto principal"
+    },
+    "name": "Apple iPad mini (6ª geração) Wi-Fi 64GB Estelar",
+    "rating": 4.8,
+    "reviewCount": 2950,
+    "glyph": "ereader",
+    "sku": "DEMO-p81",
+    "priceMinor": 549900,
+    "inventoryQuantity": 13
+  },
+  {
+    "id": "p82",
+    "image": {
+      "src": "/images/products/catalog/vortex-k60-preto.svg",
+      "alt": "Ilustração: Teclado Mecânico Gamer Vortex K60 TKL RGB Switch Red ABNT2 na cor preto"
+    },
+    "name": "Teclado Mecânico Gamer Vortex K60 TKL RGB Switch Red ABNT2, Preto",
+    "rating": 4.6,
+    "reviewCount": 3870,
+    "glyph": "keyboard",
+    "sku": "DEMO-p82",
+    "priceMinor": 29990,
+    "oldPriceMinor": 34990,
+    "inventoryQuantity": 44
+  },
+  {
+    "id": "p83",
+    "image": {
+      "src": "/images/products/catalog/vortex-k60-branco.svg",
+      "alt": "Ilustração: Teclado Mecânico Gamer Vortex K60 TKL RGB Switch Red ABNT2 na cor branco"
+    },
+    "name": "Teclado Mecânico Gamer Vortex K60 TKL RGB Switch Red ABNT2, Branco",
+    "rating": 4.6,
+    "reviewCount": 3870,
+    "glyph": "keyboard",
+    "sku": "DEMO-p83",
+    "priceMinor": 29990,
+    "oldPriceMinor": 34990,
+    "inventoryQuantity": 20,
+    "variantOf": "p82"
+  },
+  {
+    "id": "p84",
+    "image": {
+      "src": "/images/products/catalog/orion-slim-keys.svg",
+      "alt": "Ilustração: Teclado Sem Fio Orion Slim Multi-dispositivo Bluetooth ABNT2"
+    },
+    "name": "Teclado Sem Fio Orion Slim Multi-dispositivo Bluetooth ABNT2",
+    "rating": 4.5,
+    "reviewCount": 1640,
+    "glyph": "keyboard",
+    "sku": "DEMO-p84",
+    "priceMinor": 17990,
+    "inventoryQuantity": 34
+  },
+  {
+    "id": "p85",
+    "image": {
+      "src": "/images/products/catalog/vortex-m7-preto.svg",
+      "alt": "Ilustração: Mouse Gamer Vortex M7 RGB 16.000 DPI 7 Botões na cor preto"
+    },
+    "name": "Mouse Gamer Vortex M7 RGB 16.000 DPI 7 Botões, Preto",
+    "rating": 4.6,
+    "reviewCount": 5210,
+    "glyph": "mouse",
+    "sku": "DEMO-p85",
+    "priceMinor": 17990,
+    "oldPriceMinor": 21990,
+    "inventoryQuantity": 61
+  },
+  {
+    "id": "p86",
+    "image": {
+      "src": "/images/products/catalog/vortex-m7-branco.svg",
+      "alt": "Ilustração: Mouse Gamer Vortex M7 RGB 16.000 DPI 7 Botões na cor branco"
+    },
+    "name": "Mouse Gamer Vortex M7 RGB 16.000 DPI 7 Botões, Branco",
+    "rating": 4.6,
+    "reviewCount": 5210,
+    "glyph": "mouse",
+    "sku": "DEMO-p86",
+    "priceMinor": 17990,
+    "oldPriceMinor": 21990,
+    "inventoryQuantity": 26,
+    "variantOf": "p85"
+  },
+  {
+    "id": "p87",
+    "image": {
+      "src": "/images/products/catalog/orion-silent-cinza.svg",
+      "alt": "Ilustração: Mouse Sem Fio Orion Silent Click 1600 DPI na cor cinza"
+    },
+    "name": "Mouse Sem Fio Orion Silent Click 1600 DPI, Cinza",
+    "rating": 4.4,
+    "reviewCount": 9830,
+    "glyph": "mouse",
+    "sku": "DEMO-p87",
+    "priceMinor": 6990,
+    "inventoryQuantity": 85
+  },
+  {
+    "id": "p88",
+    "image": {
+      "src": "/images/products/catalog/orion-silent-azul.svg",
+      "alt": "Ilustração: Mouse Sem Fio Orion Silent Click 1600 DPI na cor azul"
+    },
+    "name": "Mouse Sem Fio Orion Silent Click 1600 DPI, Azul",
+    "rating": 4.4,
+    "reviewCount": 9830,
+    "glyph": "mouse",
+    "sku": "DEMO-p88",
+    "priceMinor": 6990,
+    "inventoryQuantity": 4,
+    "variantOf": "p87"
+  },
+  {
+    "id": "p89",
+    "image": {
+      "src": "/images/products/catalog/lumio-view-1080.svg",
+      "alt": "Ilustração: Webcam Lumio View Full HD 1080p com Microfone Duplo"
+    },
+    "name": "Webcam Lumio View Full HD 1080p com Microfone Duplo",
+    "rating": 4.4,
+    "reviewCount": 2130,
+    "glyph": "camera",
+    "sku": "DEMO-p89",
+    "priceMinor": 22990,
+    "oldPriceMinor": 27990,
+    "inventoryQuantity": 27
+  },
+  {
+    "id": "p90",
+    "image": {
+      "src": "/images/products/catalog/orion-24-ips.svg",
+      "alt": "Ilustração: Monitor Orion 24\" IPS Full HD 75 Hz com HDMI"
+    },
+    "name": "Monitor Orion 24\" IPS Full HD 75 Hz com HDMI",
+    "rating": 4.5,
+    "reviewCount": 1870,
+    "glyph": "monitor",
+    "sku": "DEMO-p90",
+    "priceMinor": 79990,
+    "oldPriceMinor": 94990,
+    "inventoryQuantity": 19
+  },
+  {
+    "id": "p91",
+    "image": {
+      "src": "/images/products/catalog/vortex-27-qhd.svg",
+      "alt": "Ilustração: Monitor Gamer Vortex 27\" QHD 165 Hz 1 ms"
+    },
+    "name": "Monitor Gamer Vortex 27\" QHD 165 Hz 1 ms",
+    "rating": 4.7,
+    "reviewCount": 930,
+    "glyph": "monitor",
+    "sku": "DEMO-p91",
+    "priceMinor": 189990,
+    "inventoryQuantity": 3
+  },
+  {
+    "id": "p92",
+    "image": {
+      "src": "/images/products/catalog/vortex-speed-xl.svg",
+      "alt": "Ilustração: Mousepad Gamer Vortex Speed XL 90 x 40 cm com Borda Costurada"
+    },
+    "name": "Mousepad Gamer Vortex Speed XL 90 x 40 cm com Borda Costurada",
+    "rating": 4.7,
+    "reviewCount": 6420,
+    "glyph": "mouse",
+    "sku": "DEMO-p92",
+    "priceMinor": 8990,
+    "inventoryQuantity": 75
+  },
+  {
+    "id": "p93",
+    "image": {
+      "src": "/images/products/catalog/nexa-nvme-1tb.svg",
+      "alt": "Ilustração: SSD Nexa 1TB M.2 NVMe PCIe 4.0 Leitura de até 7.000 MB/s"
+    },
+    "name": "SSD Nexa 1TB M.2 NVMe PCIe 4.0 Leitura de até 7.000 MB/s",
+    "rating": 4.7,
+    "reviewCount": 3120,
+    "glyph": "storage",
+    "sku": "DEMO-p93",
+    "priceMinor": 44990,
+    "oldPriceMinor": 54990,
+    "inventoryQuantity": 46
+  },
+  {
+    "id": "p94",
+    "image": {
+      "src": "/images/products/catalog/nexa-ddr4-16.svg",
+      "alt": "Ilustração: Memória RAM Nexa 16GB DDR4 3200 MHz para Desktop"
+    },
+    "name": "Memória RAM Nexa 16GB DDR4 3200 MHz para Desktop",
+    "rating": 4.8,
+    "reviewCount": 4210,
+    "glyph": "storage",
+    "sku": "DEMO-p94",
+    "priceMinor": 24990,
+    "inventoryQuantity": 2
+  },
+  {
+    "id": "p95",
+    "image": {
+      "src": "/images/products/catalog/voltra-hub-7em1.svg",
+      "alt": "Ilustração: Hub USB-C Voltra 7 em 1 com HDMI 4K, USB 3.0 e Leitor SD"
+    },
+    "name": "Hub USB-C Voltra 7 em 1 com HDMI 4K, USB 3.0 e Leitor SD",
+    "rating": 4.5,
+    "reviewCount": 2780,
+    "glyph": "charger",
+    "sku": "DEMO-p95",
+    "priceMinor": 19990,
+    "inventoryQuantity": 36
+  },
+  {
+    "id": "p96",
+    "image": {
+      "src": "/images/products/catalog/orion-stand-alu.svg",
+      "alt": "Ilustração: Suporte para Notebook Orion em Alumínio com Ajuste de Altura"
+    },
+    "name": "Suporte para Notebook Orion em Alumínio com Ajuste de Altura",
+    "rating": 4.7,
+    "reviewCount": 3950,
+    "glyph": "laptop",
+    "sku": "DEMO-p96",
+    "priceMinor": 12990,
+    "inventoryQuantity": 58
+  },
+  {
+    "id": "p97",
+    "image": {
+      "src": "/images/products/catalog/orion-urban-pack-preto.svg",
+      "alt": "Ilustração: Mochila Executiva Orion Urban para Notebook 15,6\" com Porta USB na cor preto"
+    },
+    "name": "Mochila Executiva Orion Urban para Notebook 15,6\" com Porta USB, Preto",
+    "rating": 4.6,
+    "reviewCount": 2640,
+    "glyph": "backpack",
+    "sku": "DEMO-p97",
+    "priceMinor": 18990,
+    "oldPriceMinor": 22990,
+    "inventoryQuantity": 51
+  },
+  {
+    "id": "p98",
+    "image": {
+      "src": "/images/products/catalog/orion-urban-pack-cinza.svg",
+      "alt": "Ilustração: Mochila Executiva Orion Urban para Notebook 15,6\" com Porta USB na cor cinza"
+    },
+    "name": "Mochila Executiva Orion Urban para Notebook 15,6\" com Porta USB, Cinza",
+    "rating": 4.6,
+    "reviewCount": 2640,
+    "glyph": "backpack",
+    "sku": "DEMO-p98",
+    "priceMinor": 18990,
+    "oldPriceMinor": 22990,
+    "inventoryQuantity": 23,
+    "variantOf": "p97"
+  },
+  {
+    "id": "p99",
+    "image": {
+      "src": "/images/products/catalog/orion-urban-pack-azul.svg",
+      "alt": "Ilustração: Mochila Executiva Orion Urban para Notebook 15,6\" com Porta USB na cor azul"
+    },
+    "name": "Mochila Executiva Orion Urban para Notebook 15,6\" com Porta USB, Azul",
+    "rating": 4.6,
+    "reviewCount": 2640,
+    "glyph": "backpack",
+    "sku": "DEMO-p99",
+    "priceMinor": 18990,
+    "oldPriceMinor": 22990,
+    "inventoryQuantity": 17,
+    "variantOf": "p97"
+  },
+  {
+    "id": "p100",
+    "image": {
+      "src": "/images/products/catalog/brava-aroma-30-preto.svg",
+      "alt": "Ilustração: Cafeteira Elétrica Brava Aroma 30 Xícaras com Jarra de Vidro na cor preto"
+    },
+    "name": "Cafeteira Elétrica Brava Aroma 30 Xícaras com Jarra de Vidro, Preto",
+    "rating": 4.5,
+    "reviewCount": 6240,
+    "glyph": "coffee",
+    "sku": "DEMO-p100",
+    "priceMinor": 14990,
+    "oldPriceMinor": 17990,
+    "inventoryQuantity": 57
+  },
+  {
+    "id": "p101",
+    "image": {
+      "src": "/images/products/catalog/brava-aroma-30-vermelho.svg",
+      "alt": "Ilustração: Cafeteira Elétrica Brava Aroma 30 Xícaras com Jarra de Vidro na cor vermelho"
+    },
+    "name": "Cafeteira Elétrica Brava Aroma 30 Xícaras com Jarra de Vidro, Vermelho",
+    "rating": 4.5,
+    "reviewCount": 6240,
+    "glyph": "coffee",
+    "sku": "DEMO-p101",
+    "priceMinor": 14990,
+    "oldPriceMinor": 17990,
+    "inventoryQuantity": 22,
+    "variantOf": "p100"
+  },
+  {
+    "id": "p102",
+    "image": {
+      "src": "/images/products/catalog/brava-barista.svg",
+      "alt": "Ilustração: Cafeteira Expresso Brava Barista 15 Bar com Vaporizador"
+    },
+    "name": "Cafeteira Expresso Brava Barista 15 Bar com Vaporizador",
+    "rating": 4.6,
+    "reviewCount": 1370,
+    "glyph": "coffee",
+    "sku": "DEMO-p102",
+    "priceMinor": 89990,
+    "oldPriceMinor": 109990,
+    "inventoryQuantity": 4
+  },
+  {
+    "id": "p103",
+    "image": {
+      "src": "/images/products/catalog/brava-power-900.svg",
+      "alt": "Ilustração: Liquidificador Brava Power 900W Copo de Vidro 2L 12 Velocidades"
+    },
+    "name": "Liquidificador Brava Power 900W Copo de Vidro 2L 12 Velocidades",
+    "rating": 4.4,
+    "reviewCount": 2980,
+    "glyph": "blender",
+    "sku": "DEMO-p103",
+    "priceMinor": 18990,
+    "inventoryQuantity": 33
+  },
+  {
+    "id": "p104",
+    "image": {
+      "src": "/images/products/catalog/mixer-mao-400w-1.webp",
+      "alt": "Mixer de Mão 400W com Haste de Inox, foto principal"
+    },
+    "name": "Mixer de Mão 400W com Haste de Inox",
+    "rating": 4.2,
+    "reviewCount": 1180,
+    "glyph": "blender",
+    "sku": "DEMO-p104",
+    "priceMinor": 12990,
+    "inventoryQuantity": 22
+  },
+  {
+    "id": "p105",
+    "image": {
+      "src": "/images/products/catalog/brava-crisp-55-preto.svg",
+      "alt": "Ilustração: Fritadeira Air Fryer Brava Crisp 5,5 L Digital 1500W na cor preto"
+    },
+    "name": "Fritadeira Air Fryer Brava Crisp 5,5 L Digital 1500W, Preto",
+    "rating": 4.6,
+    "reviewCount": 8120,
+    "glyph": "airfryer",
+    "sku": "DEMO-p105",
+    "priceMinor": 39990,
+    "oldPriceMinor": 49990,
+    "inventoryQuantity": 66
+  },
+  {
+    "id": "p106",
+    "image": {
+      "src": "/images/products/catalog/brava-crisp-55-branco.svg",
+      "alt": "Ilustração: Fritadeira Air Fryer Brava Crisp 5,5 L Digital 1500W na cor branco"
+    },
+    "name": "Fritadeira Air Fryer Brava Crisp 5,5 L Digital 1500W, Branco",
+    "rating": 4.6,
+    "reviewCount": 8120,
+    "glyph": "airfryer",
+    "sku": "DEMO-p106",
+    "priceMinor": 39990,
+    "oldPriceMinor": 49990,
+    "inventoryQuantity": 31,
+    "variantOf": "p105"
+  },
+  {
+    "id": "p107",
+    "image": {
+      "src": "/images/products/catalog/batedor-fouet-1.webp",
+      "alt": "Batedor de Arame Fouet em Aço Inox com Cabo Preto, foto principal"
+    },
+    "name": "Batedor de Arame Fouet em Aço Inox com Cabo Preto",
+    "rating": 4.4,
+    "reviewCount": 640,
+    "glyph": "kitchen",
+    "sku": "DEMO-p107",
+    "priceMinor": 2990,
+    "inventoryQuantity": 64
+  },
+  {
+    "id": "p108",
+    "image": {
+      "src": "/images/products/catalog/faca-chef-8-1.webp",
+      "alt": "Faca do Chef em Aço Inox 8\", foto principal"
+    },
+    "name": "Faca do Chef em Aço Inox 8\"",
+    "rating": 4.6,
+    "reviewCount": 1320,
+    "glyph": "kitchen",
+    "sku": "DEMO-p108",
+    "priceMinor": 8990,
+    "inventoryQuantity": 41
+  },
+  {
+    "id": "p109",
+    "image": {
+      "src": "/images/products/catalog/wok-aco-carbono-1.webp",
+      "alt": "Wok de Aço Carbono 32 cm com Cabo de Madeira, foto principal"
+    },
+    "name": "Wok de Aço Carbono 32 cm com Cabo de Madeira",
+    "rating": 4.5,
+    "reviewCount": 540,
+    "glyph": "kitchen",
+    "sku": "DEMO-p109",
+    "priceMinor": 15990,
+    "inventoryQuantity": 18
+  },
+  {
+    "id": "p110",
+    "image": {
+      "src": "/images/products/catalog/panela-inox-20-1.webp",
+      "alt": "Panela de Aço Inox 20 cm com Tampa de Vidro, foto principal"
+    },
+    "name": "Panela de Aço Inox 20 cm com Tampa de Vidro",
+    "rating": 4.6,
+    "reviewCount": 980,
+    "glyph": "kitchen",
+    "sku": "DEMO-p110",
+    "priceMinor": 12990,
+    "inventoryQuantity": 27
+  },
+  {
+    "id": "p111",
+    "image": {
+      "src": "/images/products/catalog/abajur-cupula-1.webp",
+      "alt": "Abajur de Mesa com Cúpula de Tecido, foto principal"
+    },
+    "name": "Abajur de Mesa com Cúpula de Tecido",
+    "rating": 4.4,
+    "reviewCount": 730,
+    "glyph": "lamp",
+    "sku": "DEMO-p111",
+    "priceMinor": 11990,
+    "inventoryQuantity": 21
+  },
+  {
+    "id": "p112",
+    "image": {
+      "src": "/images/products/catalog/lumio-desk-led.svg",
+      "alt": "Ilustração: Luminária de Mesa LED Lumio Desk Articulada com 3 Temperaturas de Cor"
+    },
+    "name": "Luminária de Mesa LED Lumio Desk Articulada com 3 Temperaturas de Cor",
+    "rating": 4.6,
+    "reviewCount": 1920,
+    "glyph": "lamp",
+    "sku": "DEMO-p112",
+    "priceMinor": 14990,
+    "inventoryQuantity": 39
+  },
+  {
+    "id": "p113",
+    "image": {
+      "src": "/images/products/catalog/porta-retrato-arvore-1.webp",
+      "alt": "Painel Porta-retrato Árvore da Família para Parede, foto principal"
+    },
+    "name": "Painel Porta-retrato Árvore da Família para Parede",
+    "rating": 4.5,
+    "reviewCount": 410,
+    "glyph": "frame",
+    "sku": "DEMO-p113",
+    "priceMinor": 7990,
+    "inventoryQuantity": 16
+  },
+  {
+    "id": "p114",
+    "image": {
+      "src": "/images/products/catalog/porta-temperos-giratorio-1.webp",
+      "alt": "Porta-temperos Giratório com Potes de Vidro e Tampas Dosadoras, foto principal"
+    },
+    "name": "Porta-temperos Giratório com Potes de Vidro e Tampas Dosadoras",
+    "rating": 4.6,
+    "reviewCount": 1650,
+    "glyph": "kitchen",
+    "sku": "DEMO-p114",
+    "priceMinor": 13990,
+    "inventoryQuantity": 24
+  },
+  {
+    "id": "p115",
+    "image": {
+      "src": "/images/products/catalog/limpax-turbo-2em1.svg",
+      "alt": "Ilustração: Aspirador de Pó Vertical Limpax Turbo 2 em 1 1250W"
+    },
+    "name": "Aspirador de Pó Vertical Limpax Turbo 2 em 1 1250W",
+    "rating": 4.4,
+    "reviewCount": 5480,
+    "glyph": "vacuum",
+    "sku": "DEMO-p115",
+    "priceMinor": 22990,
+    "oldPriceMinor": 27990,
+    "inventoryQuantity": 37
+  },
+  {
+    "id": "p116",
+    "image": {
+      "src": "/images/products/catalog/limpax-smart-s.svg",
+      "alt": "Ilustração: Robô Aspirador Limpax Smart S Wi-Fi com Mapeamento"
+    },
+    "name": "Robô Aspirador Limpax Smart S Wi-Fi com Mapeamento",
+    "rating": 4.5,
+    "reviewCount": 1270,
+    "glyph": "vacuum",
+    "sku": "DEMO-p116",
+    "priceMinor": 129990,
+    "oldPriceMinor": 159990,
+    "inventoryQuantity": 10
+  },
+  {
+    "id": "p117",
+    "image": {
+      "src": "/images/products/catalog/essence-lash-princess-1.webp",
+      "alt": "Máscara de Cílios Essence Lash Princess Efeito Volume, foto principal"
+    },
+    "name": "Máscara de Cílios Essence Lash Princess Efeito Volume",
+    "rating": 4.4,
+    "reviewCount": 20870,
+    "glyph": "beauty",
+    "sku": "DEMO-p117",
+    "priceMinor": 3990,
+    "inventoryQuantity": 110
+  },
+  {
+    "id": "p118",
+    "image": {
+      "src": "/images/products/catalog/paleta-sombras-12-1.webp",
+      "alt": "Paleta de Sombras com Espelho, Tons Nude, Terrosos e Coloridos, foto principal"
+    },
+    "name": "Paleta de Sombras com Espelho, Tons Nude, Terrosos e Coloridos",
+    "rating": 4.5,
+    "reviewCount": 2310,
+    "glyph": "beauty",
+    "sku": "DEMO-p118",
+    "priceMinor": 6990,
+    "inventoryQuantity": 45
+  },
+  {
+    "id": "p119",
+    "image": {
+      "src": "/images/products/catalog/batom-vermelho-1.webp",
+      "alt": "Batom Vermelho Cremoso de Longa Duração, foto principal"
+    },
+    "name": "Batom Vermelho Cremoso de Longa Duração",
+    "rating": 4.3,
+    "reviewCount": 1740,
+    "glyph": "beauty",
+    "sku": "DEMO-p119",
+    "priceMinor": 2990,
+    "inventoryQuantity": 88
+  },
+  {
+    "id": "p120",
+    "image": {
+      "src": "/images/products/catalog/belfiore-ion-2100-preto.svg",
+      "alt": "Ilustração: Secador de Cabelo Belfiore Ion 2100W com Tecnologia Íon na cor preto"
+    },
+    "name": "Secador de Cabelo Belfiore Ion 2100W com Tecnologia Íon, Preto",
+    "rating": 4.6,
+    "reviewCount": 4980,
+    "glyph": "hairdryer",
+    "sku": "DEMO-p120",
+    "priceMinor": 21990,
+    "oldPriceMinor": 26990,
+    "inventoryQuantity": 49
+  },
+  {
+    "id": "p121",
+    "image": {
+      "src": "/images/products/catalog/belfiore-ion-2100-rosa.svg",
+      "alt": "Ilustração: Secador de Cabelo Belfiore Ion 2100W com Tecnologia Íon na cor rosa"
+    },
+    "name": "Secador de Cabelo Belfiore Ion 2100W com Tecnologia Íon, Rosa",
+    "rating": 4.6,
+    "reviewCount": 4980,
+    "glyph": "hairdryer",
+    "sku": "DEMO-p121",
+    "priceMinor": 21990,
+    "oldPriceMinor": 26990,
+    "inventoryQuantity": 26,
+    "variantOf": "p120"
+  },
+  {
+    "id": "p122",
+    "image": {
+      "src": "/images/products/catalog/belfiore-volume.svg",
+      "alt": "Ilustração: Escova Secadora Belfiore Volume 1200W 3 Temperaturas"
+    },
+    "name": "Escova Secadora Belfiore Volume 1200W 3 Temperaturas",
+    "rating": 4.5,
+    "reviewCount": 7340,
+    "glyph": "hairdryer",
+    "sku": "DEMO-p122",
+    "priceMinor": 24990,
+    "inventoryQuantity": 34
+  },
+  {
+    "id": "p123",
+    "image": {
+      "src": "/images/products/catalog/belfiore-titanium.svg",
+      "alt": "Ilustração: Prancha Alisadora Belfiore Titanium 230 °C Bivolt"
+    },
+    "name": "Prancha Alisadora Belfiore Titanium 230 °C Bivolt",
+    "rating": 4.6,
+    "reviewCount": 3120,
+    "glyph": "hairdryer",
+    "sku": "DEMO-p123",
+    "priceMinor": 18990,
+    "inventoryQuantity": 28
+  },
+  {
+    "id": "p124",
+    "image": {
+      "src": "/images/products/catalog/axion-rotary-3.svg",
+      "alt": "Ilustração: Barbeador Elétrico Axion Rotary 3 Lâminas à Prova d'Água"
+    },
+    "name": "Barbeador Elétrico Axion Rotary 3 Lâminas à Prova d'Água",
+    "rating": 4.4,
+    "reviewCount": 1980,
+    "glyph": "shaver",
+    "sku": "DEMO-p124",
+    "priceMinor": 29990,
+    "oldPriceMinor": 34990,
+    "inventoryQuantity": 23
+  },
+  {
+    "id": "p125",
+    "image": {
+      "src": "/images/products/catalog/axion-trim-10.svg",
+      "alt": "Ilustração: Aparador de Pelos Axion Trim 10 em 1 Recarregável"
+    },
+    "name": "Aparador de Pelos Axion Trim 10 em 1 Recarregável",
+    "rating": 4.6,
+    "reviewCount": 6720,
+    "glyph": "shaver",
+    "sku": "DEMO-p125",
+    "priceMinor": 17990,
+    "inventoryQuantity": 47
+  },
+  {
+    "id": "p126",
+    "image": {
+      "src": "/images/products/catalog/ck-one-100-1.webp",
+      "alt": "Perfume Calvin Klein CK One Eau de Toilette 100 ml Unissex, foto principal"
+    },
+    "name": "Perfume Calvin Klein CK One Eau de Toilette 100 ml Unissex",
+    "rating": 4.7,
+    "reviewCount": 12840,
+    "glyph": "perfume",
+    "sku": "DEMO-p126",
+    "priceMinor": 32990,
+    "oldPriceMinor": 39990,
+    "inventoryQuantity": 30
+  },
+  {
+    "id": "p127",
+    "image": {
+      "src": "/images/products/catalog/dior-jadore-100-1.webp",
+      "alt": "Perfume Dior J'adore Eau de Parfum Feminino 100 ml, foto principal"
+    },
+    "name": "Perfume Dior J'adore Eau de Parfum Feminino 100 ml",
+    "rating": 4.8,
+    "reviewCount": 5320,
+    "glyph": "perfume",
+    "sku": "DEMO-p127",
+    "priceMinor": 99900,
+    "inventoryQuantity": 12
+  },
+  {
+    "id": "p128",
+    "image": {
+      "src": "/images/products/catalog/dom-casmurro.svg",
+      "alt": "Ilustração: Dom Casmurro - Machado de Assis (Edição de Bolso)"
+    },
+    "name": "Dom Casmurro - Machado de Assis (Edição de Bolso)",
+    "rating": 4.8,
+    "reviewCount": 9120,
+    "glyph": "book",
+    "sku": "DEMO-p128",
+    "priceMinor": 2490,
+    "inventoryQuantity": 70
+  },
+  {
+    "id": "p129",
+    "image": {
+      "src": "/images/products/catalog/memorias-postumas.svg",
+      "alt": "Ilustração: Memórias Póstumas de Brás Cubas - Machado de Assis"
+    },
+    "name": "Memórias Póstumas de Brás Cubas - Machado de Assis",
+    "rating": 4.7,
+    "reviewCount": 6310,
+    "glyph": "book",
+    "sku": "DEMO-p129",
+    "priceMinor": 2790,
+    "inventoryQuantity": 54
+  },
+  {
+    "id": "p130",
+    "image": {
+      "src": "/images/products/catalog/o-cortico.svg",
+      "alt": "Ilustração: O Cortiço - Aluísio Azevedo"
+    },
+    "name": "O Cortiço - Aluísio Azevedo",
+    "rating": 4.6,
+    "reviewCount": 4870,
+    "glyph": "book",
+    "sku": "DEMO-p130",
+    "priceMinor": 2290,
+    "inventoryQuantity": 48
+  },
+  {
+    "id": "p131",
+    "image": {
+      "src": "/images/products/catalog/iracema.svg",
+      "alt": "Ilustração: Iracema - José de Alencar"
+    },
+    "name": "Iracema - José de Alencar",
+    "rating": 4.5,
+    "reviewCount": 3210,
+    "glyph": "book",
+    "sku": "DEMO-p131",
+    "priceMinor": 1990,
+    "inventoryQuantity": 39
+  },
+  {
+    "id": "p132",
+    "image": {
+      "src": "/images/products/catalog/a-moreninha.svg",
+      "alt": "Ilustração: A Moreninha - Joaquim Manuel de Macedo"
+    },
+    "name": "A Moreninha - Joaquim Manuel de Macedo",
+    "rating": 4.4,
+    "reviewCount": 2140,
+    "glyph": "book",
+    "sku": "DEMO-p132",
+    "priceMinor": 1990,
+    "inventoryQuantity": 31
+  },
+  {
+    "id": "p133",
+    "image": {
+      "src": "/images/products/catalog/kinetik-dryfit-preto.svg",
+      "alt": "Ilustração: Camiseta Esportiva Kinetik Dry Fit Masculina com Proteção UV na cor preto"
+    },
+    "name": "Camiseta Esportiva Kinetik Dry Fit Masculina com Proteção UV, Preto",
+    "rating": 4.5,
+    "reviewCount": 6840,
+    "glyph": "shirt",
+    "sku": "DEMO-p133",
+    "priceMinor": 6990,
+    "oldPriceMinor": 8990,
+    "inventoryQuantity": 95
+  },
+  {
+    "id": "p134",
+    "image": {
+      "src": "/images/products/catalog/kinetik-dryfit-branco.svg",
+      "alt": "Ilustração: Camiseta Esportiva Kinetik Dry Fit Masculina com Proteção UV na cor branco"
+    },
+    "name": "Camiseta Esportiva Kinetik Dry Fit Masculina com Proteção UV, Branco",
+    "rating": 4.5,
+    "reviewCount": 6840,
+    "glyph": "shirt",
+    "sku": "DEMO-p134",
+    "priceMinor": 6990,
+    "oldPriceMinor": 8990,
+    "inventoryQuantity": 72,
+    "variantOf": "p133"
+  },
+  {
+    "id": "p135",
+    "image": {
+      "src": "/images/products/catalog/kinetik-legging-preto.svg",
+      "alt": "Ilustração: Legging Fitness Kinetik Cintura Alta Anti-transparência na cor preto"
+    },
+    "name": "Legging Fitness Kinetik Cintura Alta Anti-transparência, Preto",
+    "rating": 4.6,
+    "reviewCount": 5210,
+    "glyph": "shirt",
+    "sku": "DEMO-p135",
+    "priceMinor": 9990,
+    "inventoryQuantity": 83
+  },
+  {
+    "id": "p136",
+    "image": {
+      "src": "/images/products/catalog/kinetik-legging-cinza.svg",
+      "alt": "Ilustração: Legging Fitness Kinetik Cintura Alta Anti-transparência na cor cinza"
+    },
+    "name": "Legging Fitness Kinetik Cintura Alta Anti-transparência, Cinza",
+    "rating": 4.6,
+    "reviewCount": 5210,
+    "glyph": "shirt",
+    "sku": "DEMO-p136",
+    "priceMinor": 9990,
+    "inventoryQuantity": 36,
+    "variantOf": "p135"
+  },
+  {
+    "id": "p137",
+    "image": {
+      "src": "/images/products/catalog/kinetik-legging-verde.svg",
+      "alt": "Ilustração: Legging Fitness Kinetik Cintura Alta Anti-transparência na cor verde"
+    },
+    "name": "Legging Fitness Kinetik Cintura Alta Anti-transparência, Verde",
+    "rating": 4.6,
+    "reviewCount": 5210,
+    "glyph": "shirt",
+    "sku": "DEMO-p137",
+    "priceMinor": 9990,
+    "inventoryQuantity": 0,
+    "variantOf": "p135"
+  },
+  {
+    "id": "p138",
+    "image": {
+      "src": "/images/products/catalog/atlas-halter-5kg.svg",
+      "alt": "Ilustração: Par de Halteres Emborrachados Atlas 5 kg"
+    },
+    "name": "Par de Halteres Emborrachados Atlas 5 kg",
+    "rating": 4.7,
+    "reviewCount": 2740,
+    "glyph": "fitness",
+    "sku": "DEMO-p138",
+    "priceMinor": 15990,
+    "inventoryQuantity": 26
+  },
+  {
+    "id": "p139",
+    "image": {
+      "src": "/images/products/catalog/atlas-yoga-6mm-azul.svg",
+      "alt": "Ilustração: Tapete de Yoga Atlas TPE 6 mm Antiderrapante com Alça na cor azul"
+    },
+    "name": "Tapete de Yoga Atlas TPE 6 mm Antiderrapante com Alça, Azul",
+    "rating": 4.6,
+    "reviewCount": 3180,
+    "glyph": "fitness",
+    "sku": "DEMO-p139",
+    "priceMinor": 11990,
+    "inventoryQuantity": 38
+  },
+  {
+    "id": "p140",
+    "image": {
+      "src": "/images/products/catalog/atlas-yoga-6mm-verde.svg",
+      "alt": "Ilustração: Tapete de Yoga Atlas TPE 6 mm Antiderrapante com Alça na cor verde"
+    },
+    "name": "Tapete de Yoga Atlas TPE 6 mm Antiderrapante com Alça, Verde",
+    "rating": 4.6,
+    "reviewCount": 3180,
+    "glyph": "fitness",
+    "sku": "DEMO-p140",
+    "priceMinor": 11990,
+    "inventoryQuantity": 25,
+    "variantOf": "p139"
+  },
+  {
+    "id": "p141",
+    "image": {
+      "src": "/images/products/catalog/hydra-750-preto.svg",
+      "alt": "Ilustração: Garrafa Térmica Esportiva Hydra 750 ml em Aço Inox na cor preto"
+    },
+    "name": "Garrafa Térmica Esportiva Hydra 750 ml em Aço Inox, Preto",
+    "rating": 4.7,
+    "reviewCount": 5930,
+    "glyph": "bottle",
+    "sku": "DEMO-p141",
+    "priceMinor": 8990,
+    "oldPriceMinor": 10990,
+    "inventoryQuantity": 74
+  },
+  {
+    "id": "p142",
+    "image": {
+      "src": "/images/products/catalog/hydra-750-branco.svg",
+      "alt": "Ilustração: Garrafa Térmica Esportiva Hydra 750 ml em Aço Inox na cor branco"
+    },
+    "name": "Garrafa Térmica Esportiva Hydra 750 ml em Aço Inox, Branco",
+    "rating": 4.7,
+    "reviewCount": 5930,
+    "glyph": "bottle",
+    "sku": "DEMO-p142",
+    "priceMinor": 8990,
+    "oldPriceMinor": 10990,
+    "inventoryQuantity": 40,
+    "variantOf": "p141"
+  },
+  {
+    "id": "p143",
+    "image": {
+      "src": "/images/products/catalog/hydra-750-azul.svg",
+      "alt": "Ilustração: Garrafa Térmica Esportiva Hydra 750 ml em Aço Inox na cor azul"
+    },
+    "name": "Garrafa Térmica Esportiva Hydra 750 ml em Aço Inox, Azul",
+    "rating": 4.7,
+    "reviewCount": 5930,
+    "glyph": "bottle",
+    "sku": "DEMO-p143",
+    "priceMinor": 8990,
+    "oldPriceMinor": 10990,
+    "inventoryQuantity": 33,
+    "variantOf": "p141"
+  },
+  {
+    "id": "p144",
+    "image": {
+      "src": "/images/products/catalog/bola-basquete-7-1.webp",
+      "alt": "Bola de Basquete Wilson Tamanho 7, foto principal"
+    },
+    "name": "Bola de Basquete Wilson Tamanho 7",
+    "rating": 4.6,
+    "reviewCount": 1840,
+    "glyph": "ball",
+    "sku": "DEMO-p144",
+    "priceMinor": 12990,
+    "inventoryQuantity": 22
+  },
+  {
+    "id": "p145",
+    "image": {
+      "src": "/images/products/catalog/bola-volei-soft-1.webp",
+      "alt": "Bola de Vôlei Soft Touch Tamanho Oficial, foto principal"
+    },
+    "name": "Bola de Vôlei Soft Touch Tamanho Oficial",
+    "rating": 4.5,
+    "reviewCount": 1120,
+    "glyph": "ball",
+    "sku": "DEMO-p145",
+    "priceMinor": 9990,
+    "inventoryQuantity": 0
+  },
+  {
+    "id": "p146",
+    "image": {
+      "src": "/images/products/catalog/bola-futebol-5-1.webp",
+      "alt": "Bola de Futebol de Campo Tamanho 5, foto principal"
+    },
+    "name": "Bola de Futebol de Campo Tamanho 5",
+    "rating": 4.5,
+    "reviewCount": 2260,
+    "glyph": "ball",
+    "sku": "DEMO-p146",
+    "priceMinor": 11990,
+    "inventoryQuantity": 35
   }
 ]

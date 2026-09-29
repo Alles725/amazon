@@ -60,29 +60,51 @@ describe('one catalog for database and demo products (integration)', () => {
     }
     await app?.close();
   });
-  it('opens every homepage product by slug/UUID and adds each to the persisted cart', async () => {
-    for (const demo of demos) {
-      const response = await request(app.getHttpServer()).get(`${base}/${demo.id}`).expect(200);
-      const product = response.body;
-      expect(product).toMatchObject({ slug: demo.id, sku: demo.sku, priceMinor: demo.priceMinor });
-      expect(
-        (await request(app.getHttpServer()).get(`${base}/${product.id}`).expect(200)).body,
-      ).toEqual(product);
-      const cart = await request(app.getHttpServer())
+  it('opens every demo product by slug/UUID and adds each available one to the persisted cart', async () => {
+    // A cart holds at most 100 lines, so the catalog is added in batches of 50.
+    const available = demos.filter((demo) => demo.inventoryQuantity > 0);
+    for (let start = 0; start < available.length; start += 50) {
+      const batch = available.slice(start, start + 50);
+      for (const demo of batch) {
+        const response = await request(app.getHttpServer()).get(`${base}/${demo.id}`).expect(200);
+        const product = response.body;
+        expect(product).toMatchObject({
+          slug: demo.id,
+          sku: demo.sku,
+          priceMinor: demo.priceMinor,
+        });
+        expect(
+          (await request(app.getHttpServer()).get(`${base}/${product.id}`).expect(200)).body,
+        ).toEqual(product);
+        expect(product.categoryPath.length).toBeGreaterThan(0);
+        const cart = await request(app.getHttpServer())
+          .post('/api/v1/cart/items')
+          .set('Cookie', cookie)
+          .send({ productId: product.id, quantity: 1 })
+          .expect(200);
+        expect(
+          cart.body.lines.some((line: { productId: string }) => line.productId === product.id),
+        ).toBe(true);
+      }
+      const persisted = await request(app.getHttpServer())
+        .get('/api/v1/cart')
+        .set('Cookie', cookie)
+        .expect(200);
+      expect(persisted.body.itemCount).toBe(batch.length);
+      expect(persisted.body.subtotalMinor).toBe(batch.reduce((sum, p) => sum + p.priceMinor, 0));
+      await request(app.getHttpServer()).delete('/api/v1/cart/items').set('Cookie', cookie);
+    }
+    // Sold-out demo products open normally but cannot be bought.
+    for (const demo of demos.filter((item) => item.inventoryQuantity === 0)) {
+      const product = (await request(app.getHttpServer()).get(`${base}/${demo.id}`).expect(200))
+        .body;
+      expect(product.inStock).toBe(false);
+      await request(app.getHttpServer())
         .post('/api/v1/cart/items')
         .set('Cookie', cookie)
         .send({ productId: product.id, quantity: 1 })
-        .expect(200);
-      expect(
-        cart.body.lines.some((line: { productId: string }) => line.productId === product.id),
-      ).toBe(true);
+        .expect(409);
     }
-    const persisted = await request(app.getHttpServer())
-      .get('/api/v1/cart')
-      .set('Cookie', cookie)
-      .expect(200);
-    expect(persisted.body.itemCount).toBe(demos.length);
-    expect(persisted.body.subtotalMinor).toBe(demos.reduce((sum, p) => sum + p.priceMinor, 0));
   });
   it('does not require a fixture, description, category or inventory record to open details', async () => {
     const missing = await request(app.getHttpServer()).get(`${base}/${missingId}`).expect(200);
@@ -163,12 +185,29 @@ describe('one catalog for database and demo products (integration)', () => {
     expect(response.body.description).toBe(
       'Qualidade 8BitDo em controles e gamepads para consoles.',
     );
-    const family = await request(app.getHttpServer())
+    // A product can live in several categories; the deepest chain is its breadcrumb.
+    const keyboard = await request(app.getHttpServer()).get(`${base}/p82`).expect(200);
+    expect(keyboard.body.categories.map((c: { slug: string }) => c.slug).sort()).toEqual([
+      'games-pc-perifericos',
+      'teclados',
+    ]);
+    expect(keyboard.body.categoryPath.map((c: { slug: string }) => c.slug)).toEqual([
+      'games-e-consoles',
+      'games-pc',
+      'games-pc-acessorios',
+      'games-pc-perifericos',
+    ]);
+    const controllers = await request(app.getHttpServer())
+      .get(`${base}?category=games-pc-controles&pageSize=48`)
+      .expect(200);
+    const slugs = controllers.body.items.map((item: { slug: string }) => item.slug);
+    expect(slugs).toEqual(expect.arrayContaining(['p6', 'p21', 'p22', 'p23']));
+    // Other brands' controllers share the category, so recommendations have material.
+    expect(slugs.length).toBeGreaterThan(4);
+    const gamer = await request(app.getHttpServer())
       .get(`${base}?category=games-e-consoles&pageSize=48`)
       .expect(200);
-    expect(family.body.items.map((item: { slug: string }) => item.slug).sort()).toEqual(
-      ['p21', 'p22', 'p23', 'p6'].sort(),
-    );
+    expect(gamer.body.total).toBeGreaterThan(controllers.body.total);
   });
   it('upgrades the retired p6 fixture only while it still holds the untouched old values', async () => {
     const p6 = demos.find((p) => p.id === 'p6')!;

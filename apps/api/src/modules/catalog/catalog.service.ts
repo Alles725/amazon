@@ -13,6 +13,7 @@ export class CatalogService implements CatalogApi {
     page?: number;
     pageSize?: number;
     category?: string;
+    slugs?: string[];
   }): Promise<ProductPage> {
     const page = query.page ?? 1;
     const pageSize = query.pageSize ?? 12;
@@ -21,6 +22,7 @@ export class CatalogService implements CatalogApi {
     const where = {
       active: true,
       ...(categoryIds ? { categories: { some: { categoryId: { in: categoryIds } } } } : {}),
+      ...(query.slugs ? { slug: { in: query.slugs } } : {}),
     };
     const [products, total] = await this.prisma.$transaction([
       this.prisma.product.findMany({

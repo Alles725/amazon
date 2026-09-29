@@ -48,5 +48,245 @@
   { "slug": "maquiagem-labios", "name": "Lábios", "parent": "maquiagem" },
 
   { "slug": "livros", "name": "Livros" },
-  { "slug": "literatura-e-ficcao", "name": "Literatura e Ficção", "parent": "livros" }
+  { "slug": "literatura-e-ficcao", "name": "Literatura e Ficção", "parent": "livros" },
+
+  {
+    "slug": "tenis-corrida",
+    "name": "Tênis de Corrida",
+    "parent": "tenis"
+  },
+  {
+    "slug": "tenis-casual",
+    "name": "Tênis Casual",
+    "parent": "tenis"
+  },
+  {
+    "slug": "tenis-academia",
+    "name": "Tênis para Academia",
+    "parent": "tenis"
+  },
+  {
+    "slug": "sandalias-e-chinelos",
+    "name": "Sandálias e Chinelos",
+    "parent": "calcados"
+  },
+  {
+    "slug": "botas",
+    "name": "Botas",
+    "parent": "calcados"
+  },
+  {
+    "slug": "fones-over-ear",
+    "name": "Fones Over-ear",
+    "parent": "fones-de-ouvido"
+  },
+  {
+    "slug": "fones-in-ear",
+    "name": "Fones In-ear e TWS",
+    "parent": "fones-de-ouvido"
+  },
+  {
+    "slug": "headsets",
+    "name": "Headsets",
+    "parent": "eletronicos-audio"
+  },
+  {
+    "slug": "caixas-de-som",
+    "name": "Caixas de Som",
+    "parent": "eletronicos-audio"
+  },
+  {
+    "slug": "celular-acessorios",
+    "name": "Acessórios para Celular",
+    "parent": "eletronicos"
+  },
+  {
+    "slug": "carregadores",
+    "name": "Carregadores",
+    "parent": "celular-acessorios"
+  },
+  {
+    "slug": "cabos",
+    "name": "Cabos",
+    "parent": "celular-acessorios"
+  },
+  {
+    "slug": "power-banks",
+    "name": "Carregadores Portáteis",
+    "parent": "celular-acessorios"
+  },
+  {
+    "slug": "fire-tv",
+    "name": "Fire TV",
+    "parent": "dispositivos-amazon"
+  },
+  {
+    "slug": "games-pc-perifericos",
+    "name": "Periféricos Gamer",
+    "parent": "games-pc-acessorios"
+  },
+  {
+    "slug": "tablets",
+    "name": "Tablets",
+    "parent": "computadores"
+  },
+  {
+    "slug": "perifericos",
+    "name": "Periféricos",
+    "parent": "computadores"
+  },
+  {
+    "slug": "teclados",
+    "name": "Teclados",
+    "parent": "perifericos"
+  },
+  {
+    "slug": "mouses",
+    "name": "Mouses",
+    "parent": "perifericos"
+  },
+  {
+    "slug": "webcams",
+    "name": "Webcams",
+    "parent": "perifericos"
+  },
+  {
+    "slug": "monitores",
+    "name": "Monitores",
+    "parent": "perifericos"
+  },
+  {
+    "slug": "mousepads",
+    "name": "Mousepads",
+    "parent": "perifericos"
+  },
+  {
+    "slug": "componentes",
+    "name": "Componentes e Armazenamento",
+    "parent": "computadores"
+  },
+  {
+    "slug": "ssd",
+    "name": "SSDs",
+    "parent": "componentes"
+  },
+  {
+    "slug": "memoria-ram",
+    "name": "Memória RAM",
+    "parent": "componentes"
+  },
+  {
+    "slug": "hubs-e-adaptadores",
+    "name": "Hubs e Adaptadores",
+    "parent": "computadores-acessorios"
+  },
+  {
+    "slug": "suportes-para-notebook",
+    "name": "Suportes para Notebook",
+    "parent": "computadores-acessorios"
+  },
+  {
+    "slug": "cafeteiras",
+    "name": "Cafeteiras",
+    "parent": "eletroportateis"
+  },
+  {
+    "slug": "utensilios-de-cozinha",
+    "name": "Utensílios de Cozinha",
+    "parent": "cozinha"
+  },
+  {
+    "slug": "panelas-e-frigideiras",
+    "name": "Panelas e Frigideiras",
+    "parent": "cozinha"
+  },
+  {
+    "slug": "porta-retratos",
+    "name": "Porta-retratos",
+    "parent": "decoracao"
+  },
+  {
+    "slug": "organizacao",
+    "name": "Organização",
+    "parent": "casa"
+  },
+  {
+    "slug": "limpeza",
+    "name": "Limpeza",
+    "parent": "casa"
+  },
+  {
+    "slug": "aspiradores",
+    "name": "Aspiradores de Pó",
+    "parent": "limpeza"
+  },
+  {
+    "slug": "maquiagem-olhos",
+    "name": "Olhos",
+    "parent": "maquiagem"
+  },
+  {
+    "slug": "cabelos",
+    "name": "Cabelos",
+    "parent": "beleza"
+  },
+  {
+    "slug": "secadores-e-escovas",
+    "name": "Secadores e Escovas",
+    "parent": "cabelos"
+  },
+  {
+    "slug": "chapinhas-e-modeladores",
+    "name": "Chapinhas e Modeladores",
+    "parent": "cabelos"
+  },
+  {
+    "slug": "barbear",
+    "name": "Barbear",
+    "parent": "beleza"
+  },
+  {
+    "slug": "barbeadores-e-aparadores",
+    "name": "Barbeadores e Aparadores",
+    "parent": "barbear"
+  },
+  {
+    "slug": "perfumes",
+    "name": "Perfumes",
+    "parent": "beleza"
+  },
+  {
+    "slug": "literatura-brasileira",
+    "name": "Literatura Brasileira",
+    "parent": "literatura-e-ficcao"
+  },
+  {
+    "slug": "esportes",
+    "name": "Esportes"
+  },
+  {
+    "slug": "roupas-esportivas",
+    "name": "Roupas Esportivas",
+    "parent": "esportes"
+  },
+  {
+    "slug": "fitness",
+    "name": "Fitness e Musculação",
+    "parent": "esportes"
+  },
+  {
+    "slug": "acessorios-esportivos",
+    "name": "Acessórios Esportivos",
+    "parent": "esportes"
+  },
+  {
+    "slug": "garrafas-e-squeezes",
+    "name": "Garrafas e Squeezes",
+    "parent": "acessorios-esportivos"
+  },
+  {
+    "slug": "bolas",
+    "name": "Bolas e Esportes Coletivos",
+    "parent": "esportes"
+  }
 ]
