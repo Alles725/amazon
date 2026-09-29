@@ -175,6 +175,8 @@ describe('checkout (integration)', () => {
       subtotalMinor: 3702,
       paymentMethod: 'SIMULATED_CARD',
       shippingAddress: address,
+      deliveredAt: null,
+      deliveryNote: null,
     });
     expect(created.lines[0]).toMatchObject({
       productId: products[0],

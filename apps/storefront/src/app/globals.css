@@ -3833,3 +3833,638 @@ html:has(.amazon-sell-page) {
     gap: 12px;
   }
 }
+
+/* Seus pedidos (/orders, /orders/[id]) ------------------------------- */
+.amazon-orders-page {
+  --orders-text: #0f1111;
+  --orders-muted: #565959;
+  --orders-link: #2162a1;
+  --orders-link-hover: #c7511f;
+  --orders-border: #d5d9d9;
+  --orders-header-bg: #f0f2f2;
+  background: #fff;
+  color: var(--orders-text);
+  min-width: 0;
+  overflow-x: clip;
+}
+.az-orders {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 952px;
+  margin: 0 auto;
+  padding: 10px 16px 48px;
+  font:
+    400 14px/20px var(--font-orders, Arial),
+    Arial,
+    Helvetica,
+    sans-serif;
+  letter-spacing: normal;
+}
+.az-orders h1,
+.az-orders h2 {
+  font-family: inherit;
+  letter-spacing: normal;
+}
+.az-orders a {
+  color: var(--orders-link);
+  text-decoration: none;
+}
+.az-orders a:hover {
+  color: var(--orders-link-hover);
+  text-decoration: underline;
+}
+.az-orders :focus-visible {
+  outline: 2px solid #007185;
+  outline-offset: 2px;
+}
+.az-orders__crumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 14px;
+}
+.az-orders__crumbs li + li::before {
+  content: '\203A';
+  margin-right: 6px;
+  color: var(--orders-muted);
+}
+.az-orders__crumbs [aria-current='page'] {
+  color: #c45500;
+}
+.az-orders__top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+  margin-top: 18px;
+}
+.az-orders__title {
+  margin: 0;
+  font-size: 28px;
+  line-height: 36px;
+  font-weight: 400;
+}
+.az-orders__search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.az-orders__search-field {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 318px;
+  height: 32px;
+  box-sizing: border-box;
+  padding: 0 10px;
+  border: 1px solid #888c8c;
+  border-radius: 4px;
+  background: #fff;
+}
+.az-orders__search-field:focus-within {
+  border-color: #007185;
+  box-shadow: 0 0 0 3px #c8f3fa;
+}
+.az-orders__search-field input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font: inherit;
+  color: var(--orders-text);
+}
+.az-orders__search-field input::placeholder {
+  color: #6f7373;
+}
+.az-orders__search-button {
+  height: 31px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 100px;
+  background: #303333;
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.az-orders__search-button:hover {
+  background: #0f1111;
+}
+.az-orders__tabs {
+  display: flex;
+  gap: 18px;
+  margin-top: 20px;
+  border-bottom: 1px solid #e7e7e7;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.az-orders__tab {
+  flex-shrink: 0;
+  padding: 0 10px 8px;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  background: none;
+  color: var(--orders-link);
+  font: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.az-orders__tab:hover {
+  color: var(--orders-link-hover);
+  text-decoration: underline;
+}
+.az-orders__tab[aria-selected='true'] {
+  border-bottom-color: #e77600;
+  color: var(--orders-text);
+  font-weight: 700;
+  text-decoration: none;
+}
+.az-orders__summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 0 13px;
+}
+.az-orders__select {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+.az-orders__select select {
+  height: 32px;
+  padding: 0 30px 0 11px;
+  border: 1px solid var(--orders-border);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(213, 217, 217, 0.5);
+  color: var(--orders-text);
+  font: inherit;
+  cursor: pointer;
+  appearance: none;
+}
+.az-orders__select select:hover {
+  background: #f7fafa;
+}
+.az-orders__select svg {
+  position: absolute;
+  right: 9px;
+  pointer-events: none;
+}
+.az-orders__clear {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--orders-link);
+  font: inherit;
+  cursor: pointer;
+}
+.az-orders__clear:hover {
+  color: var(--orders-link-hover);
+  text-decoration: underline;
+}
+.az-orders__empty {
+  margin: 16px 0;
+}
+.az-orders__list {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* One order */
+.az-order {
+  border: 1px solid var(--orders-border);
+  border-radius: 8px;
+  background: #fff;
+}
+.az-order__header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 24px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--orders-border);
+  border-radius: 8px 8px 0 0;
+  background: var(--orders-header-bg);
+  color: var(--orders-muted);
+}
+.az-order__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 24px;
+  margin: 0;
+}
+.az-order__facts dt,
+.az-order__id > p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 16px;
+  text-transform: uppercase;
+}
+.az-order__facts dd {
+  margin: 2px 0 0;
+  font-size: 14px;
+  line-height: 20px;
+}
+.az-order__id {
+  margin-left: auto;
+  text-align: right;
+}
+.az-order__links {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  margin-top: 2px;
+}
+.az-order__sep {
+  display: inline-block;
+  width: 1px;
+  height: 14px;
+  background: #ccc;
+  vertical-align: middle;
+}
+.az-order-detail__meta .az-order__sep {
+  margin: 0 12px;
+}
+.az-order__popover {
+  position: relative;
+  display: inline-block;
+}
+.az-order__popover summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--orders-link);
+  cursor: pointer;
+  list-style: none;
+}
+.az-order__popover summary::-webkit-details-marker {
+  display: none;
+}
+.az-order__popover summary:hover {
+  color: var(--orders-link-hover);
+  text-decoration: underline;
+}
+.az-order__popover[open] .az-order__chevron {
+  transform: rotate(180deg);
+}
+.az-order__popover-body {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 220px;
+  padding: 12px 14px;
+  border: 1px solid var(--orders-border);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(15, 17, 17, 0.2);
+  color: var(--orders-text);
+  font-style: normal;
+  text-align: left;
+}
+.az-order__popover--end .az-order__popover-body {
+  right: 0;
+  left: auto;
+  min-width: 170px;
+}
+.az-order__body {
+  display: flex;
+  gap: 24px;
+  padding: 16px 18px 18px;
+}
+.az-order__shipment {
+  flex: 1;
+  min-width: 0;
+}
+.az-order__status {
+  margin: 0;
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 700;
+}
+.az-order__status-detail {
+  margin: 0;
+}
+.az-order__items {
+  display: grid;
+  gap: 18px;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.az-order__item {
+  display: flex;
+  gap: 14px;
+}
+.az-order__item-media {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 90px;
+  height: 90px;
+}
+.az-order__item-media img,
+.az-order__item-media svg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.az-order__item-media .az-product-no-photo > span {
+  display: none;
+}
+.az-order__item-info {
+  min-width: 0;
+}
+.az-order .az-order__item-name {
+  display: block;
+}
+.az-order__item-meta {
+  margin: 4px 0 0;
+  font-size: 12px;
+  line-height: 16px;
+}
+.az-order__item-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+.az-order__buy-status {
+  flex-basis: 100%;
+  font-size: 12px;
+  color: #067d62;
+}
+.az-order__actions {
+  display: flex;
+  flex: 0 0 250px;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* Amazon pill buttons */
+.az-orders .az-order-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-sizing: border-box;
+  min-height: 31px;
+  padding: 0 14px;
+  border: 1px solid #888c8c;
+  border-radius: 100px;
+  background: #fff;
+  color: var(--orders-text);
+  font: inherit;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+.az-orders .az-order-btn:hover {
+  background: #f7fafa;
+  color: var(--orders-text);
+  text-decoration: none;
+}
+.az-orders .az-order-btn--primary,
+.az-orders .az-order-btn--buy {
+  border-color: #ffd814;
+  background: #ffd814;
+}
+.az-orders .az-order-btn--primary:hover,
+.az-orders .az-order-btn--buy:hover {
+  border-color: #f2c200;
+  background: #f7ca00;
+}
+.az-orders .az-order-btn--buy {
+  padding-left: 4px;
+}
+.az-orders .az-order-btn:disabled {
+  cursor: progress;
+  opacity: 0.7;
+}
+.az-order-btn__icon {
+  display: inline-flex;
+}
+
+/* Compre Novamente tab */
+.az-orders__buy-again {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.az-orders__buy-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px;
+  border: 1px solid var(--orders-border);
+  border-radius: 8px;
+}
+.az-orders__buy-link {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.az-orders__buy-media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 150px;
+}
+.az-orders__buy-media img,
+.az-orders__buy-media svg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.az-orders__buy-name {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+.az-orders__buy-date {
+  color: var(--orders-muted);
+  font-size: 12px;
+}
+.az-orders__buy-card .az-order-btn {
+  align-self: flex-start;
+}
+
+/* Order details */
+.az-order-detail__meta {
+  margin: 4px 0 14px;
+}
+.az-order-detail__summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px 24px;
+  margin-bottom: 16px;
+  padding: 16px 18px;
+  border: 1px solid var(--orders-border);
+  border-radius: 8px;
+}
+.az-order-detail__summary h2 {
+  margin: 0 0 4px;
+  font-size: 14px;
+  font-weight: 700;
+}
+.az-order-detail__summary address,
+.az-order-detail__summary p {
+  margin: 0;
+  font-style: normal;
+}
+.az-order-detail__totals {
+  margin: 0;
+}
+.az-order-detail__totals > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.az-order-detail__totals dd {
+  margin: 0;
+}
+.az-order-detail__grand {
+  margin-top: 4px;
+  font-weight: 700;
+}
+
+/* Home card built from the user's orders */
+.az-home-orders {
+  display: flex;
+  flex-direction: column;
+}
+.az-home-orders__grid {
+  display: grid;
+  flex: 1;
+  gap: 14px 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.az-home-orders__grid--many {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.az-home-orders__grid--one {
+  align-content: start;
+}
+.az-home-orders__item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-sizing: border-box;
+  padding: 5px;
+  border-radius: 4px;
+  background: #f7f7f7;
+  color: #0f1111;
+}
+.az-home-orders__media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 106px;
+}
+.az-home-orders__grid--one .az-home-orders__media {
+  height: 230px;
+}
+.az-home-orders__media img,
+.az-home-orders__media svg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.az-home-orders__name {
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 16px;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+.az-home-orders__item:hover .az-home-orders__name {
+  color: #2162a1;
+  text-decoration: underline;
+}
+.az-home-orders__status {
+  font-size: 12px;
+  font-weight: 700;
+  color: #067d62;
+}
+.az-home-orders__all {
+  margin-top: 12px;
+  font-size: 13px;
+  color: #2162a1;
+}
+.az-home-orders__all:hover {
+  color: #c7511f;
+  text-decoration: underline;
+}
+
+@media (max-width: 767px) {
+  .az-orders__top {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .az-orders__search-field {
+    flex: 1;
+    width: auto;
+    min-width: 0;
+  }
+  .az-order__header {
+    flex-direction: column;
+  }
+  .az-order__id {
+    margin-left: 0;
+    text-align: left;
+  }
+  .az-order__links {
+    justify-content: flex-start;
+  }
+  .az-order__popover--end .az-order__popover-body {
+    right: auto;
+    left: 0;
+  }
+  .az-order__body {
+    flex-direction: column;
+    gap: 16px;
+  }
+  .az-order__actions {
+    flex-basis: auto;
+  }
+  .az-order-detail__summary {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 420px) {
+  .az-orders__search {
+    flex-wrap: wrap;
+  }
+  .az-orders__search-button {
+    flex: 1 1 100%;
+  }
+  .az-order__item-media {
+    width: 70px;
+    height: 70px;
+  }
+  .az-order__item-actions .az-order-btn {
+    flex: 1 1 100%;
+  }
+}

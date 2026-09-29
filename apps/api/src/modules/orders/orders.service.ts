@@ -184,6 +184,8 @@ function orderView(order: StoredOrder): OrderResponse {
     shippingAddress: order.shippingAddress as unknown as AddressInput | null,
     paymentMethod: order.paymentMethod as SimulatedPayment | null,
     placedAt: order.placedAt.toISOString(),
+    deliveredAt: order.deliveredAt?.toISOString() ?? null,
+    deliveryNote: order.deliveryNote,
     lines: order.items.map(
       ({ productId, productName, sku, quantity, unitPriceMinor, lineTotalMinor, currency }) => ({
         productId,

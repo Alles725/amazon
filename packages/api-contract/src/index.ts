@@ -213,6 +213,9 @@ export interface OrderResponse {
   shippingAddress: AddressInput | null;
   paymentMethod: SimulatedPayment | null;
   placedAt: string;
+  /** ISO timestamp; null until the package is delivered. */
+  deliveredAt: string | null;
+  deliveryNote: string | null;
   lines: OrderLineResponse[];
 }
 export const CHECKOUT_ROUTES = {

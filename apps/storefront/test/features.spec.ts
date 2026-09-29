@@ -19,9 +19,15 @@ describe('shipped config/features.yaml', () => {
     expect(registry.isEnabled('home')).toBe(true);
   });
 
+  it('enables order history ("Seus pedidos")', () => {
+    const registry = loadShipped();
+    expect(registry.routeState('orders')).toBe('enabled');
+    expect(registry.routeState('orderDetails')).toBe('enabled');
+  });
+
   it('ships unbuilt features disabled', () => {
     const registry = loadShipped();
-    for (const feature of ['catalog', 'productDetails', 'cart', 'checkout', 'orders', 'account']) {
+    for (const feature of ['catalog', 'productDetails', 'cart', 'checkout', 'account']) {
       expect(registry.isEnabled(feature)).toBe(false);
     }
   });
