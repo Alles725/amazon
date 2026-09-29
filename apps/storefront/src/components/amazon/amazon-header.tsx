@@ -3,24 +3,27 @@ import Link from 'next/link';
 import { AmazonLogo } from '@/components/amazon-logo';
 import { CartHeaderLink } from '@/features/cart/cart-header-link';
 import { AccountMenu } from '@/components/amazon/account-menu';
+import { AllMenu } from '@/components/amazon/all-menu';
+import { BrowsingHistoryMenu } from '@/features/browsing-history/browsing-history-menu';
 import { getServerSession } from '@/features/auth/server-session';
+import { isFeatureEnabled } from '@/config/feature-gate';
 
+// "Todos" is rendered separately by AllMenu, always as the first navbar item.
 const NAV_LINKS = [
-  { label: 'Todos', href: '/products' },
-  { label: 'Ofertas do Dia', href: '/products' },
+  { label: 'Venda na Amazon', href: '/sell' },
+  { label: 'Atendimento ao cliente', href: '/help' },
   { label: 'Comprar novamente', href: '/orders' },
-  { label: 'Venda na Amazon', href: '/products' },
-  { label: 'Livros', href: '/products?department=books' },
-  { label: 'Eletrônicos', href: '/products?department=electronics' },
-  { label: 'Atendimento ao Cliente', href: '/products' },
-  { label: 'Alimentos e Bebidas', href: '/products' },
+  { label: 'Ofertas do dia', href: '/products' },
   { label: 'Sua Amazon.com.br', href: '/account' },
+  { label: 'Alimentos e Bebidas', href: '/products' },
+  { label: 'Histórico de navegação', href: '/products' },
   { label: 'Ideias de Presente', href: '/products' },
 ];
 
 export async function AmazonHeader() {
   const session = await getServerSession();
   const firstName = session?.user.displayName.split(' ')[0];
+  const browsingHistory = isFeatureEnabled('browsingHistory');
 
   return (
     <header className="az-header">
@@ -81,16 +84,16 @@ export async function AmazonHeader() {
 
       <nav className="az-navbar" aria-label="Categorias">
         <div className="az-navbar__links">
-          {NAV_LINKS.map((link, index) => (
-            <Link
-              key={link.label}
-              href={link.href}
-              className={`az-navbar__link${index === 0 ? ' az-navbar__link--all' : ''}`}
-            >
-              {index === 0 && <MenuIcon />}
-              {link.label}
-            </Link>
-          ))}
+          <AllMenu firstName={firstName} />
+          {NAV_LINKS.map((link) =>
+            browsingHistory && link.label === 'Histórico de navegação' ? (
+              <BrowsingHistoryMenu key={link.label} />
+            ) : (
+              <Link key={link.label} href={link.href} className="az-navbar__link">
+                {link.label}
+              </Link>
+            ),
+          )}
         </div>
       </nav>
     </header>
@@ -131,22 +134,6 @@ function CartIcon() {
       />
       <circle cx="10" cy="21" r="1.4" fill="#fff" stroke="none" />
       <circle cx="17" cy="21" r="1.4" fill="#fff" stroke="none" />
-    </svg>
-  );
-}
-
-function MenuIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      width="18"
-      height="18"
-      aria-hidden="true"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-    >
-      <path d="M3 6h18M3 12h18M3 18h18" strokeLinecap="round" />
     </svg>
   );
 }

@@ -192,3 +192,21 @@ create-pr request prepared feat/academic-checkout from updated main; publication
 awaits final approval. Shared flags stay false;
 local ignored config enables checkout alongside cart/productDetails. Application
 left running locally. See docs/checkout.md for limits and operating details.
+
+## 2026-09-29 — HEADER-NAV-001
+
+Replaced the navbar items with the nine requested entries and turned "Todos" into
+an Amazon-style slide-in menu (AllMenu, client component beside AccountMenu) with
+the requested sections and links. Closes on outside click, close button and Escape.
+
+Added the "Histórico de navegação" flyout from the Amazon reference: title, "Exibir
+e editar" (remove items / clear), single-row carousel reusing HorizontalRail and
+ProductImage, "No carrinho" badge from CartProvider, and a timeline with orange dots
+and one date label per day. The project had no history data and forbids fabricated
+history, so product detail pages record real visits in localStorage (no backend).
+Gated by the new `browsingHistory` flag, disabled in shared config.
+
+Validation: lint, typecheck and 46 storefront unit tests pass; Chromium checks at
+1900px and 390px with demo-seeded history. See current-state.md for what was not
+exercised end-to-end.
+

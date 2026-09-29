@@ -33,6 +33,10 @@ features:
     enabled: false
     description: Account management beyond the auth shell
 
+  browsingHistory:
+    enabled: false
+    description: Device-local browsing history flyout in the header navbar
+
   # Footer informational pages. Each is an independent, content-only page —
   # not part of a vertical slice — so one team member can build any one of
   # them without touching the others.
