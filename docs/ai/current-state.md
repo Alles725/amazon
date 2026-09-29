@@ -1,6 +1,6 @@
 # Current state
 
-Last updated: 2026-09-25
+Last updated: 2026-09-29
 
 This records observed local results, not an assertion that CI or deployment passed.
 
@@ -49,7 +49,8 @@ This records observed local results, not an assertion that CI or deployment pass
 - Cart defaults off in shared config and on in the ignored local FEATURES_FILE.
   See `docs/cart.md` for setup, endpoints and remaining limitations.
 - Real catalog products have no photos in the existing schema; cart uses an honest
-  image-unavailable state. No fake ratings, recommendations or browsing history.
+  image-unavailable state. No fake ratings or recommendations; browsing history
+  is only ever recorded from real visits (see Header navigation, 2026-09-29).
 
 ## Product detail — initial pass, 2026-09-25
 
@@ -157,3 +158,23 @@ hub is part of the authenticated shell and does not enable account management.
   addresses, products and integration database removed. Homepage geometry and
   22 footer destinations preserved. No new normal-flow console/backend/DB errors;
   deliberate failure tests and pre-existing toolchain/favicon warnings excluded.
+
+## Header navigation and browsing history — 2026-09-29
+
+- Navbar has exactly nine items: Todos, Venda na Amazon, Atendimento ao cliente,
+  Comprar novamente, Ofertas do dia, Sua Amazon.com.br, Alimentos e Bebidas,
+  Histórico de navegação, Ideias de Presente. "Livros" and "Eletrônicos" removed.
+- "Todos" opens an Amazon-style left panel (5 sections, fixed external links).
+  "Sair" is a no-op `javascript:void(0)` link by request; React logs a dev warning.
+- Browsing history flyout behind the new `browsingHistory` flag (false in shared
+  config). Product detail pages record real visits in the browser's localStorage;
+  nothing is fabricated and there is no backend. History is per browser, not per
+  account: people sharing a browser share it, like Amazon's signed-out history.
+- Validation: storefront lint/typecheck and 46 unit tests pass. Chromium verified
+  the navbar order, Todos open/close, the flyout at 1900px and 390px (carousel
+  arrow scrolling, timeline dots centered under each product, hover/click/outside
+  close). The flyout was exercised with history seeded from demo products: the
+  running server had productDetails disabled, so recording from a real product
+  page visit is covered by unit tests only. "No carrinho" badge unit-tested only.
+- Production build compiled; the standalone output step failed locally with a
+  Windows symlink EPERM unrelated to this change.

@@ -954,6 +954,312 @@ a {
   width: 21px;
   height: 21px;
 }
+button.az-navbar__link {
+  background: none;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* "Histórico de navegação" flyout. Positioned against .az-navbar (not the
+   scrolling links row) so the row's overflow doesn't clip it. */
+.az-navbar {
+  position: relative;
+}
+.az-history-menu {
+  display: flex;
+}
+button.az-history-menu__trigger {
+  font-weight: 400;
+}
+.az-history-menu__trigger.is-open {
+  border-color: #fff;
+}
+.az-history-menu__caret {
+  width: 0;
+  height: 0;
+  margin-left: 1px;
+  border: 4px solid transparent;
+  border-top-color: #ccc;
+  border-bottom: 0;
+}
+.az-history-flyout {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  padding: 16px 26px 12px;
+  background: #fff;
+  color: #0f1111;
+  font-family: Arial, Helvetica, sans-serif;
+  border-top: 3px solid #b6b6b6;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+}
+.az-history__header {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+.az-history__title {
+  margin: 0;
+  color: #333;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: normal;
+}
+.az-history__edit {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #2162a1;
+  font: inherit;
+  font-size: 15px;
+  cursor: pointer;
+}
+.az-history__edit:hover {
+  color: #c45500;
+  text-decoration: underline;
+}
+.az-history__empty {
+  margin: 0 0 8px;
+  font-size: 14px;
+}
+.az-history__empty a {
+  color: #2162a1;
+}
+.az-history__rail .az-rail__track {
+  gap: 0;
+  padding: 0;
+  scrollbar-width: none;
+}
+.az-history__rail .az-rail__track::-webkit-scrollbar {
+  display: none;
+}
+.az-history__rail .az-rail__arrow {
+  top: 20px;
+  height: 140px;
+  font-size: 34px;
+}
+.az-history__item {
+  display: flex;
+  flex: 0 0 clamp(140px, 13vw, 186px);
+  flex-direction: column;
+  min-width: 0;
+  scroll-snap-align: start;
+}
+.az-history__product {
+  display: flex;
+  flex-direction: column;
+  padding-right: 14px;
+  color: #0f1111;
+}
+.az-history__image {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 150px;
+  margin-bottom: 12px;
+}
+.az-history__image .az-product-photo,
+.az-history__image .az-product-no-photo {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+.az-history__in-cart {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 6px 12px;
+  border-radius: 3px;
+  background: rgba(35, 35, 35, 0.85);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.az-history__name {
+  display: -webkit-box;
+  min-height: 2.6em;
+  overflow: hidden;
+  font-size: 14px;
+  line-height: 1.3;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+.az-history__product:hover .az-history__name {
+  color: #c45500;
+  text-decoration: underline;
+}
+.az-history__remove {
+  align-self: flex-start;
+  margin-top: 4px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #2162a1;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+/* One line segment per item, so the timeline scrolls with the products and
+   each dot sits under its own product's image. */
+.az-history__timeline {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  height: 12px;
+  margin: 14px 0 12px;
+  padding-right: 14px;
+}
+.az-history__timeline::before {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #e7e7e7;
+}
+.az-history__dot {
+  position: relative;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #f7941d;
+}
+.az-history__date {
+  min-height: 18px;
+  padding-right: 14px;
+  color: #333;
+  font-size: 14px;
+  text-align: center;
+  white-space: nowrap;
+}
+@media (max-width: 700px) {
+  .az-history-flyout {
+    padding: 12px 10px 8px;
+  }
+  .az-history__item {
+    flex-basis: 132px;
+  }
+  .az-history__image {
+    height: 120px;
+  }
+  .az-history__name {
+    font-size: 13px;
+  }
+}
+
+/* "Todos" slide-in menu (Amazon's hmenu) */
+.az-all-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.8);
+  animation: az-all-menu-fade 0.2s ease-out;
+}
+.az-all-menu__panel {
+  display: flex;
+  flex-direction: column;
+  width: 365px;
+  max-width: calc(100vw - 50px);
+  height: 100%;
+  background: #fff;
+  color: #111;
+  font-family: Arial, Helvetica, sans-serif;
+  outline: none;
+  animation: az-all-menu-slide 0.25s ease-out;
+}
+.az-all-menu__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  min-height: 50px;
+  padding: 11px 36px;
+  background: #232f3e;
+  color: #fff;
+  font-size: 19px;
+  font-weight: 700;
+}
+.az-all-menu__content {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 12px;
+}
+.az-all-menu__section + .az-all-menu__section {
+  border-top: 1px solid #d5dbdb;
+}
+.az-all-menu__section {
+  padding: 13px 0 4px;
+}
+.az-all-menu__title {
+  margin: 0;
+  padding: 0 20px 5px 36px;
+  color: #111;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: normal;
+}
+.az-all-menu__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.az-all-menu__link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px 12px 36px;
+  color: #111;
+  font-size: 14px;
+  line-height: 20px;
+}
+.az-all-menu__link:hover {
+  background: #eaeded;
+}
+.az-all-menu__link svg {
+  flex-shrink: 0;
+  color: #8d9096;
+}
+.az-all-menu__close {
+  position: absolute;
+  top: 10px;
+  left: min(365px, calc(100vw - 50px));
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  margin-left: 6px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: #fff;
+  cursor: pointer;
+}
+@keyframes az-all-menu-fade {
+  from { opacity: 0; }
+}
+@keyframes az-all-menu-slide {
+  from { transform: translateX(-100%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .az-all-menu,
+  .az-all-menu__panel {
+    animation: none;
+  }
+}
 @media (max-width: 1100px) {
   .az-topbar__deliver {
     display: none;

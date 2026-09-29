@@ -13,6 +13,7 @@ import { ProductPurchase } from '@/features/product/product-purchase';
 import { ProductPrice } from '@/features/product/product-price';
 import { HorizontalRail } from '@/components/amazon/horizontal-rail';
 import { ProductCard } from '@/components/amazon/product-card';
+import { RecordProductView } from '@/features/browsing-history/record-product-view';
 
 export default async function ProductDetailPage({ params }: { params: { productId: string } }) {
   if (!isFeatureEnabled('productDetails'))
@@ -55,6 +56,9 @@ export default async function ProductDetailPage({ params }: { params: { productI
 
   return (
     <main className="az-detail-main">
+      {isFeatureEnabled('browsingHistory') && (
+        <RecordProductView id={product.id} name={product.name} image={presentation.images[0]} />
+      )}
       <nav className="az-detail-breadcrumb" aria-label="Localização do produto">
         <Link href="/">Página inicial</Link>
         <span aria-hidden="true">›</span>
