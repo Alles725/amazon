@@ -245,3 +245,17 @@ order; account, orders and consumed stock were removed/restored afterwards. Edge
 headless at 1770/1280/1024/500px: no clipping or horizontal overflow. Running
 `next build` alongside `next dev` clobbers the shared .next (dev server lost its CSS);
 the dev server was restarted with a clean .next and the root .env loaded.
+
+## 2026-09-29 — TAB-001
+
+Set the browser tab identity: root metadata title "Amazon.com.br | Tudo pra você, de
+A a Z." and an SVG favicon via the App Router `app/icon.svg` convention. The Amazon
+logo existed only as an inline React component, so the icon reuses its "a" and orange
+smile/colors instead of a new design. Only one title source exists (root layout); the
+smoke test's home assertion moved from the old "MVP Storefront" title to the new one.
+
+Validation: storefront lint/typecheck and 58 tests pass. Title and icon link verified
+in `next dev` and `next start`; /icon.svg returns 200 image/svg+xml and was rendered in
+Edge headless at 16/32/160px. Production build compiled; standalone step hit the known
+Windows symlink EPERM. The dev server was stopped for the build and restarted with a
+clean .next and the root .env.

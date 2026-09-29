@@ -53,7 +53,7 @@ async function main() {
   console.log('storefront reachable through the Ingress');
   const home = await call('/');
   check('GET / returns 200', home.status === 200, `got ${home.status}`);
-  check('GET / renders the storefront', home.text.includes('MVP Storefront'));
+  check('GET / renders the storefront', home.text.includes('Amazon.com.br | Tudo pra você, de A a Z.'));
 
   console.log('\nAPI reachable through the Ingress on the same origin');
   const health = await call('/health');

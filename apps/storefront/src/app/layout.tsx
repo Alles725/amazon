@@ -8,7 +8,7 @@ import { isFeatureEnabled } from '@/config/feature-gate';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'MVP Storefront',
+  title: 'Amazon.com.br | Tudo pra você, de A a Z.',
   description: 'Skeleton storefront for the modular monolith MVP.',
 };
 
