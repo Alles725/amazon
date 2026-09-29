@@ -2,25 +2,28 @@
 
 ## Current objective
 
-HELP-001 — "Atendimento ao Cliente" page on /help (see current-state.md). PR
-preparation is on feat/atendimento-ao-cliente, created from origin/main at a31f525
-(sell PR #14 merged). Commit, push and PR await the final explicit approval.
+ORDERS-001 — "Seus pedidos" on /orders (see current-state.md). PR preparation is on
+feat/seus-pedidos, created from origin/main at 129bfe5 (favicon PR #16 merged).
+Commit, push and PR await the final explicit approval.
 
 ## Implementation
 
-- /help: customer-service bar, recent products from the user's real orders, action
-  buttons, quick-links strip, help-library search, tabbed help topics.
-- Copy in apps/storefront/src/features/help/help-content.ts; order mapping in
-  recent-products.ts (server-only, reuses GET /api/v1/orders).
-- Previous objective SELL-001 merged in PR #14; CHECKOUT-001 notes below still apply.
+- apps/storefront/src/features/orders: orders-server.ts (the only orders API reader),
+  order-presentation.ts (pure rules: periods/years, search, counter, status, return
+  window, distinct products), order-card.tsx, orders-view.tsx, recent-orders-card.tsx.
+- Consumers: /orders, /orders/:id, /help recent products, Home "Seus pedidos" card.
+- Demo order: config/demo-orders.json + `seed:demo-orders` (needs DEMO_ORDER_EMAIL of
+  an existing account). Orders have nullable delivered_at/delivery_note.
+- Previous objectives HELP-001 (PR #15) and TAB-001 (PR #16) merged.
 
 ## Configuration and limits
 
 Shared cart/productDetails/checkout flags remain false. Ignored local override
 enables all three. API :3001, storefront :3000, PostgreSQL Docker container mvp-pg.
 Free shipping and no discounts are explicit academic rules; no real gateway,
-card credentials, delivery prediction or payment/status automation. Order list
-page remains unimplemented; /checkout/success/:orderId is the real confirmation.
+card credentials, delivery prediction or payment/status automation (delivery fields
+are only set by data, e.g. the demo seed). /checkout/success/:orderId is the real
+confirmation; /orders lists the user's persisted orders.
 
 ## Validation
 

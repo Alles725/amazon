@@ -231,6 +231,22 @@ iterations:
           app/icon.svg derived from the AmazonLogo colors. Verified in next dev and
           next start; build compiled (standalone step: known Windows EPERM).
 
+  - id: 11
+    name: Order history
+    stories:
+      - id: ORDERS-001
+        owner: dev2
+        status: done
+        title: '"Seus pedidos" (Devoluções e Pedidos) backed by persisted orders'
+        note: >-
+          /orders and /orders/:id read only GET /api/v1/orders. Orders gain nullable
+          delivered_at/delivery_note (migration 20260929000000_order_delivery). Year
+          filter lists only years with orders; relative periods, search by product name
+          or order number, computed counter, tabs. One demo order in
+          config/demo-orders.json, persisted by seed:demo-orders for an existing account
+          (DEMO_ORDER_EMAIL). Shared orders module also feeds /help and a Home card.
+          Shared orders flag enabled.
+
 next_up:
   - id: FIRSTRUN-001
     title: First cluster run

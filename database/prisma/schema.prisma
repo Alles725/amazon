@@ -184,6 +184,10 @@ model Order {
   shippingAddress Json?   @map("shipping_address")
   paymentMethod   String? @map("payment_method")
 
+  // Delivery tracking. Null until the carrier confirms delivery.
+  deliveredAt  DateTime? @map("delivered_at")
+  deliveryNote String?   @map("delivery_note")
+
   user  User        @relation(fields: [userId], references: [id], onDelete: Restrict)
   items OrderItem[]
 

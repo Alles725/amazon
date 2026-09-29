@@ -1557,6 +1557,14 @@
           "placedAt": {
             "type": "string"
           },
+          "deliveredAt": {
+            "type": "string",
+            "nullable": true
+          },
+          "deliveryNote": {
+            "type": "string",
+            "nullable": true
+          },
           "lines": {
             "type": "array",
             "items": {
@@ -1576,6 +1584,8 @@
           "shippingAddress",
           "paymentMethod",
           "placedAt",
+          "deliveredAt",
+          "deliveryNote",
           "lines"
         ]
       }

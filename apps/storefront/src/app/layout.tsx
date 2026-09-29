@@ -27,6 +27,8 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
     BARE_ROUTES.includes(pathname) ||
     pathname === '/checkout' ||
     pathname.startsWith('/checkout/') ||
+    pathname === '/orders' ||
+    pathname.startsWith('/orders/') ||
     /^\/products\/[^/]+\/?$/.test(pathname);
 
   const cartEnabled = isFeatureEnabled('cart');

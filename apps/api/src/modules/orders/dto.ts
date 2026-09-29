@@ -52,5 +52,7 @@ export class OrderResponseDto implements OrderResponse {
   @ApiProperty({ type: AddressInputDto, nullable: true }) shippingAddress: AddressInput | null;
   @ApiProperty({ type: String, nullable: true }) paymentMethod: SimulatedPayment | null;
   @ApiProperty() placedAt: string;
+  @ApiProperty({ type: String, nullable: true }) deliveredAt: string | null;
+  @ApiProperty({ type: String, nullable: true }) deliveryNote: string | null;
   @ApiProperty({ type: [OrderLineDto] }) lines: OrderLineDto[];
 }

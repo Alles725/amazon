@@ -259,3 +259,30 @@ in `next dev` and `next start`; /icon.svg returns 200 image/svg+xml and was rend
 Edge headless at 16/32/160px. Production build compiled; standalone step hit the known
 Windows symlink EPERM. The dev server was stopped for the build and restarted with a
 clean .next and the root .env.
+
+## 2026-09-29 — ORDERS-001
+
+Implemented "Seus pedidos" on /orders (target of the header's "Devoluções e Pedidos")
+from an amazon.com.br screenshot: breadcrumb, title with "Pesquisar todos os pedidos" /
+"Buscar pedidos", tabs (Pedidos, Compre Novamente, Ainda não enviado), "N pedido(s)
+feito(s) em" with a period selector, and order cards (grey header with date, total,
+ship-to popover, order number, details and "Fatura"; delivery status, items, Amazon
+pill buttons). /orders/:id replaces its placeholder with a real details page.
+
+Everything reads the existing orders API; nothing is mocked in the UI. The only schema
+change is nullable `delivered_at` / `delivery_note` on orders (additive migration), so
+"Entregue no dia 17 agosto" and its note come from the database. The period selector
+lists "últimos 30 dias", "nos últimos 3 meses" and then only the years that actually
+contain orders, newest first (São Paulo calendar). One demo order lives in
+config/demo-orders.json and is persisted by `seed:demo-orders` for an existing account
+given by DEMO_ORDER_EMAIL, snapshotting catalog product p6 like checkout does; reruns
+skip existing order numbers and the seed never creates users. A shared
+features/orders module (single API reader + pure rules) now also feeds the /help
+recent products and a Home "Seus pedidos" card shown only to signed-in users with orders.
+
+Validation: lint, typecheck, 71 storefront unit tests (12 new), 35 API integration tests
+on a disposable database, drift check on a disposable shadow database, OpenAPI
+regenerated. Edge (Playwright) with a temporary session on the seeded account: 25
+checks (DB/UI order parity, counter, year options, filters, search, tabs, details page,
+/help and Home reuse, signed-out redirect, no overflow at 320–1920px); session removed.
+Build compiled; standalone step hit the known Windows EPERM.

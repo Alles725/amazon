@@ -26,8 +26,8 @@ features:
     description: Academic checkout with saved addresses and persisted orders
 
   orders:
-    enabled: false
-    description: Order history
+    enabled: true
+    description: Order history ("Seus pedidos") and order details
 
   account:
     enabled: false

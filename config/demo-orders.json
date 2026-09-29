@@ -1,0 +1,20 @@
+[
+  {
+    "orderNumber": "702-4418305-7719264",
+    "status": "FULFILLED",
+    "placedAt": "2026-08-10T13:32:00.000Z",
+    "deliveredAt": "2026-08-17T15:10:00.000Z",
+    "deliveryNote": "O pacote foi entregue nas mãos de um morador.",
+    "paymentMethod": "SIMULATED_CARD",
+    "shippingAddress": {
+      "postalCode": "90020060",
+      "street": "Rua dos Andradas",
+      "number": "1234",
+      "complement": "Apto 501",
+      "neighborhood": "Centro Histórico",
+      "city": "Porto Alegre",
+      "state": "RS"
+    },
+    "items": [{ "productSlug": "p6", "quantity": 1 }]
+  }
+]

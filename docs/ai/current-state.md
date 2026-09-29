@@ -99,7 +99,7 @@ This records observed local results, not an assertion that CI or deployment pass
 - Homepage keeps its curated demo presentation from shared fixtures, not a live
   API feed. Its 20 stable IDs now resolve to database slugs; details and cart use
   persisted UUIDs and current prices. Demo review counts remain homepage-only.
-- Product listing and the orders list page remain placeholders. Checkout, product
+- Product listing remains a placeholder (orders: see "Seus pedidos" below). Checkout, product
   details and cart are implemented and enabled locally; shipped flags stay false.
   A responding route is not evidence of a working purchase flow.
 - Authentication and the account hub/dropdown are preserved. Cart browser checks
@@ -130,7 +130,7 @@ This records observed local results, not an assertion that CI or deployment pass
 
 ## Enabled features
 
-Only home and authentication are enabled in shared config/features.yaml; the
+Shared config/features.yaml enables home, authentication, sell, help and orders; the
 local ignored configuration also enables cart, productDetails and checkout.
 Unimplemented destinations render Coming Soon. The account
 hub is part of the authenticated shell and does not enable account management.
@@ -219,3 +219,29 @@ hub is part of the authenticated shell and does not enable account management.
   both serve the title and `<link rel="icon" href="/icon.svg?…">` (200, image/svg+xml)
   on /, /login, /help (plus /sell, /cart in dev). `next build` compiled and emitted
   /icon.svg; the standalone step failed with the known Windows symlink EPERM.
+
+## Seus pedidos (order history) — 2026-09-29
+
+- /orders ("Devoluções e Pedidos") and /orders/:id are bare routes with the shared
+  Amazon header/footer. Signed out → /login. Shared `orders` flag enabled.
+- Data: GET /api/v1/orders only, through features/orders/orders-server.ts, which is
+  also the source for /help recent products and the Home "Seus pedidos" card (shown
+  only to signed-in users with orders). No UI mocks.
+- Migration 20260929000000_order_delivery adds nullable orders.delivered_at and
+  delivery_note; checkout orders keep both null ("Pedido recebido"). Applied locally;
+  drift check clean on a disposable shadow database. OpenAPI regenerated.
+- Demo data: config/demo-orders.json holds one order (product p6, placed 2026-08-10,
+  delivered 2026-08-17). `DEMO_ORDER_EMAIL=<existing account> pnpm --filter
+  @amazon-mvp/database seed:demo-orders` persists it; reruns skip existing order
+  numbers; never creates users.
+- Year selector derives from order dates (only years with orders, newest first).
+  "Comprar novamente" adds to the cart when the cart feature is on, otherwise opens
+  the product page (cart is off in shared config).
+- Validation: lint, typecheck, 71 storefront unit tests, 35 API integration tests on a
+  disposable database. Edge via Playwright with a temporary (then deleted) session: 25
+  checks incl. DB/UI parity, filters, search, tabs, details, /help and Home reuse,
+  signed-out redirect and no horizontal overflow at 320/390/768/1024/1920px.
+- Not verified: the Home card at every breakpoint beyond 1536px desktop; Edge logged
+  "Extra attributes from the server: style" on the header search input only after the
+  test had typed into forms in the same session (not reproducible on fresh loads of any
+  page). `next build` compiled; standalone step hit the known Windows EPERM.
