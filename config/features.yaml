@@ -62,7 +62,7 @@ features:
     enabled: false
     description: Amazon Science
   sell:
-    enabled: false
+    enabled: true
     description: Sell on Amazon
   brandProtection:
     enabled: false

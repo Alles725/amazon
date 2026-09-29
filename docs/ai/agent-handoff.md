@@ -2,19 +2,16 @@
 
 ## Current objective
 
-CHECKOUT-001 — functional academic checkout based on docs/reference/Checkout.
-PR preparation is on feat/academic-checkout, created from origin/main at 58da501
-(product PR #11 merged). Commit, push and PR await the final explicit approval.
+SELL-001 — "Venda na Amazon" page on /sell (see current-state.md). PR preparation is
+on feat/sell-page, created from origin/main at 41ecc5e (header PR #13 merged).
+Commit, push and PR await the final explicit approval.
 
 ## Implementation
 
-- Real authenticated cart, saved/selectable/editable addresses, simulated card/Pix.
-- Two-column checkout with live quantity/removal/totals and persisted confirmation.
-- Existing Order/OrderItem reused; migration 20260926000000_checkout adds addresses,
-  address/payment/cost snapshots and unique sourceCartId, preserving existing data.
-- Transactional cart/inventory/order handling with price revision and retry safety.
-- Strict user ownership. Payment stores only SIMULATED_CARD / SIMULATED_PIX.
-- Interfaces, shared contract, OpenAPI and docs/checkout.md reflect the new flow.
+- /sell: hero, stats, story card, share stats, benefit cards, FAQ (<details>), CTA.
+- Content and links in apps/storefront/src/features/sell/sell-content.tsx.
+- AmazonHeader takes an optional currentHref (aria-current on the matching item).
+- Previous objective CHECKOUT-001 merged in PR #12; its notes below still apply.
 
 ## Configuration and limits
 

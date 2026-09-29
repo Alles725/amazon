@@ -20,7 +20,8 @@ const NAV_LINKS = [
   { label: 'Ideias de Presente', href: '/products' },
 ];
 
-export async function AmazonHeader() {
+/** `currentHref` marks the navbar item of the page being shown (aria-current). */
+export async function AmazonHeader({ currentHref }: { currentHref?: string } = {}) {
   const session = await getServerSession();
   const firstName = session?.user.displayName.split(' ')[0];
   const browsingHistory = isFeatureEnabled('browsingHistory');
@@ -89,7 +90,12 @@ export async function AmazonHeader() {
             browsingHistory && link.label === 'Histórico de navegação' ? (
               <BrowsingHistoryMenu key={link.label} />
             ) : (
-              <Link key={link.label} href={link.href} className="az-navbar__link">
+              <Link
+                key={link.label}
+                href={link.href}
+                className="az-navbar__link"
+                aria-current={link.href === currentHref ? 'page' : undefined}
+              >
                 {link.label}
               </Link>
             ),

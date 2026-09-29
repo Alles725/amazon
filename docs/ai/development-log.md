@@ -210,3 +210,19 @@ Validation: lint, typecheck and 46 storefront unit tests pass; Chromium checks a
 1900px and 390px with demo-seeded history. See current-state.md for what was not
 exercised end-to-end.
 
+## 2026-09-29 — SELL-001
+
+Implemented the "Venda na Amazon" page on /sell from the amazon.com.br reference
+(PDF plus 75%-zoom screenshots of the live page). Sections in reference order: hero
+band, stats, Tons de Preta story card, share stats, three benefit cards, eight-item
+FAQ, sign-up CTA. Copy comes verbatim from the provided Markdown; link destinations
+come from venda.amazon.com.br because the Markdown carried no URLs. Reference
+imagery is stored locally (public/images/sell/SOURCES.md); Inter Tight (OFL) stands
+in for Amazon Ember Display. Reuses AmazonHeader, which gained an optional
+currentHref that marks the page's navbar item, and AmazonFooter unchanged.
+
+Validation: storefront lint/typecheck and 50 unit tests pass (4 new). Chromium at
+1890px (reference-matched) and 390px: FAQ opens/closes, 12 links resolve to their
+reference destinations, back-to-top scrolls smoothly, no horizontal overflow, other
+routes still 200. Production build compiled; standalone step hit the known Windows
+symlink EPERM.
