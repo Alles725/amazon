@@ -328,3 +328,30 @@ Pre-PR review fixes: the login `next` check now refuses whitespace/control chara
 agora" adds the chosen units exactly like "Adicionar ao carrinho". Follow-ups (flags,
 reviews backend, category/brand pages, HTTP 404, Pix, batch catalog read for the Home,
 viewer focus trap, metadata on API failure, single breadcrumb query) are in backlog.yaml.
+
+## 2026-09-29 — CATALOG-002 (+ CATALOG-BATCH-001)
+
+Expanded the demo catalog from 27 to 150 products without touching the architecture: the
+same config/demo-products.json + demo-product-content.json + demo-categories.json and the
+same idempotent seed:demo. p24-p146 add 48 categories (up to four levels, new root Esportes;
+gamer peripherals also linked to Games › PC › Acessórios › Periféricos Gamer through the
+existing many-to-many), 30 brands and 24 colour families modelled exactly like the 8BitDo
+(sibling records, variantOf, variant.group). Every new product has its own image: generated
+SVG illustrations in the variant's colour, or a DummyJSON photo whose product name was
+written to match the photo. Stock is mixed (146 available, 7 low, 4 sold out). The original
+23 demo records are untouched (appended after them).
+
+relatedProducts now ranks candidates (related-products.ts): category distance (all of the
+product's categories first, then breadcrumb ancestors, one bounded request per level, only
+while the rail is short), shared categories, availability, same brand, shared attributes
+such as colour and similar price; the product's own family never appears and each other
+family shows once (matching colour, else its head). Home rails draw from the whole catalog
+(10 cards, one product type each) and resolve in one GET /catalog/products?slugs= call.
+
+Validation: lint, typecheck, unit tests (storefront 149, API 12, config 13), 39 API
+integration tests on a disposable database, seed run three times with identical counts,
+OpenAPI regenerated. Browser (Playwright, FEATURES_FILE copy): Home, 15 products across
+departments with click-through of a recommendation, variants, Home → product → related →
+cart → checkout → order → Seus pedidos, other routes, 390px; all 147 product pages render
+with a related rail (6-12 cards for every demo product). No console errors. Storefront
+build compiled; standalone step hit the known Windows EPERM.

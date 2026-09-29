@@ -1,6 +1,15 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
-import { IsInt, IsOptional, IsString, Max, MaxLength, Min } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
+import {
+  ArrayMaxSize,
+  IsArray,
+  IsInt,
+  IsOptional,
+  IsString,
+  Max,
+  MaxLength,
+  Min,
+} from 'class-validator';
 import { CatalogItem, CatalogPage, CatalogProductDetails } from '@amazon-mvp/api-contract';
 
 export class CatalogQueryDto {
@@ -23,6 +32,26 @@ export class CatalogQueryDto {
   @IsString()
   @MaxLength(100)
   category?: string;
+  /** Curated storefront rails resolve their cards in one query instead of one per product. */
+  @ApiPropertyOptional({
+    description: 'Comma-separated product slugs (at most 48); only these products are listed',
+    type: String,
+    example: 'p1,p6',
+  })
+  @IsOptional()
+  @Transform(({ value }) =>
+    typeof value === 'string'
+      ? value
+          .split(',')
+          .map((slug) => slug.trim())
+          .filter(Boolean)
+      : value,
+  )
+  @IsArray()
+  @ArrayMaxSize(48)
+  @IsString({ each: true })
+  @MaxLength(200, { each: true })
+  slugs?: string[];
 }
 
 export class CatalogItemDto implements CatalogItem {

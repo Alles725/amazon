@@ -50,10 +50,30 @@ export const PRODUCTS: Product[] = demoProducts
     ...(oldPriceMinor ? { oldPrice: oldPriceMinor / 100 } : {}),
   }));
 
-export const DEALS_OF_THE_DAY = PRODUCTS.filter((p) => p.oldPrice).slice(0, 8);
-export const BEST_SELLERS = [...PRODUCTS].sort((a, b) => b.reviewCount - a.reviewCount).slice(0, 8);
-export const RECOMMENDED = PRODUCTS.slice(8, 16);
-export const ALSO_CONSIDER = [...PRODUCTS].reverse().slice(0, 8);
+/** Rails are a window on the catalog, not a dump of it: at most RAIL_SIZE cards,
+ * one product type (glyph) each before any type repeats, so a rail never turns into
+ * a wall of near-identical items. */
+const RAIL_SIZE = 10;
+function varied(candidates: Product[], exclude: Product[] = []): Product[] {
+  const pool = candidates.filter((product) => !exclude.includes(product));
+  const first = pool.filter(
+    (product, index) => pool.findIndex((other) => other.glyph === product.glyph) === index,
+  );
+  return [...first, ...pool.filter((product) => !first.includes(product))].slice(0, RAIL_SIZE);
+}
+
+export const DEALS_OF_THE_DAY = varied(
+  PRODUCTS.filter((p) => p.oldPrice).sort((a, b) => discountPercent(b)! - discountPercent(a)!),
+);
+export const BEST_SELLERS = varied([...PRODUCTS].sort((a, b) => b.reviewCount - a.reviewCount));
+export const RECOMMENDED = varied(
+  PRODUCTS.filter((p) => p.rating >= 4.6).sort(
+    (a, b) => b.rating - a.rating || b.reviewCount - a.reviewCount,
+  ),
+  BEST_SELLERS,
+);
+// Newest additions to the catalog first.
+export const ALSO_CONSIDER = varied([...PRODUCTS].reverse(), [...BEST_SELLERS, ...RECOMMENDED]);
 
 export const CATEGORIES: Category[] = [
   { id: 'c1', image: PRODUCTS[1].image, name: 'Eletrônicos', glyph: 'headphones' },
@@ -64,6 +84,12 @@ export const CATEGORIES: Category[] = [
   { id: 'c6', image: PRODUCTS[4].image, name: 'Moda', glyph: 'sneaker' },
   { id: 'c7', image: PRODUCTS[5].image, name: 'Games', glyph: 'controller' },
   { id: 'c8', image: PRODUCTS[9].image, name: 'Ofertas', glyph: 'watch' },
+  {
+    id: 'c9',
+    image: PRODUCTS.find((product) => product.glyph === 'fitness')?.image,
+    name: 'Esportes',
+    glyph: 'fitness',
+  },
 ];
 
 export interface ProductCollection {

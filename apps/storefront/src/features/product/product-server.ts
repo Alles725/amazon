@@ -8,7 +8,14 @@ import {
   SavedAddress,
 } from '@amazon-mvp/api-contract';
 import { getConfig } from '@/config/storefront-config';
+import { productContent, variantGroupSlugs } from './product-content';
 import { normalizeProductDetails } from './product-presentation';
+import {
+  distinctCards,
+  rankRelated,
+  type RelatedCandidate,
+  type RelatedFacts,
+} from './related-products';
 
 const apiBase = () => {
   const config = getConfig();
@@ -65,22 +72,72 @@ export async function getDeliveryAddress(): Promise<SavedAddress | null> {
   }
 }
 
-/** Same-category products, widening one breadcrumb level at a time until the rail
- * is full. Excludes the product itself and its variants (shown as swatches). */
+/** Active products with these slugs, in one request per 48 slugs (the API page limit).
+ * Order is the API's; callers pick records by slug. */
+export async function listBySlugs(slugs: string[]): Promise<CatalogItem[]> {
+  const chunks: string[][] = [];
+  for (let start = 0; start < slugs.length; start += 48)
+    chunks.push(slugs.slice(start, start + 48));
+  const pages = await Promise.all(
+    chunks.map(async (chunk) => {
+      try {
+        const response = await fetch(
+          `${apiBase()}/catalog/products?pageSize=48&slugs=${chunk.map(encodeURIComponent).join(',')}`,
+          { cache: 'no-store' },
+        );
+        return response.ok ? ((await response.json()) as CatalogPage).items : [];
+      } catch {
+        return [];
+      }
+    }),
+  );
+  return pages.flat();
+}
+
+const relatedFacts = (item: CatalogItem): RelatedFacts => {
+  const content = productContent(item);
+  const family = content.variant?.group;
+  return {
+    brand: content.brand,
+    family,
+    familyHead: family !== undefined && variantGroupSlugs(family)[0] === item.slug,
+    attributes: content.attributes,
+  };
+};
+
+/** Recommendations for the product page. Candidates come from the product's own
+ * category first, widening one breadcrumb level at a time only until the rail can
+ * be filled (each level is one bounded, database-filtered request); they are then
+ * ranked by category distance, brand, shared attributes and price (rankRelated).
+ * Excludes the product itself and its variants (shown as swatches). */
 export async function relatedProducts(
   product: CatalogProductDetails,
   exclude: Set<string>,
   limit = 12,
 ): Promise<CatalogItem[]> {
-  const levels = product.categoryPath.length
-    ? [...product.categoryPath].reverse().map((category) => category.slug)
-    : product.categories.map((category) => category.slug);
-  const found = new Map<string, CatalogItem>();
-  for (const slug of levels) {
+  // Distance 0 = every category the product is listed in (a gamer keyboard is both a
+  // keyboard and a gamer peripheral); then the breadcrumb's ancestors, nearest first.
+  const ancestors = [...product.categoryPath].reverse().slice(1);
+  const levels: Array<[slug: string, distance: number]> = [
+    ...product.categories.map((category): [string, number] => [category.slug, 0]),
+    ...ancestors.map((category, index): [string, number] => [category.slug, index + 1]),
+  ].filter(([slug], index, all) => all.findIndex(([other]) => other === slug) === index);
+  const candidates = new Map<string, RelatedCandidate>();
+  for (const [position, [slug, distance]] of levels.entries()) {
     for (const item of await listCategory(slug)) {
-      if (!exclude.has(item.id) && !found.has(item.id)) found.set(item.id, item);
+      const known = candidates.get(item.id);
+      if (known && distance === 0 && known.distance === 0)
+        known.sharedCategories = (known.sharedCategories ?? 1) + 1;
+      if (known || exclude.has(item.id)) continue;
+      candidates.set(item.id, { item, distance, sharedCategories: 1, facts: relatedFacts(item) });
     }
-    if (found.size >= limit) break;
+    // Finish the current distance before deciding whether to widen.
+    const nextDistance = levels[position + 1]?.[1];
+    if (nextDistance !== distance && distinctCards([...candidates.values()]) >= limit) break;
   }
-  return [...found.values()].slice(0, limit);
+  return rankRelated(
+    { item: product, facts: relatedFacts(product) },
+    [...candidates.values()],
+    limit,
+  );
 }

@@ -102,6 +102,19 @@ describe('product details (integration)', () => {
       await prisma.category.deleteMany({ where: { id: { in: [leafId, rootId] } } });
     }
   });
+  it('lists only the requested slugs in one query and validates the list', async () => {
+    const listed = await request(app.getHttpServer())
+      .get(`${CATALOG_ROUTES.products}?pageSize=48&slugs=${slug},absent-${id},${uuidSlug}`)
+      .expect(200);
+    expect(listed.body.items.map((item: { slug: string }) => item.slug).sort()).toEqual(
+      [slug, uuidSlug].sort(),
+    );
+    expect(listed.body.total).toBe(2);
+    const tooMany = Array.from({ length: 49 }, (_, index) => `s${index}`).join(',');
+    await request(app.getHttpServer())
+      .get(`${CATALOG_ROUTES.products}?slugs=${tooMany}`)
+      .expect(400);
+  });
   it('accepts UUID-shaped slugs without confusing them with absent primary IDs', async () => {
     expect((await get(uuidSlug).expect(200)).body.id).toBe(uuidSlugId);
   });
