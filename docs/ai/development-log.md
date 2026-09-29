@@ -226,3 +226,22 @@ Validation: storefront lint/typecheck and 50 unit tests pass (4 new). Chromium a
 reference destinations, back-to-top scrolls smoothly, no horizontal overflow, other
 routes still 200. Production build compiled; standalone step hit the known Windows
 symlink EPERM.
+
+## 2026-09-29 — HELP-001
+
+Implemented the "Atendimento ao Cliente" page on /help from three amazon.com.br
+screenshots: teal "amazon customer service" bar, recent-products hero, two action
+buttons, quick-links strip, help-library search and "Todos os tópicos de ajuda"
+(11 categories as vertical tabs, 2-column cards), existing footer. Recent products
+come only from the signed-in user's orders via the existing orders API (newest order
+first, distinct products, at most six); order items carry no media, so the photo is
+matched by SKU against the same fixtures the product page uses, else a placeholder.
+Without orders the grid is omitted and the title becomes a greeting — no fabricated
+items. The quick-links strip is an equal-column grid so no link is clipped.
+
+Validation: workspace lint/typecheck and tests pass (storefront 58, 8 new). End to end
+with a disposable account and two real orders: /help listed exactly those products in
+order; account, orders and consumed stock were removed/restored afterwards. Edge
+headless at 1770/1280/1024/500px: no clipping or horizontal overflow. Running
+`next build` alongside `next dev` clobbers the shared .next (dev server lost its CSS);
+the dev server was restarted with a clean .next and the root .env loaded.

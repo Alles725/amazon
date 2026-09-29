@@ -2,16 +2,17 @@
 
 ## Current objective
 
-SELL-001 — "Venda na Amazon" page on /sell (see current-state.md). PR preparation is
-on feat/sell-page, created from origin/main at 41ecc5e (header PR #13 merged).
-Commit, push and PR await the final explicit approval.
+HELP-001 — "Atendimento ao Cliente" page on /help (see current-state.md). PR
+preparation is on feat/atendimento-ao-cliente, created from origin/main at a31f525
+(sell PR #14 merged). Commit, push and PR await the final explicit approval.
 
 ## Implementation
 
-- /sell: hero, stats, story card, share stats, benefit cards, FAQ (<details>), CTA.
-- Content and links in apps/storefront/src/features/sell/sell-content.tsx.
-- AmazonHeader takes an optional currentHref (aria-current on the matching item).
-- Previous objective CHECKOUT-001 merged in PR #12; its notes below still apply.
+- /help: customer-service bar, recent products from the user's real orders, action
+  buttons, quick-links strip, help-library search, tabbed help topics.
+- Copy in apps/storefront/src/features/help/help-content.ts; order mapping in
+  recent-products.ts (server-only, reuses GET /api/v1/orders).
+- Previous objective SELL-001 merged in PR #14; CHECKOUT-001 notes below still apply.
 
 ## Configuration and limits
 

@@ -193,3 +193,18 @@ hub is part of the authenticated shell and does not enable account management.
   <details> behaviour and is not unit-tested (jsdom does not implement it).
 - Production build compiled; the standalone output step failed locally with the
   same Windows symlink EPERM noted above.
+
+## Atendimento ao Cliente page — 2026-09-29
+
+- /help renders the customer service page (bare route: Amazon header/footer plus a
+  customer-service bar). Shared `help` flag enabled.
+- Recent products are read from GET /api/v1/orders for the signed-in user only;
+  signed out, API failure or no orders → no product cards. Verified end to end with a
+  disposable account and two real orders (data removed afterwards). Seed products have
+  no demo SKU, so real cards currently show the "Imagem indisponível" placeholder.
+- Help-library search filters topic cards client-side (accent/case-insensitive);
+  topic cards link to existing routes, most of which are still Coming Soon.
+- Validation: lint, typecheck, 58 storefront unit tests; Edge headless at 1770, 1280,
+  1024 and 500px with no clipping or horizontal overflow. `next build` was not rerun
+  for the final diff (it shares .next with the running dev server and the standalone
+  step fails locally with the known Windows symlink EPERM).
