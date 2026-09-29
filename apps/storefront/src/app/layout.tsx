@@ -29,7 +29,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
     pathname.startsWith('/checkout/') ||
     pathname === '/orders' ||
     pathname.startsWith('/orders/') ||
-    /^\/products\/[^/]+\/?$/.test(pathname);
+    /^\/products\/[^/]+(\/review)?\/?$/.test(pathname);
 
   const cartEnabled = isFeatureEnabled('cart');
   const session = cartEnabled ? await getServerSession() : null;

@@ -35,14 +35,20 @@ export const formatBRL = (value: number): string =>
 export const discountPercent = (product: Product): number | undefined =>
   product.oldPrice ? Math.round((1 - product.price / product.oldPrice) * 100) : undefined;
 
-export const PRODUCTS: Product[] = demoProducts.map(
-  ({ priceMinor, oldPriceMinor, ...product }) => ({
-    ...product,
+// One card per variant family, like Amazon: sibling colors/sizes (variantOf) are
+// reached through the swatches on the product page, not as separate home cards.
+export const PRODUCTS: Product[] = demoProducts
+  .filter((product) => !('variantOf' in product))
+  .map(({ priceMinor, oldPriceMinor, ...product }) => ({
+    id: product.id,
+    name: product.name,
+    rating: product.rating,
+    reviewCount: product.reviewCount,
+    image: product.image,
     glyph: product.glyph as GlyphKind,
     price: priceMinor / 100,
     ...(oldPriceMinor ? { oldPrice: oldPriceMinor / 100 } : {}),
-  }),
-);
+  }));
 
 export const DEALS_OF_THE_DAY = PRODUCTS.filter((p) => p.oldPrice).slice(0, 8);
 export const BEST_SELLERS = [...PRODUCTS].sort((a, b) => b.reviewCount - a.reviewCount).slice(0, 8);

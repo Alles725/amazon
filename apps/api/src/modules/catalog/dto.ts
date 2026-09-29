@@ -57,4 +57,9 @@ export class CatalogCategoryDto {
 
 export class CatalogProductDetailsDto extends CatalogItemDto implements CatalogProductDetails {
   @ApiProperty({ type: [CatalogCategoryDto] }) categories: CatalogCategoryDto[];
+  @ApiProperty({
+    type: [CatalogCategoryDto],
+    description: 'Root-to-leaf ancestor chain of the most specific category (breadcrumb)',
+  })
+  categoryPath: CatalogCategoryDto[];
 }

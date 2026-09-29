@@ -16,9 +16,11 @@ export class CatalogService implements CatalogApi {
   }): Promise<ProductPage> {
     const page = query.page ?? 1;
     const pageSize = query.pageSize ?? 12;
+    // A category includes its whole subtree: "Games e Consoles" lists its controllers.
+    const categoryIds = query.category ? await this.subtreeIds(query.category) : null;
     const where = {
       active: true,
-      ...(query.category ? { categories: { some: { category: { slug: query.category } } } } : {}),
+      ...(categoryIds ? { categories: { some: { categoryId: { in: categoryIds } } } } : {}),
     };
     const [products, total] = await this.prisma.$transaction([
       this.prisma.product.findMany({
@@ -78,12 +80,46 @@ export class CatalogService implements CatalogApi {
         ? await this.prisma.product.findUnique({ where: { id: identifier }, include })
         : null) ?? (await this.prisma.product.findUnique({ where: { slug: identifier }, include }));
     if (!product) return null;
+    const categories = product.categories
+      .map(({ category }) => category)
+      .sort((a, b) => a.slug.localeCompare(b.slug));
+    // The most specific category (deepest chain) drives the breadcrumb; ties keep slug order.
+    let categoryPath: Array<{ slug: string; name: string }> = [];
+    for (const category of categories) {
+      const path = await this.ancestorPath(category.id);
+      if (path.length > categoryPath.length) categoryPath = path;
+    }
     return {
       ...toCatalogProduct(product),
-      categories: product.categories
-        .map(({ category }) => ({ slug: category.slug, name: category.name }))
-        .sort((a, b) => a.slug.localeCompare(b.slug)),
+      categories: categories.map(({ slug, name }) => ({ slug, name })),
+      categoryPath,
     };
+  }
+
+  /** Root → category chain. The depth guard keeps a corrupted cycle from looping forever. */
+  private async ancestorPath(categoryId: string): Promise<Array<{ slug: string; name: string }>> {
+    const rows = await this.prisma.$queryRaw<Array<{ slug: string; name: string }>>`
+      WITH RECURSIVE chain AS (
+        SELECT id, parent_id, slug, name, 0 AS depth FROM categories WHERE id = ${categoryId}::uuid
+        UNION ALL
+        SELECT c.id, c.parent_id, c.slug, c.name, chain.depth + 1
+        FROM categories c JOIN chain ON c.id = chain.parent_id
+        WHERE chain.depth < 20
+      )
+      SELECT slug, name FROM chain ORDER BY depth DESC`;
+    return rows;
+  }
+
+  private async subtreeIds(slug: string): Promise<string[]> {
+    const rows = await this.prisma.$queryRaw<Array<{ id: string }>>`
+      WITH RECURSIVE tree AS (
+        SELECT id, 0 AS depth FROM categories WHERE slug = ${slug}
+        UNION ALL
+        SELECT c.id, tree.depth + 1 FROM categories c JOIN tree ON c.parent_id = tree.id
+        WHERE tree.depth < 20
+      )
+      SELECT DISTINCT id::text AS id FROM tree`;
+    return rows.map((row) => row.id);
   }
 
   async findBySlug(slug: string): Promise<CatalogProduct | null> {

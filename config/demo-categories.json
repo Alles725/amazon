@@ -1,0 +1,52 @@
+[
+  { "slug": "games-e-consoles", "name": "Games e Consoles" },
+  { "slug": "games-pc", "name": "PC", "parent": "games-e-consoles" },
+  { "slug": "games-pc-acessorios", "name": "Acessórios", "parent": "games-pc" },
+  { "slug": "games-pc-controles", "name": "Controles e Gamepads", "parent": "games-pc-acessorios" },
+
+  { "slug": "dispositivos-amazon", "name": "Dispositivos Amazon" },
+  { "slug": "echo-e-alexa", "name": "Echo e Alexa", "parent": "dispositivos-amazon" },
+  { "slug": "echo-smart-speakers", "name": "Smart Speakers", "parent": "echo-e-alexa" },
+  { "slug": "echo-smart-displays", "name": "Smart Displays", "parent": "echo-e-alexa" },
+  { "slug": "kindle", "name": "Kindle", "parent": "dispositivos-amazon" },
+
+  { "slug": "eletronicos", "name": "Eletrônicos" },
+  { "slug": "eletronicos-audio", "name": "Áudio", "parent": "eletronicos" },
+  { "slug": "fones-de-ouvido", "name": "Fones de Ouvido", "parent": "eletronicos-audio" },
+  { "slug": "eletronicos-wearables", "name": "Wearables", "parent": "eletronicos" },
+  { "slug": "smartwatches", "name": "Smartwatches", "parent": "eletronicos-wearables" },
+  { "slug": "casa-inteligente", "name": "Casa Inteligente", "parent": "eletronicos" },
+  { "slug": "cameras-de-seguranca", "name": "Câmeras de Segurança", "parent": "casa-inteligente" },
+
+  { "slug": "computadores", "name": "Computadores e Informática" },
+  { "slug": "notebooks", "name": "Notebooks", "parent": "computadores" },
+  { "slug": "computadores-acessorios", "name": "Acessórios", "parent": "computadores" },
+  {
+    "slug": "mochilas-para-notebook",
+    "name": "Mochilas para Notebook",
+    "parent": "computadores-acessorios"
+  },
+
+  { "slug": "cozinha", "name": "Cozinha" },
+  { "slug": "eletroportateis", "name": "Eletroportáteis", "parent": "cozinha" },
+  { "slug": "fritadeiras-eletricas", "name": "Fritadeiras Elétricas", "parent": "eletroportateis" },
+  { "slug": "liquidificadores", "name": "Liquidificadores", "parent": "eletroportateis" },
+  { "slug": "garrafas-termicas", "name": "Garrafas Térmicas", "parent": "cozinha" },
+
+  { "slug": "casa", "name": "Casa" },
+  { "slug": "decoracao", "name": "Decoração", "parent": "casa" },
+  { "slug": "plantas-artificiais", "name": "Plantas Artificiais", "parent": "decoracao" },
+  { "slug": "iluminacao", "name": "Iluminação", "parent": "casa" },
+  { "slug": "luminarias-de-mesa", "name": "Luminárias de Mesa", "parent": "iluminacao" },
+
+  { "slug": "moda", "name": "Moda" },
+  { "slug": "calcados", "name": "Calçados", "parent": "moda" },
+  { "slug": "tenis", "name": "Tênis", "parent": "calcados" },
+
+  { "slug": "beleza", "name": "Beleza" },
+  { "slug": "maquiagem", "name": "Maquiagem", "parent": "beleza" },
+  { "slug": "maquiagem-labios", "name": "Lábios", "parent": "maquiagem" },
+
+  { "slug": "livros", "name": "Livros" },
+  { "slug": "literatura-e-ficcao", "name": "Literatura e Ficção", "parent": "livros" }
+]

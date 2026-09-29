@@ -1,9 +1,10 @@
 import Link from 'next/link';
 import { HorizontalRail } from './horizontal-rail';
 import { ProductCard } from './product-card';
-import { Product } from '@/features/home/catalog-mock';
+import type { CatalogItem } from '@amazon-mvp/api-contract';
 
-export function ProductSection({ title, products }: { title: string; products: Product[] }) {
+export function ProductSection({ title, products }: { title: string; products: CatalogItem[] }) {
+  if (!products.length) return null;
   return (
     <section className="az-section" aria-label={title}>
       <div className="az-section__head">

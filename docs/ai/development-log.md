@@ -286,3 +286,45 @@ regenerated. Edge (Playwright) with a temporary session on the seeded account: 2
 checks (DB/UI order parity, counter, year options, filters, search, tabs, details page,
 /help and Home reuse, signed-out redirect, no overflow at 320–1920px); session removed.
 Build compiled; standalone step hit the known Windows EPERM.
+
+## 2026-09-29 — PRODUCT-002
+
+Rebuilt /products/[productId] after the amazon.com.br page of the 8BitDo Ultimate 2C
+(three reference screenshots) as ONE template for every catalog record: Prime notice,
+breadcrumb, "Você comprou este produto…" banner, vertical-thumbnail gallery with a
+full-image viewer, info column (brand, attributes, rating, badges, price, installments,
+benefits, variants, "Sobre este item"), buy box (Prime box, delivery address, stock,
+quantity, add to cart, buy now, shipped/sold by, returns), related rail, product details,
+description, "Da marca" and customer reviews (summary, histogram, media, reviews).
+
+Facts come from the catalog API; the new migration adds categories.parent_id so the
+breadcrumb is the product's own category chain (API categoryPath; ?category= now lists a
+whole subtree). Merchandising content the schema does not store lives in server-only
+fixtures keyed by slug+SKU (demo-product-content, demo-categories, demo-brands,
+demo-reviews); reviews go through a single ProductReviews source ready to be swapped for
+an API. Variants are sibling catalog records (p6 Hortelã, p21 Pêssego, p22 Roxa, p23
+Verde); p6 was upgraded from the old generic controller only while it still held the
+untouched fixture values. Buy box uses the existing CartProvider and /checkout; guests go
+to /login?next= (same-site paths only). Pix discount, delivery dates and customer media
+are deliberately not shown (nothing in checkout/data backs them).
+
+Validation: lint, typecheck, storefront/API/config unit tests, 38 API integration tests
+on a disposable database, drift check, OpenAPI regenerated, Kustomize overlays. Edge
+(Playwright): 27 end-to-end checks and a 661-check audit of all 27 products by slug and
+UUID. Build compiled; standalone step hit the known Windows EPERM.
+
+## 2026-09-29 — INTEGRATION-001
+
+Audited Home → product → variant → cart → checkout → order → Seus pedidos → Atendimento →
+product. One duplicated source found and removed: Home cards printed name/price from
+config/demo-products.json. The fixture now only curates which products appear;
+features/home/home-catalog.ts resolves each card to its catalog record (inactive/missing
+records are omitted, glyph fallbacks kept). A browser journey with temporary DB prices
+(restored) passed 30/30 checks: same UUID, name, price and image on every screen, order
+snapshot reused by /orders, the Home orders card and /help, stock decremented once.
+
+Pre-PR review fixes: the login `next` check now refuses whitespace/control characters
+(browsers strip tab/newline, so "/	/evil.example" was an open redirect), and "Comprar
+agora" adds the chosen units exactly like "Adicionar ao carrinho". Follow-ups (flags,
+reviews backend, category/brand pages, HTTP 404, Pix, batch catalog read for the Home,
+viewer focus trap, metadata on API failure, single breadcrumb query) are in backlog.yaml.

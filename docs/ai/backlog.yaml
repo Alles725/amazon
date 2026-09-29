@@ -197,7 +197,7 @@ iterations:
       - id: SELL-001
         owner: dev2
         status: done
-        title: "Venda na Amazon" landing page reproducing the amazon.com.br reference
+        title: '"Venda na Amazon" landing page reproducing the amazon.com.br reference'
         note: >-
           Content-only page on /sell reusing AmazonHeader (current item marked) and
           AmazonFooter. Local copies of the reference imagery, native <details> FAQ.
@@ -210,7 +210,7 @@ iterations:
       - id: HELP-001
         owner: dev2
         status: done
-        title: "Atendimento ao Cliente" page reproducing the amazon.com.br reference
+        title: '"Atendimento ao Cliente" page reproducing the amazon.com.br reference'
         note: >-
           /help with AmazonHeader (current item marked), customer-service bar, recent
           products taken only from the signed-in user's real orders (GET /orders, newest
@@ -246,6 +246,106 @@ iterations:
           config/demo-orders.json, persisted by seed:demo-orders for an existing account
           (DEMO_ORDER_EMAIL). Shared orders module also feeds /help and a Home card.
           Shared orders flag enabled.
+
+  - id: 12
+    name: Amazon product detail page
+    stories:
+      - id: PRODUCT-002
+        owner: dev2
+        status: done
+        title: Product detail page following the 8BitDo Ultimate 2C reference, generic for every product
+        note: >-
+          One template for all catalog records. Breadcrumb from categories.parent_id
+          (migration 20260930000000_category_hierarchy, API categoryPath), variants as
+          sibling catalog records, purchase banner from real orders, buy box on the
+          existing cart/checkout, server-only presentation fixtures. See
+          docs/product-details.md. 661-check audit of all 27 products in the browser.
+      - id: INTEGRATION-001
+        owner: dev2
+        status: done
+        title: End-to-end integration audit (Home -> product -> variant -> cart -> checkout -> order -> Seus pedidos -> Atendimento -> product)
+        note: >-
+          Home cards no longer print name/price from config/demo-products.json: the
+          fixture only curates which products appear; name, price and stock come from
+          the catalog record (features/home/home-catalog.ts). Browser journey with a
+          temporary DB price proved every screen shows the same record and the order
+          snapshot/UUID flows to /orders, the Home orders card and /help (30/30).
+
+  - id: 13
+    name: Product page follow-ups
+    stories:
+      - id: FLAGS-001
+        owner: dev2
+        status: planned
+        title: Enable productDetails, cart and checkout in the shared config/features.yaml
+        note: >-
+          Implemented and verified with a local FEATURES_FILE copy. Needs a team decision:
+          update apps/storefront/test/features.spec.ts ("ships unbuilt features disabled")
+          and config-schema expectations in the same change.
+      - id: REVIEWS-001
+        owner: dev1
+        status: planned
+        title: Customer reviews backend (write, list, rating summary, helpful votes, media)
+        note: >-
+          Storefront reads reviews only through features/product/reviews/product-reviews.ts
+          (ProductReviews shape); replace its demo source with the API. Enable the
+          productReviews flag for /products/[id]/review. Aggregate ratings still come
+          from config/demo-products.json and must move to the backend too.
+      - id: BROWSE-001
+        owner: dev2
+        status: planned
+        title: Category and brand listing pages (and real search results)
+        note: >-
+          /products is still a placeholder. API already filters by category subtree.
+          Then pass hrefFor to ProductBreadcrumb, link "Marca:" to the brand listing and
+          point Home "Ver mais" / header search to real results. Brand is presentation
+          data today (config/demo-product-content.json).
+      - id: NOTFOUND-001
+        owner: dev2
+        status: planned
+        title: Return HTTP 404 for unknown products
+        note: >-
+          Today the not-found UI streams with status 200 + noindex because the global
+          app/loading.tsx opens a Suspense boundary before notFound(). Options: move the
+          global loading state into route groups that need it, or check existence in
+          middleware.
+      - id: PIX-001
+        owner: dev1
+        status: planned
+        title: Pix discount ("5% off à vista no Pix") applied by checkout
+        note: >-
+          Checkout has no promotion engine (discountMinor is always 0), so the product
+          page deliberately hides the Pix price. Implement the discount server-side in the
+          order quote/transaction first; only then show it on the product page and cart.
+
+      - id: CATALOG-BATCH-001
+        owner: dev1
+        status: planned
+        title: Batch catalog read for the Home (GET /catalog/products?slugs=...)
+        note: >-
+          features/home/home-catalog.ts resolves ~20 curated cards with one API call each
+          (each doing a product query plus a breadcrumb query per category). Add a slugs
+          filter to the list endpoint (DTO, api-contract, openapi.json) and use one call.
+      - id: PDP-A11Y-001
+        owner: dev2
+        status: planned
+        title: Trap focus inside the product image viewer
+        note: >-
+          ImageViewer (features/product/product-gallery.tsx) sets aria-modal but Tab can
+          still leave the dialog.
+      - id: PDP-META-001
+        owner: dev2
+        status: planned
+        title: Keep the default title when product metadata cannot be loaded
+        note: >-
+          generateMetadata turns an API failure into "Produto não encontrado"; only a real
+          404 should.
+      - id: CATALOG-PATH-001
+        owner: dev1
+        status: planned
+        title: Resolve all breadcrumb chains of a product in one query
+        note: >-
+          CatalogService.getProduct runs one recursive query per category of the product.
 
 next_up:
   - id: FIRSTRUN-001

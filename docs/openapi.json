@@ -1227,6 +1227,13 @@
             "items": {
               "$ref": "#/components/schemas/CatalogCategoryDto"
             }
+          },
+          "categoryPath": {
+            "description": "Root-to-leaf ancestor chain of the most specific category (breadcrumb)",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CatalogCategoryDto"
+            }
           }
         },
         "required": [
@@ -1240,7 +1247,8 @@
           "active",
           "availableQuantity",
           "inStock",
-          "categories"
+          "categories",
+          "categoryPath"
         ]
       },
       "CatalogItemDto": {

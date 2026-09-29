@@ -25,6 +25,12 @@ describe('shipped config/features.yaml', () => {
     expect(registry.routeState('orderDetails')).toBe('enabled');
   });
 
+  it('keeps writing reviews behind a Coming Soon flag until a reviews backend exists', () => {
+    const registry = loadShipped();
+    expect(registry.isEnabled('productReviews')).toBe(false);
+    expect(registry.routeState('productReviews')).toBe('coming-soon');
+  });
+
   it('ships unbuilt features disabled', () => {
     const registry = loadShipped();
     for (const feature of ['catalog', 'productDetails', 'cart', 'checkout', 'account']) {

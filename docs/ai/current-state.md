@@ -245,3 +245,60 @@ hub is part of the authenticated shell and does not enable account management.
   "Extra attributes from the server: style" on the header search input only after the
   test had typed into forms in the same session (not reproducible on fresh loads of any
   page). `next build` compiled; standalone step hit the known Windows EPERM.
+
+## Product detail page (Amazon layout) — 2026-09-29
+
+- /products/[productId] rebuilt after the 8BitDo Ultimate 2C reference (3 screenshots): Prime
+  alert, breadcrumb, "Você comprou…" banner, gallery + viewer, info column, variants, buy box,
+  related rail, details, description, "Da marca" and customer reviews. One generic template;
+  see docs/product-details.md for every data source and what stays demo-only.
+- Migration 20260930000000_category_hierarchy (categories.parent_id). API returns categoryPath
+  and ?category= includes the subtree; contract + docs/openapi.json regenerated. Applied locally;
+  drift clean on a disposable shadow database.
+- Demo data: p6 is now the 8BitDo Ultimate 2C Hortelã (seed upgrades it only if it still holds
+  the old fixture values); p21–p23 are its Pêssego/Roxa/Verde siblings. New server-only fixtures:
+  demo-product-content, demo-categories, demo-brands, demo-reviews. seed:demo ran twice locally
+  (idempotent). 39 product images + 2 brand images copied locally (SOURCES.md next to them).
+- Existing demo order 702-4418305-7719264 (p6) keeps its old snapshot name; the banner still
+  matches it by product ID.
+- Validation: lint, typecheck, unit tests (config-schema 13, API 12, storefront 106), 38 API
+  integration tests on a disposable database, OpenAPI regenerated, three Kustomize overlays.
+  `next build` compiled and generated all pages; the standalone step hit the known Windows EPERM.
+- Browser (Edge via Playwright, temporary accounts deleted, stock restored): 27/27 end-to-end
+  checks (add to cart, variant switch, gallery viewer, buy now → checkout → confirmed order,
+  purchase banner on both variants, Ver pedido, out of stock, guest → login?next) and a 661-check
+  audit of all 27 products by slug and UUID (title, <title>, price, breadcrumb, own images, stock,
+  related links, console) plus 20 Home and 27 cart product links. 390/768/1440 px without
+  horizontal overflow and without console errors.
+- productDetails/cart/checkout stay false in the shared config (features.spec asserts it);
+  verification used a local copy of features.yaml with them on. New flag productReviews (false,
+  Coming Soon) backs "Escreva uma avaliação".
+- Not verified: missing product returns HTTP 200 + noindex (global app/loading.tsx streams first);
+  customer photo/video UI is unit-tested only (no customer media exists).
+
+## Integration audit (Home → … → produto novamente) — 2026-09-29
+
+- Found one duplicated source: Home cards printed name/price from config/demo-products.json
+  while product page, cart and checkout read the catalog. Home now resolves each curated card
+  to its catalog record (features/home/home-catalog.ts); inactive/missing records are omitted.
+  Cards without photos keep their glyph. Visual check: same 9 rails and 48 cards, no overflow.
+- Screens and their entity: product/cart/checkout = catalog record (UUID); success page,
+  /orders, /orders/:id, Home orders card and /help = the persisted order and its item snapshot;
+  product page banner = orders matched by product UUID. Images everywhere come from the same
+  fixture (slug+SKU for catalog records, SKU for order snapshots).
+- Browser journey with temporary DB prices (restored): Home → p6 → Roxa (p22) → cart ×2 →
+  checkout → order → /orders → /orders/:id → Home orders card → /help → order → product:
+  30/30 checks, same UUID/name/price/image on every screen, stock decremented once, cart
+  emptied, no console errors. Temporary account and order deleted.
+- Follow-ups recorded as planned stories in backlog.yaml iteration 13 (FLAGS-001, REVIEWS-001,
+  BROWSE-001, NOTFOUND-001, PIX-001). backlog.yaml was invalid YAML on main (two quoted titles);
+  fixed.
+
+## Pre-PR review fixes — 2026-09-29
+
+- Login `next`: whitespace/control characters now refused ("/	/evil.example" was an open
+  redirect because browsers strip tabs/newlines); tests assert every result is same-origin.
+- "Comprar agora" adds the chosen units like "Adicionar ao carrinho" (was: top-up to a total);
+  with all stock already in the cart it opens checkout directly. Both covered by unit tests.
+- Remaining review items recorded in backlog.yaml (CATALOG-BATCH-001, PDP-A11Y-001,
+  PDP-META-001, CATALOG-PATH-001).

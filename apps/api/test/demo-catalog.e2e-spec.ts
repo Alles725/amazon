@@ -152,4 +152,51 @@ describe('one catalog for database and demo products (integration)', () => {
       });
     }
   });
+  it('seeds the demo taxonomy so product pages get a breadcrumb and a description', async () => {
+    const response = await request(app.getHttpServer()).get(`${base}/p6`).expect(200);
+    expect(response.body.categoryPath.map((c: { name: string }) => c.name)).toEqual([
+      'Games e Consoles',
+      'PC',
+      'Acessórios',
+      'Controles e Gamepads',
+    ]);
+    expect(response.body.description).toBe(
+      'Qualidade 8BitDo em controles e gamepads para consoles.',
+    );
+    const family = await request(app.getHttpServer())
+      .get(`${base}?category=games-e-consoles&pageSize=48`)
+      .expect(200);
+    expect(family.body.items.map((item: { slug: string }) => item.slug).sort()).toEqual(
+      ['p21', 'p22', 'p23', 'p6'].sort(),
+    );
+  });
+  it('upgrades the retired p6 fixture only while it still holds the untouched old values', async () => {
+    const p6 = demos.find((p) => p.id === 'p6')!;
+    const original = await prisma.product.findUniqueOrThrow({ where: { slug: 'p6' } });
+    try {
+      await prisma.product.update({
+        where: { slug: 'p6' },
+        data: { name: 'Controle Sem Fio para Console, Preto', priceMinor: 32900 },
+      });
+      await seedDemoProducts(prisma);
+      expect(await prisma.product.findUniqueOrThrow({ where: { slug: 'p6' } })).toMatchObject({
+        name: p6.name,
+        priceMinor: p6.priceMinor,
+      });
+      await prisma.product.update({
+        where: { slug: 'p6' },
+        data: { name: 'Controle Sem Fio para Console, Preto', priceMinor: 29900 },
+      });
+      await seedDemoProducts(prisma);
+      expect(await prisma.product.findUniqueOrThrow({ where: { slug: 'p6' } })).toMatchObject({
+        name: 'Controle Sem Fio para Console, Preto',
+        priceMinor: 29900,
+      });
+    } finally {
+      await prisma.product.update({
+        where: { slug: 'p6' },
+        data: { name: original.name, priceMinor: original.priceMinor },
+      });
+    }
+  });
 });

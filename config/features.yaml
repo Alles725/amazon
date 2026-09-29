@@ -17,6 +17,10 @@ features:
     enabled: false
     description: Dynamic product details with catalog data and cart integration
 
+  productReviews:
+    enabled: false
+    description: Writing customer reviews (the product page reads demo reviews until a backend exists)
+
   cart:
     enabled: false
     description: Persistent account cart with quantities and subtotals
@@ -156,6 +160,10 @@ routes:
 
   productDetails:
     feature: productDetails
+    disabledBehavior: coming-soon
+
+  productReviews:
+    feature: productReviews
     disabledBehavior: coming-soon
 
   cart:
