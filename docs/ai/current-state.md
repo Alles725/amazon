@@ -178,3 +178,18 @@ hub is part of the authenticated shell and does not enable account management.
   page visit is covered by unit tests only. "No carrinho" badge unit-tested only.
 - Production build compiled; the standalone output step failed locally with a
   Windows symlink EPERM unrelated to this change.
+
+## Venda na Amazon page — 2026-09-29
+
+- /sell renders the Amazon seller landing page (bare route: Amazon header/footer
+  only). Shared `sell` flag enabled; the page is static and has no backend.
+- Content verbatim from the reference; external links point to venda.amazon.com.br,
+  Seller Central registration and the Tons de Preta YouTube story, opened in a new tab.
+- Images copied from Amazon's media CDN into public/images/sell (sources listed);
+  font is Inter Tight under OFL, not Amazon's proprietary Ember.
+- Validation: storefront lint/typecheck and 50 unit tests pass. Chromium verified
+  desktop (compared against the reference screenshots) and 390px mobile, FAQ toggle,
+  link targets, smooth back-to-top and no overflow. The FAQ toggle itself is native
+  <details> behaviour and is not unit-tested (jsdom does not implement it).
+- Production build compiled; the standalone output step failed locally with the
+  same Windows symlink EPERM noted above.

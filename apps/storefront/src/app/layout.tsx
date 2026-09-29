@@ -19,7 +19,7 @@ export const dynamic = 'force-dynamic';
 // screens (each matches Amazon's own UI): no build-state stamp strip, no
 // generic site navigation. Each brings its own Amazon-style header/footer
 // instead.
-const BARE_ROUTES = ['/login', '/', '/account', '/cart'];
+const BARE_ROUTES = ['/login', '/', '/account', '/cart', '/sell'];
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const pathname = headers().get('x-pathname') ?? '';

@@ -191,6 +191,19 @@ iterations:
           immutable order snapshots, inventory rollback and idempotent confirmation.
           New migration applied locally; shared checkout flag stays disabled.
 
+  - id: 8
+    name: Sell on Amazon page
+    stories:
+      - id: SELL-001
+        owner: dev2
+        status: done
+        title: "Venda na Amazon" landing page reproducing the amazon.com.br reference
+        note: >-
+          Content-only page on /sell reusing AmazonHeader (current item marked) and
+          AmazonFooter. Local copies of the reference imagery, native <details> FAQ.
+          50 storefront unit tests and Chromium checks at 1890px and 390px pass.
+          Shared sell flag enabled (static content, no backend dependency).
+
 next_up:
   - id: FIRSTRUN-001
     title: First cluster run
