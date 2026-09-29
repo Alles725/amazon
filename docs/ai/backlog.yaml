@@ -204,6 +204,21 @@ iterations:
           50 storefront unit tests and Chromium checks at 1890px and 390px pass.
           Shared sell flag enabled (static content, no backend dependency).
 
+  - id: 9
+    name: Customer service page
+    stories:
+      - id: HELP-001
+        owner: dev2
+        status: done
+        title: "Atendimento ao Cliente" page reproducing the amazon.com.br reference
+        note: >-
+          /help with AmazonHeader (current item marked), customer-service bar, recent
+          products taken only from the signed-in user's real orders (GET /orders, newest
+          first, distinct, max 6; photo by order-item SKU), quick-links strip, help
+          library search and tabbed topics, AmazonFooter. No orders: no product cards.
+          58 storefront unit tests and Edge headless checks at 1770/1280/1024/500px pass.
+          Shared help flag enabled (same precedent as sell).
+
 next_up:
   - id: FIRSTRUN-001
     title: First cluster run

@@ -101,7 +101,7 @@ features:
     enabled: false
     description: Product recalls and safety alerts
   help:
-    enabled: false
+    enabled: true
     description: Customer help center
 
   # Account dropdown / account hub destinations that do not have a dedicated
