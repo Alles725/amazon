@@ -1,0 +1,68 @@
+[
+  {
+    "group": "8bitdo-ultimate-2c",
+    "media": [],
+    "reviews": [
+      {
+        "id": "r-8bitdo-1",
+        "author": "Rafael M.",
+        "rating": 5,
+        "title": "O melhor custo-benefício do momento",
+        "date": "2026-07-18",
+        "country": "Brasil",
+        "variant": [
+          { "name": "Estilo", "value": "Ultimate 2C" },
+          { "name": "Cor", "value": "Hortelã" }
+        ],
+        "verified": true,
+        "body": "Procurava um controle para o PC e encontrei o modelo certo. Quem já usou controle de Xbox vai se sentir em casa: a pegada é a mesma, com dois botões extras atrás que podem receber o comando de qualquer outro botão. O peso é bom e o manejo é muito confortável. Os analógicos são Hall Effect, então o famoso drift não deve aparecer com o tempo. Recomendo muito.",
+        "helpfulCount": 8
+      },
+      {
+        "id": "r-8bitdo-2",
+        "author": "Camila S.",
+        "rating": 5,
+        "title": "Um dos melhores controles que já usei",
+        "date": "2026-09-02",
+        "country": "Brasil",
+        "variant": [
+          { "name": "Estilo", "value": "Ultimate 2C" },
+          { "name": "Cor", "value": "Verde" }
+        ],
+        "verified": true,
+        "body": "Chegou rápido. Conecta facilmente no PC pelo receptor 2.4G e a resposta é instantânea, sem nenhum atraso perceptível. Tenho certeza de que vou usar por muitos anos.",
+        "helpfulCount": 1
+      },
+      {
+        "id": "r-8bitdo-3",
+        "author": "Diego A.",
+        "rating": 5,
+        "title": "Perfeito. Só vai.",
+        "date": "2026-08-21",
+        "country": "Brasil",
+        "variant": [
+          { "name": "Estilo", "value": "Ultimate 2C" },
+          { "name": "Cor", "value": "Roxa" }
+        ],
+        "verified": true,
+        "body": "Gatilhos macios, direcional preciso e bateria que dura bastante. Funcionou direto no Windows, sem instalar nada.",
+        "helpfulCount": 0
+      },
+      {
+        "id": "r-8bitdo-4",
+        "author": "Juliana P.",
+        "rating": 4,
+        "title": "Muito bom, mas sem suporte a console",
+        "date": "2026-06-30",
+        "country": "Brasil",
+        "variant": [
+          { "name": "Estilo", "value": "Ultimate 2C" },
+          { "name": "Cor", "value": "Pêssego" }
+        ],
+        "verified": true,
+        "body": "Excelente para PC e celular Android. Só tirei uma estrela porque não funciona no Switch; é preciso comprar a versão Bluetooth para isso.",
+        "helpfulCount": 3
+      }
+    ]
+  }
+]

@@ -1,0 +1,368 @@
+[
+  {
+    "id": "p6",
+    "sku": "DEMO-p6",
+    "description": "Qualidade 8BitDo em controles e gamepads para consoles.",
+    "categories": ["games-pc-controles"],
+    "brand": "8BitDo",
+    "gallery": [
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/hortela-1.jpg",
+        "alt": "Controle 8BitDo Ultimate 2C hortelã e receptor 2.4G"
+      },
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/hortela-2.jpg",
+        "alt": "Controle 8BitDo Ultimate 2C hortelã, vista frontal"
+      },
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/hortela-3.jpg",
+        "alt": "Controle 8BitDo Ultimate 2C hortelã, vista lateral"
+      },
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/hortela-4.jpg",
+        "alt": "Controle 8BitDo Ultimate 2C hortelã, vista traseira"
+      },
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/hortela-5.jpg",
+        "alt": "Joysticks e gatilhos Hall Effect do 8BitDo Ultimate 2C"
+      },
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/hortela-6.jpg",
+        "alt": "Taxa de polling de 1000 Hz do 8BitDo Ultimate 2C"
+      },
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/hortela-7.jpg",
+        "alt": "Botões traseiros L4/R4 remapeáveis do 8BitDo Ultimate 2C"
+      },
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/hortela-8.jpg",
+        "alt": "Modos de conexão do 8BitDo Ultimate 2C"
+      },
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/hortela-9.jpg",
+        "alt": "Conteúdo da embalagem do 8BitDo Ultimate 2C"
+      }
+    ],
+    "attributes": [{ "label": "Plataforma", "value": "Windows, Android" }],
+    "badges": { "amazonChoice": true, "boughtLastMonth": "Mais de 200 compras" },
+    "installments": { "count": 6 },
+    "variant": {
+      "group": "8bitdo-ultimate-2c",
+      "options": [
+        { "name": "Estilo", "value": "Ultimate 2C" },
+        { "name": "Cor", "value": "Hortelã" }
+      ]
+    },
+    "bullets": [
+      "Compatible with Windows and Android.",
+      "1000Hz Polling Rate (for 2.4G and wired connection)",
+      "Hall Effect joysticks and Hall triggers. Wear-resistant metal joystick rings.",
+      "Extra R4/L4 bumpers. Custom button mapping without using software. Turbo function.",
+      "Refined bumpers and D-pad. Light but tactile."
+    ],
+    "details": [
+      { "label": "Idioma", "value": "Inglês" },
+      { "label": "Dimensões do produto", "value": "15,29 x 12,4 x 7,39 cm; 244,94 g" },
+      { "label": "Certificação", "value": "Anatel 08606-24-16532" },
+      { "label": "Número do modelo", "value": "6922621505945" },
+      {
+        "label": "Pilha(s) ou bateria(s)",
+        "value": "1 Polímero de lítio baterias necessárias. (inclusas)"
+      },
+      { "label": "Data de lançamento", "value": "15 julho 2024" },
+      { "label": "ASIN", "value": "B0D736BCNM" }
+    ],
+    "bestSellerRanks": [
+      { "rank": 42, "category": "Games e Consoles" },
+      { "rank": 5, "category": "Controles e Gamepads para PC" }
+    ],
+    "ratingDistribution": [92, 5, 1, 0, 2],
+    "fulfillment": {
+      "shippedBy": "Amazon",
+      "soldBy": "Amazon.com.br",
+      "returns": "Elegível para devolução, reembolso ou substituição em até 30 dias após o recebimento"
+    }
+  },
+  {
+    "id": "p21",
+    "sku": "DEMO-p21",
+    "description": "Qualidade 8BitDo em controles e gamepads para consoles.",
+    "categories": ["games-pc-controles"],
+    "brand": "8BitDo",
+    "gallery": [
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/pessego-1.jpg",
+        "alt": "Controle 8BitDo Ultimate 2C pêssego e receptor 2.4G"
+      },
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/pessego-2.jpg",
+        "alt": "Controle 8BitDo Ultimate 2C pêssego, vista frontal"
+      },
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/pessego-3.jpg",
+        "alt": "Controle 8BitDo Ultimate 2C pêssego, vista lateral"
+      },
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/pessego-4.jpg",
+        "alt": "Controle 8BitDo Ultimate 2C pêssego, vista traseira"
+      },
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/pessego-5.jpg",
+        "alt": "Joysticks e gatilhos Hall Effect do 8BitDo Ultimate 2C"
+      },
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/pessego-6.jpg",
+        "alt": "Taxa de polling de 1000 Hz do 8BitDo Ultimate 2C"
+      },
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/pessego-7.jpg",
+        "alt": "Botões traseiros L4/R4 remapeáveis do 8BitDo Ultimate 2C"
+      },
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/pessego-8.jpg",
+        "alt": "Modos de conexão do 8BitDo Ultimate 2C"
+      },
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/pessego-9.jpg",
+        "alt": "Recursos do 8BitDo Ultimate 2C pêssego"
+      },
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/pessego-10.jpg",
+        "alt": "Conteúdo da embalagem do 8BitDo Ultimate 2C"
+      }
+    ],
+    "attributes": [{ "label": "Plataforma", "value": "Windows, Android" }],
+    "installments": { "count": 6 },
+    "variant": {
+      "group": "8bitdo-ultimate-2c",
+      "options": [
+        { "name": "Estilo", "value": "Ultimate 2C" },
+        { "name": "Cor", "value": "Pêssego" }
+      ]
+    },
+    "bullets": [
+      "Compatible with Windows and Android.",
+      "1000Hz Polling Rate (for 2.4G and wired connection)",
+      "Hall Effect joysticks and Hall triggers. Wear-resistant metal joystick rings.",
+      "Extra R4/L4 bumpers. Custom button mapping without using software. Turbo function.",
+      "Refined bumpers and D-pad. Light but tactile."
+    ],
+    "details": [
+      { "label": "Idioma", "value": "Inglês" },
+      { "label": "Dimensões do produto", "value": "8 x 16 x 12 cm; 100 g" },
+      { "label": "Certificação", "value": "Anatel 08606-24-16532" },
+      { "label": "Número do modelo", "value": "6922621506102" },
+      {
+        "label": "Pilha(s) ou bateria(s)",
+        "value": "1 Polímero de lítio baterias necessárias. (inclusas)"
+      },
+      { "label": "Data de lançamento", "value": "15 julho 2024" },
+      { "label": "ASIN", "value": "B0D73398R9" },
+      { "label": "País de origem", "value": "China" }
+    ],
+    "bestSellerRanks": [
+      { "rank": 39, "category": "Games e Consoles" },
+      { "rank": 3, "category": "Controles e Gamepads para PC" }
+    ],
+    "ratingDistribution": [92, 5, 1, 0, 2],
+    "fulfillment": {
+      "shippedBy": "Amazon",
+      "soldBy": "Amazon.com.br",
+      "returns": "Elegível para devolução, reembolso ou substituição em até 30 dias após o recebimento"
+    }
+  },
+  {
+    "id": "p22",
+    "sku": "DEMO-p22",
+    "description": "Qualidade 8BitDo em controles e gamepads para consoles.",
+    "categories": ["games-pc-controles"],
+    "brand": "8BitDo",
+    "gallery": [
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/roxa-1.jpg",
+        "alt": "Controle 8BitDo Ultimate 2C roxo e receptor 2.4G"
+      },
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/roxa-2.jpg",
+        "alt": "Controle 8BitDo Ultimate 2C roxo, vista frontal"
+      },
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/roxa-3.jpg",
+        "alt": "Controle 8BitDo Ultimate 2C roxo, vista lateral"
+      },
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/roxa-4.jpg",
+        "alt": "Controle 8BitDo Ultimate 2C roxo, vista traseira"
+      },
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/roxa-5.jpg",
+        "alt": "Joysticks e gatilhos Hall Effect do 8BitDo Ultimate 2C"
+      },
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/roxa-6.jpg",
+        "alt": "Taxa de polling de 1000 Hz do 8BitDo Ultimate 2C"
+      },
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/roxa-7.jpg",
+        "alt": "Botões traseiros L4/R4 remapeáveis do 8BitDo Ultimate 2C"
+      },
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/roxa-8.jpg",
+        "alt": "Modos de conexão do 8BitDo Ultimate 2C"
+      },
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/roxa-9.jpg",
+        "alt": "Recursos do 8BitDo Ultimate 2C roxo"
+      },
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/roxa-10.jpg",
+        "alt": "Conteúdo da embalagem do 8BitDo Ultimate 2C"
+      }
+    ],
+    "attributes": [{ "label": "Plataforma", "value": "Windows, Android" }],
+    "installments": { "count": 6 },
+    "variant": {
+      "group": "8bitdo-ultimate-2c",
+      "options": [
+        { "name": "Estilo", "value": "Ultimate 2C" },
+        { "name": "Cor", "value": "Roxa" }
+      ]
+    },
+    "bullets": [
+      "Compatible with Windows and Android.",
+      "1000Hz Polling Rate (for 2.4G and wired connection)",
+      "Hall Effect joysticks and Hall triggers. Wear-resistant metal joystick rings.",
+      "Extra R4/L4 bumpers. Custom button mapping without using software. Turbo function.",
+      "Refined bumpers and D-pad. Light but tactile."
+    ],
+    "details": [
+      { "label": "Idioma", "value": "Inglês" },
+      { "label": "Dimensões do produto", "value": "7,4 x 12,6 x 15,2 cm; 330 g" },
+      { "label": "Certificação", "value": "Anatel 08606-24-16532" },
+      { "label": "Número do modelo", "value": "81HD" },
+      {
+        "label": "Pilha(s) ou bateria(s)",
+        "value": "1 Polímero de lítio baterias necessárias. (inclusas)"
+      },
+      { "label": "Data de lançamento", "value": "15 julho 2024" },
+      { "label": "ASIN", "value": "B0D72TNXSC" }
+    ],
+    "bestSellerRanks": [
+      { "rank": 42, "category": "Games e Consoles" },
+      { "rank": 5, "category": "Controles e Gamepads para PC" }
+    ],
+    "ratingDistribution": [92, 5, 1, 0, 2],
+    "fulfillment": {
+      "shippedBy": "Amazon",
+      "soldBy": "Amazon.com.br",
+      "returns": "Elegível para devolução, reembolso ou substituição em até 30 dias após o recebimento"
+    }
+  },
+  {
+    "id": "p23",
+    "sku": "DEMO-p23",
+    "description": "Qualidade 8BitDo em controles e gamepads para consoles.",
+    "categories": ["games-pc-controles"],
+    "brand": "8BitDo",
+    "gallery": [
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/verde-1.jpg",
+        "alt": "Controle 8BitDo Ultimate 2C verde e receptor 2.4G"
+      },
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/verde-2.jpg",
+        "alt": "Controle 8BitDo Ultimate 2C verde, vista frontal"
+      },
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/verde-3.jpg",
+        "alt": "Controle 8BitDo Ultimate 2C verde, vista lateral"
+      },
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/verde-4.jpg",
+        "alt": "Controle 8BitDo Ultimate 2C verde, vista traseira"
+      },
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/verde-5.jpg",
+        "alt": "Joysticks e gatilhos Hall Effect do 8BitDo Ultimate 2C"
+      },
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/verde-6.jpg",
+        "alt": "Taxa de polling de 1000 Hz do 8BitDo Ultimate 2C"
+      },
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/verde-7.jpg",
+        "alt": "Botões traseiros L4/R4 remapeáveis do 8BitDo Ultimate 2C"
+      },
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/verde-8.jpg",
+        "alt": "Modos de conexão do 8BitDo Ultimate 2C"
+      },
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/verde-9.jpg",
+        "alt": "Recursos do 8BitDo Ultimate 2C verde"
+      },
+      {
+        "src": "/images/products/8bitdo-ultimate-2c/verde-10.jpg",
+        "alt": "Conteúdo da embalagem do 8BitDo Ultimate 2C"
+      }
+    ],
+    "attributes": [{ "label": "Plataforma", "value": "Windows, Android" }],
+    "installments": { "count": 6 },
+    "variant": {
+      "group": "8bitdo-ultimate-2c",
+      "options": [
+        { "name": "Estilo", "value": "Ultimate 2C" },
+        { "name": "Cor", "value": "Verde" }
+      ]
+    },
+    "bullets": [
+      "Compatible with Windows and Android.",
+      "1000Hz Polling Rate (for 2.4G and wired connection)",
+      "Hall Effect joysticks and Hall triggers. Wear-resistant metal joystick rings.",
+      "Extra R4/L4 bumpers. Custom button mapping without using software. Turbo function.",
+      "Refined bumpers and D-pad. Light but tactile."
+    ],
+    "details": [
+      { "label": "Idioma", "value": "Inglês" },
+      { "label": "Dimensões do produto", "value": "19 x 14 x 20 cm; 280 g" },
+      { "label": "Certificação", "value": "Anatel 08606-24-16532" },
+      { "label": "Número do modelo", "value": "6922621505990" },
+      {
+        "label": "Pilha(s) ou bateria(s)",
+        "value": "1 Polímero de lítio baterias necessárias. (inclusas)"
+      },
+      { "label": "Data de lançamento", "value": "15 julho 2024" },
+      { "label": "ASIN", "value": "B0D739FJLG" },
+      { "label": "País de origem", "value": "China" }
+    ],
+    "bestSellerRanks": [
+      { "rank": 39, "category": "Games e Consoles" },
+      { "rank": 3, "category": "Controles e Gamepads para PC" }
+    ],
+    "ratingDistribution": [92, 5, 1, 0, 2],
+    "fulfillment": {
+      "shippedBy": "Amazon",
+      "soldBy": "Amazon.com.br",
+      "returns": "Elegível para devolução, reembolso ou substituição em até 30 dias após o recebimento"
+    }
+  },
+  { "id": "p1", "sku": "DEMO-p1", "categories": ["echo-smart-speakers"], "brand": "Amazon" },
+  { "id": "p2", "sku": "DEMO-p2", "categories": ["fones-de-ouvido"], "brand": "JBL" },
+  { "id": "p3", "sku": "DEMO-p3", "categories": ["kindle"], "brand": "Amazon" },
+  { "id": "p4", "sku": "DEMO-p4", "categories": ["fritadeiras-eletricas"] },
+  { "id": "p5", "sku": "DEMO-p5", "categories": ["tenis"] },
+  { "id": "p7", "sku": "DEMO-p7", "categories": ["plantas-artificiais"] },
+  { "id": "p8", "sku": "DEMO-p8", "categories": ["maquiagem-labios"] },
+  { "id": "p9", "sku": "DEMO-p9", "categories": ["notebooks"] },
+  { "id": "p10", "sku": "DEMO-p10", "categories": ["smartwatches"] },
+  { "id": "p11", "sku": "DEMO-p11", "categories": ["mochilas-para-notebook"] },
+  { "id": "p12", "sku": "DEMO-p12", "categories": ["cameras-de-seguranca"] },
+  { "id": "p13", "sku": "DEMO-p13", "categories": ["literatura-e-ficcao"] },
+  { "id": "p14", "sku": "DEMO-p14", "categories": ["luminarias-de-mesa"] },
+  { "id": "p15", "sku": "DEMO-p15", "categories": ["garrafas-termicas"] },
+  { "id": "p16", "sku": "DEMO-p16", "categories": ["liquidificadores"] },
+  { "id": "p17", "sku": "DEMO-p17", "categories": ["fones-de-ouvido"] },
+  { "id": "p18", "sku": "DEMO-p18", "categories": ["echo-smart-displays"], "brand": "Amazon" },
+  { "id": "p19", "sku": "DEMO-p19", "categories": ["tenis"] },
+  { "id": "p20", "sku": "DEMO-p20", "categories": ["literatura-e-ficcao"] }
+]

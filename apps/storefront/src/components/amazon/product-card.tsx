@@ -10,16 +10,26 @@ export function ProductCard({
   product,
   compact = false,
   action,
+  freeDelivery = false,
 }: {
   product: Product | CatalogItem;
   compact?: boolean;
   action?: ReactNode;
+  /** Checkout charges no shipping, so "Entrega GRÁTIS" is always true when shown. */
+  freeDelivery?: boolean;
 }) {
   const catalog = 'priceMinor' in product ? product : null;
   const presentation = catalog ? productPresentation(catalog) : null;
   const mock = 'price' in product ? product : null;
   const price = catalog ? catalog.priceMinor / 100 : (mock?.price ?? 0);
-  const discount = mock ? discountPercent(mock) : undefined;
+  const oldPrice =
+    mock?.oldPrice ?? (presentation?.oldPriceMinor ? presentation.oldPriceMinor / 100 : undefined);
+  const discount = mock
+    ? discountPercent(mock)
+    : oldPrice
+      ? Math.round((1 - price / oldPrice) * 100)
+      : undefined;
+  const rating = mock ? { average: mock.rating, count: mock.reviewCount } : presentation?.rating;
   const parts = new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: catalog?.currency ?? 'BRL',
@@ -33,7 +43,10 @@ export function ProductCard({
   const content = (
     <>
       <div className="az-card__image">
-        <ProductImage image={mock?.image ?? presentation?.images[0]} glyph={mock?.glyph} />
+        <ProductImage
+          image={mock?.image ?? presentation?.images[0]}
+          glyph={mock?.glyph ?? presentation?.glyph}
+        />
       </div>
       <div className="az-card__deal">
         {discount && (
@@ -44,7 +57,7 @@ export function ProductCard({
         )}
       </div>
       <p className="az-card__name">{product.name}</p>
-      {mock && <RatingStars rating={mock.rating} reviewCount={mock.reviewCount} />}
+      {rating && <RatingStars rating={rating.average} reviewCount={rating.count} />}
       <div
         className="az-card__price"
         aria-label={`Preço atual: ${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: catalog?.currency ?? 'BRL' }).format(price)}`}
@@ -59,16 +72,23 @@ export function ProductCard({
           {fraction}
         </span>
       </div>
-      {mock?.oldPrice && (
+      {oldPrice && (
         <span className="az-card__old-price">
-          De: <del>{formatBRL(mock?.oldPrice)}</del>
+          De: <del>{formatBRL(oldPrice)}</del>
+        </span>
+      )}
+      {freeDelivery && catalog?.inStock && (
+        <span className="az-card__delivery">
+          Entrega <strong>GRÁTIS</strong>
         </span>
       )}
       {mock?.badge && <span className="az-card__badge">{mock?.badge}</span>}
     </>
   );
   const className = `az-card${compact ? ' az-card--compact' : ''}`;
-  return catalog ? (
+  // Cards with an extra action (e.g. the cart's "Adicionar") need a wrapper so the
+  // button is not nested inside the link; plain cards are one link, as on the Home.
+  return catalog && action ? (
     <article className={className} aria-label={product.name}>
       <Link href={`/products/${catalog.id}`} className="az-card__detail-link" title={product.name}>
         {content}
@@ -76,7 +96,11 @@ export function ProductCard({
       {action}
     </article>
   ) : (
-    <Link href={`/products/${product.id}`} className={className} title={product.name}>
+    <Link
+      href={`/products/${catalog ? catalog.id : product.id}`}
+      className={className}
+      title={product.name}
+    >
       {content}
     </Link>
   );

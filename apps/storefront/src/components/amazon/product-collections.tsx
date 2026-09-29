@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ReactNode } from 'react';
-import { ProductCollection } from '@/features/home/catalog-mock';
+import type { CatalogItem } from '@amazon-mvp/api-contract';
+import type { ProductCollection } from '@/features/home/catalog-mock';
 import { ProductCard } from './product-card';
 import { HorizontalRail } from './horizontal-rail';
 
@@ -9,7 +10,7 @@ export function ProductCollections({
   collections,
   leading,
 }: {
-  collections: ProductCollection[];
+  collections: Array<Omit<ProductCollection, 'products'> & { products: CatalogItem[] }>;
   leading?: ReactNode;
 }) {
   return (

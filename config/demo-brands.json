@@ -1,0 +1,15 @@
+[
+  {
+    "name": "8BitDo",
+    "logo": { "src": "/images/brands/8bitdo/logo.jpg", "alt": "Logotipo 8BitDo" },
+    "banner": {
+      "src": "/images/brands/8bitdo/story.jpg",
+      "alt": "Controles 8BitDo Ultimate em diversas cores sobre fundo preto"
+    },
+    "story": [
+      "A 8BitDo é uma empresa terceirizada de hardware de videogame com foco especial em controles de jogos com tema retrô.",
+      "Conhecida por produzir os controles retrô da mais alta qualidade no mercado, a linha de controles da 8BitDo foi conhecida como \"uma gama de excelentes controles de jogos estilo retrô\" pela The Verge.",
+      "O objetivo da 8BitDo é produzir controles de jogos de qualidade premium com ultra-compatibilidade a preços econômicos."
+    ]
+  }
+]

@@ -21,7 +21,7 @@ const product: CatalogItem = {
 describe('generic product presentation', () => {
   it('keeps arbitrary database identities and prices without requiring any fixture', () => {
     const normalized = normalizeProductDetails(product);
-    expect(normalized).toEqual({ ...product, categories: [] });
+    expect(normalized).toEqual({ ...product, categories: [], categoryPath: [] });
     expect(productPresentation(normalized)).toEqual({
       images: [],
       demo: false,

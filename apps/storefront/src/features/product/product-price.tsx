@@ -5,8 +5,8 @@ export function ProductPrice({ amount, currency }: { amount: number; currency: s
     amount / 100,
   );
   return (
-    <span className="az-detail-price" aria-label={formatCartMoney(amount, currency)}>
-      <span className="az-detail-price__currency" aria-hidden="true">
+    <span className="az-pdp-price" aria-label={formatCartMoney(amount, currency)}>
+      <span className="az-pdp-price__currency" aria-hidden="true">
         {parts.find((p) => p.type === 'currency')?.value}
       </span>
       <span aria-hidden="true">
@@ -15,7 +15,7 @@ export function ProductPrice({ amount, currency }: { amount: number; currency: s
           .map((p) => p.value)
           .join('')}
       </span>
-      <span className="az-detail-price__fraction" aria-hidden="true">
+      <span className="az-pdp-price__fraction" aria-hidden="true">
         {parts.find((p) => p.type === 'fraction')?.value}
       </span>
     </span>

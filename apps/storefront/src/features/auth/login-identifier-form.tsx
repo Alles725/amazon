@@ -83,7 +83,7 @@ export function LoginIdentifierForm() {
       // Argon2id verification against the stored hash and a Postgres-backed
       // session, delivered as an httpOnly cookie. Nothing here is mocked.
       await authClient.login({ email, password });
-      router.push(searchParams.get('next') === 'checkout' ? '/checkout' : '/account');
+      router.push(afterLogin(searchParams.get('next')));
       router.refresh();
     } catch (error) {
       if (error instanceof AuthRequestError && error.code === 'AUTH_INVALID_CREDENTIALS') {
@@ -244,4 +244,14 @@ export function LoginIdentifierForm() {
       </div>
     </>
   );
+}
+
+/** Where to go after signing in. "checkout" is the legacy value; otherwise only
+ * same-site absolute paths are honoured. Whitespace/control characters are refused too:
+ * browsers strip tabs and newlines, so "/\t/evil.example" would become "//evil.example". */
+const SAME_SITE_PATH = /^\/(?!\/)[^\s\\\u0000-\u001f\u007f]*$/;
+export function afterLogin(next: string | null): string {
+  if (next === 'checkout') return '/checkout';
+  if (next && SAME_SITE_PATH.test(next)) return next;
+  return '/account';
 }

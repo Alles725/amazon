@@ -63,6 +63,7 @@ describe('product details (integration)', () => {
       availableQuantity: 3,
       inStock: true,
       categories: [{ name: 'Detail category', slug }],
+      categoryPath: [{ name: 'Detail category', slug }],
     });
     expect(response.headers['cache-control']).toBe('no-store');
     expect((await get(slug).expect(200)).body).toEqual(response.body);
@@ -70,6 +71,36 @@ describe('product details (integration)', () => {
       .get(`${CATALOG_ROUTES.products}?category=${slug}`)
       .expect(200);
     expect(related.body.items.map((item: { id: string }) => item.id)).toEqual([id]);
+  });
+  it('returns the breadcrumb of the deepest category and lists whole category subtrees', async () => {
+    const rootId = randomUUID();
+    const leafId = randomUUID();
+    const tree = `tree-${id}`;
+    await prisma.category.create({ data: { id: rootId, slug: `${tree}-root`, name: 'Root' } });
+    await prisma.category.create({
+      data: { id: leafId, slug: `${tree}-leaf`, name: 'Leaf', parentId: rootId },
+    });
+    try {
+      await prisma.productCategory.create({ data: { productId: id, categoryId: leafId } });
+      const response = await get(id).expect(200);
+      // Deepest chain wins over the flat "Detail category".
+      expect(response.body.categoryPath).toEqual([
+        { slug: `${tree}-root`, name: 'Root' },
+        { slug: `${tree}-leaf`, name: 'Leaf' },
+      ]);
+      expect(response.body.categories).toHaveLength(2);
+      const listed = await request(app.getHttpServer())
+        .get(`${CATALOG_ROUTES.products}?category=${tree}-root`)
+        .expect(200);
+      expect(listed.body.items.map((item: { id: string }) => item.id)).toEqual([id]);
+      const unknown = await request(app.getHttpServer())
+        .get(`${CATALOG_ROUTES.products}?category=${tree}-absent`)
+        .expect(200);
+      expect(unknown.body).toEqual({ items: [], total: 0 });
+    } finally {
+      await prisma.productCategory.deleteMany({ where: { categoryId: leafId } });
+      await prisma.category.deleteMany({ where: { id: { in: [leafId, rootId] } } });
+    }
   });
   it('accepts UUID-shaped slugs without confusing them with absent primary IDs', async () => {
     expect((await get(uuidSlug).expect(200)).body.id).toBe(uuidSlugId);

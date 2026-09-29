@@ -77,15 +77,15 @@
   {
     "id": "p6",
     "image": {
-      "src": "/images/products/controller.jpg",
-      "alt": "Foto ilustrativa de controle sem fio"
+      "src": "/images/products/8bitdo-ultimate-2c/hortela-1.jpg",
+      "alt": "Controle 8BitDo Ultimate 2C na cor hortelã com receptor 2.4G"
     },
-    "name": "Controle Sem Fio para Console, Preto",
-    "rating": 4.7,
-    "reviewCount": 8842,
+    "name": "8BitDo Ultimate 2C Wireless Controller for Windows PC and Android, with 1000 Hz Polling Rate, Hall Effect Joysticks and Triggers, and Remappable L4/R4 Bumpers (Mint)",
+    "rating": 4.8,
+    "reviewCount": 5508,
     "glyph": "controller",
     "sku": "DEMO-p6",
-    "priceMinor": 32900,
+    "priceMinor": 20520,
     "inventoryQuantity": 10
   },
   {
@@ -276,5 +276,50 @@
     "priceMinor": 9990,
     "oldPriceMinor": 14990,
     "inventoryQuantity": 10
+  },
+  {
+    "id": "p21",
+    "image": {
+      "src": "/images/products/8bitdo-ultimate-2c/pessego-1.jpg",
+      "alt": "Controle 8BitDo Ultimate 2C na cor pêssego com receptor 2.4G"
+    },
+    "name": "8BitDo Ultimate 2C Wireless Controller for Windows PC and Android, with 1000 Hz Polling Rate, Hall Effect Joysticks and Triggers, and Remappable L4/R4 Bumpers (Peach)",
+    "rating": 4.8,
+    "reviewCount": 5508,
+    "glyph": "controller",
+    "sku": "DEMO-p21",
+    "priceMinor": 21000,
+    "inventoryQuantity": 10,
+    "variantOf": "p6"
+  },
+  {
+    "id": "p22",
+    "image": {
+      "src": "/images/products/8bitdo-ultimate-2c/roxa-1.jpg",
+      "alt": "Controle 8BitDo Ultimate 2C na cor roxa com receptor 2.4G"
+    },
+    "name": "8BitDo Ultimate 2C Wireless Controller for Windows PC and Android, with 1000 Hz Polling Rate, Hall Effect Joysticks and Triggers, and Remappable L4/R4 Bumpers (Purple)",
+    "rating": 4.8,
+    "reviewCount": 5508,
+    "glyph": "controller",
+    "sku": "DEMO-p22",
+    "priceMinor": 19950,
+    "inventoryQuantity": 10,
+    "variantOf": "p6"
+  },
+  {
+    "id": "p23",
+    "image": {
+      "src": "/images/products/8bitdo-ultimate-2c/verde-1.jpg",
+      "alt": "Controle 8BitDo Ultimate 2C na cor verde com receptor 2.4G"
+    },
+    "name": "Controle Wireless 8BitDo Ultimate 2C, Bluetooth, Verde - 81HD02",
+    "rating": 4.8,
+    "reviewCount": 5508,
+    "glyph": "controller",
+    "sku": "DEMO-p23",
+    "priceMinor": 20010,
+    "inventoryQuantity": 10,
+    "variantOf": "p6"
   }
 ]

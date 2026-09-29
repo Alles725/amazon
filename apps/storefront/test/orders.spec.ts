@@ -182,7 +182,7 @@ describe('Seus pedidos page', () => {
     expect(within(card).getByRole('link', { name: 'Ver o seu item' }).getAttribute('href')).toBe(
       '/products/product-o1',
     );
-    expect(card.querySelector('img')?.getAttribute('src')).toContain('controller.jpg');
+    expect(card.querySelector('img')?.getAttribute('src')).toContain(encodeURIComponent('8bitdo-ultimate-2c/hortela-1.jpg'));
   });
 
   it('lists only unshipped orders in "Ainda não enviado"', () => {

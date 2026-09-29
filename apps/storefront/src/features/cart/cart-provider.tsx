@@ -21,10 +21,11 @@ interface CartState {
   error: string | null;
   notice: string;
   refresh: () => Promise<void>;
-  add: (productId: string, quantity?: number) => Promise<void>;
-  update: (productId: string, quantity: number) => Promise<void>;
-  remove: (productId: string) => Promise<void>;
-  clear: () => Promise<void>;
+  /** Resolve true once the server confirmed the change. */
+  add: (productId: string, quantity?: number) => Promise<boolean>;
+  update: (productId: string, quantity: number) => Promise<boolean>;
+  remove: (productId: string) => Promise<boolean>;
+  clear: () => Promise<boolean>;
 }
 const CartContext = createContext<CartState | null>(null);
 
@@ -112,7 +113,7 @@ export function CartProvider({
   }, [enabled, userId, refresh]);
 
   async function mutate(operation: () => Promise<CartResponse>, message: string) {
-    if (busy.current || status === 'guest' || !enabled) return;
+    if (busy.current || status === 'guest' || !enabled) return false;
     busy.current = true;
     setPending(true);
     setError(null);
@@ -120,13 +121,15 @@ export function CartProvider({
     const current = ++version.current;
     try {
       const result = await operation();
-      if (!mounted.current || current !== version.current) return;
+      if (!mounted.current || current !== version.current) return true;
       setCart(result);
       setStatus('ready');
       setNotice(message);
       channel.current?.postMessage('changed');
+      return true;
     } catch (reason) {
       if (mounted.current && current === version.current) reportError(reason);
+      return false;
     } finally {
       busy.current = false;
       if (mounted.current) {

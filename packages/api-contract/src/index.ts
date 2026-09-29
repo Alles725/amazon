@@ -125,6 +125,8 @@ export interface CatalogItem {
 /** Product details expose only information currently stored by catalog. */
 export interface CatalogProductDetails extends CatalogItem {
   categories: Array<{ slug: string; name: string }>;
+  /** Breadcrumb: root → leaf ancestor chain of the product's most specific category. */
+  categoryPath: Array<{ slug: string; name: string }>;
 }
 
 export interface CatalogPage {
