@@ -219,6 +219,18 @@ iterations:
           58 storefront unit tests and Edge headless checks at 1770/1280/1024/500px pass.
           Shared help flag enabled (same precedent as sell).
 
+  - id: 10
+    name: Browser tab identity
+    stories:
+      - id: TAB-001
+        owner: dev2
+        status: done
+        title: Tab title and Amazon favicon
+        note: >-
+          Root metadata title "Amazon.com.br | Tudo pra você, de A a Z." and
+          app/icon.svg derived from the AmazonLogo colors. Verified in next dev and
+          next start; build compiled (standalone step: known Windows EPERM).
+
 next_up:
   - id: FIRSTRUN-001
     title: First cluster run

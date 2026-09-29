@@ -125,7 +125,7 @@ This records observed local results, not an assertion that CI or deployment pass
 
 ## Known environment warnings
 
-- Existing favicon.ico request returns 404.
+- /favicon.ico is not served; browsers use the /icon.svg link emitted by metadata.
 - Vite CJS and Node util._extend deprecation warnings; checks still pass.
 
 ## Enabled features
@@ -208,3 +208,14 @@ hub is part of the authenticated shell and does not enable account management.
   1024 and 500px with no clipping or horizontal overflow. `next build` was not rerun
   for the final diff (it shares .next with the running dev server and the standalone
   step fails locally with the known Windows symlink EPERM).
+
+## Browser tab title and favicon — 2026-09-29
+
+- Root metadata title is "Amazon.com.br | Tudo pra você, de A a Z." for every route
+  (no route defines its own title). The smoke test's home check expects this title.
+- Favicon: apps/storefront/src/app/icon.svg (App Router file convention), the "a" and
+  orange smile from the existing AmazonLogo colors; header/logo unchanged.
+- Validation: lint, typecheck, 58 storefront unit tests. `next dev` and `next start`
+  both serve the title and `<link rel="icon" href="/icon.svg?…">` (200, image/svg+xml)
+  on /, /login, /help (plus /sell, /cart in dev). `next build` compiled and emitted
+  /icon.svg; the standalone step failed with the known Windows symlink EPERM.
