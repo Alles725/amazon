@@ -2,10 +2,10 @@
 
 ## Current objective
 
-CATALOG-002 — demo catalog expanded to 150 products with ranked related products (see
-current-state.md, docs/product-details.md "Produtos relacionados"). PR preparation is on
-feat/catalogo-expandido, created from origin/main at 6ba058b (product page PR #18 merged).
-Commit, push and PR await the final explicit approval.
+FLAGS-001 — productDetails, cart, checkout and browsingHistory enabled in the shared
+config/features.yaml (see current-state.md "Shared feature flags"). PR preparation is on
+feat/habilitar-pagina-de-produto, created from origin/main at 1c73f40 (CATALOG-002 PR #19
+merged). Commit, push and PR await the final explicit approval.
 
 ## Implementation
 
@@ -23,8 +23,8 @@ Commit, push and PR await the final explicit approval.
 
 ## Configuration and limits
 
-Shared cart/productDetails/checkout flags remain false (features.spec asserts it); local
-runs point FEATURES_FILE at a copy with them on — FLAGS-001 decides the shared change.
+Shared config enables productDetails, cart, checkout and browsingHistory (FLAGS-001,
+features.spec asserts it); the default FEATURES_FILE needs no local copy.
 API :3001, storefront :3000, PostgreSQL Docker container mvp-pg (port 5433). Start the
 storefront from PowerShell (Git Bash rewrites API_PUBLIC_BASE_PATH=/api/v1 into a path).
 Prime, reviews text and the brand story are demo presentation; no Pix discount, delivery

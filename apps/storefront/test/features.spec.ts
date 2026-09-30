@@ -31,9 +31,18 @@ describe('shipped config/features.yaml', () => {
     expect(registry.routeState('productReviews')).toBe('coming-soon');
   });
 
+  it('enables the product page, cart, checkout and browsing history', () => {
+    const registry = loadShipped();
+    for (const feature of ['productDetails', 'cart', 'checkout', 'browsingHistory']) {
+      expect(registry.isEnabled(feature)).toBe(true);
+    }
+    expect(registry.routeState('productDetails')).toBe('enabled');
+    expect(registry.routeState('cart')).toBe('enabled');
+  });
+
   it('ships unbuilt features disabled', () => {
     const registry = loadShipped();
-    for (const feature of ['catalog', 'productDetails', 'cart', 'checkout', 'account']) {
+    for (const feature of ['catalog', 'account']) {
       expect(registry.isEnabled(feature)).toBe(false);
     }
   });
@@ -61,7 +70,7 @@ describe('shipped config/features.yaml', () => {
     const registry = loadShipped();
     expect(registry.routeState('login')).toBe('enabled'); // feature enabled
     expect(registry.routeState('products')).toBe('coming-soon'); // disabled -> visible, marked
-    expect(registry.routeState('checkout')).toBe('not-found'); // disabled -> hidden
+    expect(registry.routeState('checkout')).toBe('enabled');
   });
 });
 

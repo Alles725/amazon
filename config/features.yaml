@@ -14,7 +14,7 @@ features:
     description: Product listing
 
   productDetails:
-    enabled: false
+    enabled: true
     description: Dynamic product details with catalog data and cart integration
 
   productReviews:
@@ -22,11 +22,11 @@ features:
     description: Writing customer reviews (the product page reads demo reviews until a backend exists)
 
   cart:
-    enabled: false
+    enabled: true
     description: Persistent account cart with quantities and subtotals
 
   checkout:
-    enabled: false
+    enabled: true
     description: Academic checkout with saved addresses and persisted orders
 
   orders:
@@ -38,7 +38,7 @@ features:
     description: Account management beyond the auth shell
 
   browsingHistory:
-    enabled: false
+    enabled: true
     description: Device-local browsing history flyout in the header navbar
 
   # Footer informational pages. Each is an independent, content-only page —

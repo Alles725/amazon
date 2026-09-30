@@ -52,10 +52,9 @@ chamar um DELETE separado, e abre a confirmação persistida.
 
 ## Execução local
 
-Aplicar migrations e gerar Prisma antes de iniciar API/storefront. Ativar cart,
-productDetails e checkout no arquivo local ignorado apontado por FEATURES_FILE;
-reiniciar storefront porque as flags são lidas uma vez. Shared config/features.yaml
-mantém as flags desabilitadas, conforme a estratégia de implantação existente.
+Aplicar migrations e gerar Prisma antes de iniciar API/storefront. cart,
+productDetails e checkout estão ativados em config/features.yaml (FLAGS-001); ao
+trocar de arquivo de flags, reiniciar o storefront porque as flags são lidas uma vez.
 
 ## Validação
 
