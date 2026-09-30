@@ -102,7 +102,7 @@ export class AuthService {
   }
 }
 
-function toProfile(user: UserRecord): UserProfile {
+export function toProfile(user: UserRecord): UserProfile {
   return {
     id: user.id,
     email: user.email,
@@ -111,6 +111,6 @@ function toProfile(user: UserRecord): UserProfile {
   };
 }
 
-function isUniqueViolation(error: unknown): boolean {
+export function isUniqueViolation(error: unknown): boolean {
   return typeof error === 'object' && error !== null && (error as { code?: string }).code === 'P2002';
 }

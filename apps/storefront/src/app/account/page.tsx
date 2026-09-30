@@ -25,8 +25,8 @@ const CARDS: { title: string; description: string; href: string; icon: AccountIc
 /**
  * Not wrapped in FeatureRoute: the authenticated shell belongs to the
  * `authentication` feature, which is the vertical slice that must always
- * work. The `account` feature covers profile management, which is not built
- * yet — each card below routes to its own flag-gated destination instead.
+ * work. The `account` feature covers profile management (built in "Acesso e
+ * segurança"); each card below routes to its own flag-gated destination.
  */
 export default async function AccountPage() {
   const session = await getServerSession();

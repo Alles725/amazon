@@ -441,3 +441,23 @@ form (keyboard star picker, edit, login redirect) and productReviews is on.
 Validation: lint, typecheck, unit tests, reviews integration suite on a disposable database,
 drift check clean, openapi regenerated. Browser: write, edit, verified badge after a real
 order, helpful vote, empty state and distribution. See docs/reviews.md.
+
+## 2026-09-30 — ACCOUNT-001
+
+Real pages: Seus endereços (DELETE and set-default; addresses.is_default with back-fill,
+migration 20261001000101_address_default; default listed first so checkout preselects it;
+reuses the checkout AddressForm), Acesso e segurança (/account/profile|password|email;
+current password verified with Argon2id; other sessions revoked through
+SESSIONS_API.revokeOthersForUser, current kept; 403 AUTH_INVALID_CREDENTIALS on a wrong
+password) and Suas listas (new lists module with LISTS_API, tables lists/list_items,
+migration 20261001000100_lists, catalog data through CATALOG_API, lazy "Lista de desejos",
+limits 20 lists × 100 items, default list protected). The product page gets "Adicionar à
+lista" (guests go to login). Prime, Vales-presente, Reembolsos, Mensagens, Assinaturas and
+Programe e Poupe are informational pages with truthful empty states and no forms or
+balances. Flags on: account, security, addresses, lists, giftCards, refunds, messages,
+prime, subscriptions, subscribeAndSave.
+
+Validation: lint, typecheck, unit tests, account integration suite (ownership, session
+invalidation) on a disposable database, drift check clean, openapi regenerated. Browser:
+all nine pages, guest redirects, checkout preselecting the default address. See
+docs/account.md.

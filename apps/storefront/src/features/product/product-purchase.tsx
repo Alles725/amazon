@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { CatalogItem, MAX_CART_QUANTITY } from '@amazon-mvp/api-contract';
+import { AddToList } from '@/features/account/add-to-list';
 import { useCart } from '@/features/cart/cart-provider';
 import { formatCartMoney } from '@/features/cart/money';
 import { PixPrice } from '@/features/checkout/pix-price';
@@ -30,6 +31,7 @@ export function ProductPurchase({
   fulfillment,
   address,
   pixDiscountPercent = null,
+  lists,
 }: {
   product: CatalogItem;
   cartEnabled: boolean;
@@ -39,6 +41,8 @@ export function ProductPurchase({
   address?: DeliveryAddress | null;
   /** Rate from the API's checkout config (GET /orders/pricing); null = not advertised. */
   pixDiscountPercent?: number | null;
+  /** Present when the lists feature is on: renders "Adicionar à lista". */
+  lists?: { signedIn: boolean };
 }) {
   const router = useRouter();
   const { cart, status, pending, error, notice, add, refresh } = useCart();
@@ -239,6 +243,7 @@ export function ProductPurchase({
           )}
         </dl>
       )}
+      {lists && <AddToList productId={product.id} signedIn={lists.signedIn} loginHref={loginHref} />}
     </section>
   );
 }

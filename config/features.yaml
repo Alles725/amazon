@@ -34,8 +34,8 @@ features:
     description: Order history ("Seus pedidos") and order details
 
   account:
-    enabled: false
-    description: Account management beyond the auth shell
+    enabled: true
+    description: Account management beyond the auth shell (profile, e-mail and password in Acesso e segurança)
 
   browsingHistory:
     enabled: true
@@ -108,35 +108,35 @@ features:
     enabled: true
     description: Customer help center
 
-  # Account dropdown / account hub destinations that do not have a dedicated
-  # vertical slice yet. Each ships disabled behind its own flag, same as the
-  # footer pages above.
+  # Account dropdown / account hub destinations (features/account, see
+  # docs/account.md). Security, addresses and lists are backed by the API; the
+  # others are honest informational pages with empty states.
   security:
-    enabled: false
+    enabled: true
     description: Account access and security settings
   addresses:
-    enabled: false
+    enabled: true
     description: Saved addresses
   giftCards:
-    enabled: false
+    enabled: true
     description: Gift cards
   refunds:
-    enabled: false
+    enabled: true
     description: Boleto/Pix refunds
   messages:
-    enabled: false
+    enabled: true
     description: Buyer/seller messages
   lists:
-    enabled: false
+    enabled: true
     description: Shopping and wish lists
   prime:
-    enabled: false
+    enabled: true
     description: Prime membership
   subscriptions:
-    enabled: false
+    enabled: true
     description: Digital subscriptions
   subscribeAndSave:
-    enabled: false
+    enabled: true
     description: Subscribe & Save recurring deliveries
 
 # Route -> feature binding. `disabledBehavior` decides what a visitor sees when

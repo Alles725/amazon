@@ -27,5 +27,7 @@ export interface SessionsApi {
   validate(token: string | undefined): Promise<ActiveSession | null>;
   revoke(token: string): Promise<void>;
   revokeAllForUser(userId: string): Promise<number>;
+  /** Signs the account out everywhere except the session identified by keepSessionId. */
+  revokeOthersForUser(userId: string, keepSessionId: string): Promise<number>;
   purgeExpired(): Promise<number>;
 }

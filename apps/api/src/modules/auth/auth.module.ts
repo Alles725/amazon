@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { UsersModule } from '../users/users.module';
+import { AccountController } from './account.controller';
+import { AccountService } from './account.service';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { PasswordService } from './password.service';
@@ -15,9 +17,10 @@ import { SessionGuard } from './session.guard';
  */
 @Module({
   imports: [UsersModule],
-  controllers: [AuthController, ProtectedExampleController],
+  controllers: [AuthController, ProtectedExampleController, AccountController],
   providers: [
     AuthService,
+    AccountService,
     PasswordService,
     SessionService,
     { provide: SESSIONS_API, useExisting: SessionService },

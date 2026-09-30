@@ -62,6 +62,14 @@ export class SessionService implements SessionsApi {
     return result.count;
   }
 
+  async revokeOthersForUser(userId: string, keepSessionId: string): Promise<number> {
+    const result = await this.prisma.session.updateMany({
+      where: { userId, revokedAt: null, NOT: { id: keepSessionId } },
+      data: { revokedAt: new Date() },
+    });
+    return result.count;
+  }
+
   /** Housekeeping for expired rows. Called by an operator or a future CronJob. */
   async purgeExpired(): Promise<number> {
     const result = await this.prisma.session.deleteMany({

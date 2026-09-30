@@ -180,6 +180,7 @@ export default async function ProductDetailPage({ params, searchParams = {} }: P
             fulfillment={content.fulfillment}
             address={address}
             pixDiscountPercent={pixDiscountPercent}
+            lists={isFeatureEnabled('lists') ? { signedIn: Boolean(session) } : undefined}
           />
         </aside>
       </div>
