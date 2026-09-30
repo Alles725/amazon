@@ -15,8 +15,19 @@ import { ProductImage } from '@/components/amazon/product-image';
 import { productPresentation } from '@/features/product/product-presentation';
 import { AddressForm } from './address-form';
 import { checkoutClient, CheckoutError, cartContentKey } from './checkout-client';
+import './pix-price.css';
 
-export function CheckoutContent({ name }: { name: string }) {
+/** Until a method is chosen the API quotes card, i.e. no discount. */
+const DEFAULT_QUOTE_METHOD: SimulatedPayment = 'SIMULATED_CARD';
+
+export function CheckoutContent({
+  name,
+  pixDiscountPercent = null,
+}: {
+  name: string;
+  /** Advertised next to the Pix option only; totals always come from the quote. */
+  pixDiscountPercent?: number | null;
+}) {
   const router = useRouter();
   const { cart, status, pending, error: cartError, update, remove, refresh } = useCart();
   const [addresses, setAddresses] = useState<SavedAddress[]>([]);
@@ -35,7 +46,11 @@ export function CheckoutContent({ name }: { name: string }) {
   const busy = useRef(false);
   const currentKey = cartContentKey(cart);
   const locked = pending || submitting || Boolean(uncertain);
-  const validQuote = quote && cartContentKey(quote.cart) === currentKey;
+  const quoteMethod = payment || DEFAULT_QUOTE_METHOD;
+  // A quote is usable only for the current cart AND the selected payment method: the
+  // revision binds both, so switching card <-> Pix waits for a fresh API quote.
+  const validQuote =
+    quote && cartContentKey(quote.cart) === currentKey && quote.paymentMethod === quoteMethod;
   useEffect(() => {
     let active = true;
     setAddressLoading(true);
@@ -69,7 +84,7 @@ export function CheckoutContent({ name }: { name: string }) {
     setQuoteError('');
     if (status === 'ready' && cart?.lines.length && !pending && !uncertain) {
       checkoutClient
-        .quote()
+        .quote(quoteMethod)
         .then((data) => {
           if (active) setQuote(data);
         })
@@ -83,7 +98,7 @@ export function CheckoutContent({ name }: { name: string }) {
     return () => {
       active = false;
     };
-  }, [currentKey, status, pending, retry, uncertain, cart?.lines.length]);
+  }, [currentKey, status, pending, retry, uncertain, cart?.lines.length, quoteMethod]);
   async function confirm() {
     if (busy.current || pending) return;
     setError('');
@@ -313,9 +328,15 @@ export function CheckoutContent({ name }: { name: string }) {
                   value="SIMULATED_PIX"
                   checked={payment === 'SIMULATED_PIX'}
                   onChange={() => setPayment('SIMULATED_PIX')}
+                  aria-describedby={pixDiscountPercent ? 'checkout-pix-hint' : undefined}
                 />{' '}
                 Pix simulado
               </label>
+              {pixDiscountPercent ? (
+                <span id="checkout-pix-hint" className="az-checkout-pix-hint">
+                  {pixDiscountPercent}% de desconto à vista no Pix
+                </span>
+              ) : null}
             </fieldset>
           </section>
           <section className="az-checkout-panel">
@@ -430,8 +451,12 @@ export function CheckoutContent({ name }: { name: string }) {
               <dd>{validQuote ? formatCartMoney(quote.shippingMinor, quote.currency) : '—'}</dd>
             </div>
             {validQuote && quote.discountMinor > 0 && (
-              <div>
-                <dt>Descontos</dt>
+              <div className="az-checkout-discount">
+                <dt>
+                  {quote.paymentMethod === 'SIMULATED_PIX'
+                    ? `Desconto Pix (${quote.discountPercent}%)`
+                    : 'Descontos'}
+                </dt>
                 <dd>− {formatCartMoney(quote.discountMinor, quote.currency)}</dd>
               </div>
             )}

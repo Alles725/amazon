@@ -88,8 +88,12 @@ describe('checkout (integration)', () => {
       .post('/api/v1/cart/items')
       .set('Cookie', cookies[index])
       .send({ productId, quantity });
-  const quote = (index = 0) =>
-    request(app.getHttpServer()).get('/api/v1/orders/quote').set('Cookie', cookies[index]);
+  const quote = (index = 0, paymentMethod?: string) =>
+    request(app.getHttpServer())
+      .get('/api/v1/orders/quote')
+      .query(paymentMethod ? { paymentMethod } : {})
+      .set('Cookie', cookies[index]);
+  const pixQuote = (index = 0) => quote(index, 'SIMULATED_PIX');
   const getCart = () => request(app.getHttpServer()).get('/api/v1/cart').set('Cookie', cookies[0]);
   const data = (q: { cart: { id: string }; revision: string }, index = 0) => ({
     cartId: q.cart.id,
@@ -99,6 +103,10 @@ describe('checkout (integration)', () => {
   });
   const place = (body: unknown, index = 0) =>
     request(app.getHttpServer()).post('/api/v1/orders').set('Cookie', cookies[index]).send(body);
+  const pixData = (q: { cart: { id: string }; revision: string }, index = 0) => ({
+    ...data(q, index),
+    paymentMethod: 'SIMULATED_PIX',
+  });
   it('requires session for quote, place, address and order reads', async () => {
     for (const path of [
       '/api/v1/addresses',
@@ -288,5 +296,114 @@ describe('checkout (integration)', () => {
       (await prisma.inventory.findUniqueOrThrow({ where: { productId: products[0] } })).quantity,
     ).toBe(10);
     expect((await getCart()).body.itemCount).toBe(3);
+  });
+  it('exposes the configured Pix rate publicly', async () => {
+    const response = await request(app.getHttpServer()).get('/api/v1/orders/pricing').expect(200);
+    expect(response.body).toEqual({ pixDiscountPercent: 5 });
+  });
+  it('quotes card without discount and Pix with the server-side 5% discount', async () => {
+    await add(3).expect(200);
+    const card = (await quote().expect(200)).body;
+    expect(card).toMatchObject({
+      subtotalMinor: 3702,
+      discountMinor: 0,
+      totalMinor: 3702,
+      paymentMethod: 'SIMULATED_CARD',
+      discountPercent: 0,
+    });
+    expect((await quote(0, 'SIMULATED_CARD').expect(200)).body.revision).toBe(card.revision);
+    const pix = (await pixQuote().expect(200)).body;
+    expect(pix).toMatchObject({
+      subtotalMinor: 3702,
+      shippingMinor: 0,
+      discountMinor: 185,
+      totalMinor: 3517,
+      paymentMethod: 'SIMULATED_PIX',
+      discountPercent: 5,
+    });
+    expect(pix.revision).not.toBe(card.revision);
+    await quote(0, 'REAL_CARD').expect(400);
+    await request(app.getHttpServer())
+      .get('/api/v1/orders/quote')
+      .query({ discountPercent: 50 })
+      .set('Cookie', cookies[0])
+      .expect(400);
+  });
+  it('rounds the Pix discount down to the cent', async () => {
+    await add(1).expect(200);
+    for (const [price, discount] of [
+      [1, 0],
+      [19, 0],
+      [20, 1],
+      [99999, 4999],
+    ]) {
+      await prisma.product.update({ where: { id: products[0] }, data: { priceMinor: price } });
+      const q = (await pixQuote().expect(200)).body;
+      expect([q.subtotalMinor, q.discountMinor, q.totalMinor]).toEqual([
+        price,
+        discount,
+        price - discount,
+      ]);
+    }
+    const created = (await place(pixData((await pixQuote()).body)).expect(201)).body;
+    expect(created).toMatchObject({ subtotalMinor: 99999, discountMinor: 4999, totalMinor: 95000 });
+  });
+  it('persists the Pix discount in the order snapshot and keeps it on retries', async () => {
+    await add(3).expect(200);
+    const body = pixData((await pixQuote()).body);
+    const responses = await Promise.all([place(body).expect(201), place(body).expect(201)]);
+    expect(responses[0].body.id).toBe(responses[1].body.id);
+    expect(responses[0].body).toMatchObject({
+      paymentMethod: 'SIMULATED_PIX',
+      subtotalMinor: 3702,
+      shippingMinor: 0,
+      discountMinor: 185,
+      totalMinor: 3517,
+    });
+    const stored = await prisma.order.findUniqueOrThrow({ where: { id: responses[0].body.id } });
+    expect([stored.subtotalMinor, stored.discountMinor, stored.totalMinor]).toEqual([
+      3702, 185, 3517,
+    ]);
+    expect(await prisma.order.count({ where: { userId: users[0] } })).toBe(1);
+    // A price change after the order does not touch the snapshot.
+    await prisma.product.update({ where: { id: products[0] }, data: { priceMinor: 99 } });
+    const fetched = await request(app.getHttpServer())
+      .get(`/api/v1/orders/${responses[0].body.id}`)
+      .set('Cookie', cookies[0])
+      .expect(200);
+    expect(fetched.body).toEqual(responses[0].body);
+    // Replaying the same cart with another method returns the original order untouched.
+    const replay = (await place({ ...body, paymentMethod: 'SIMULATED_CARD' }).expect(201)).body;
+    expect(replay).toEqual(responses[0].body);
+  });
+  it('never trusts client totals and rejects a quote made for another method', async () => {
+    await add(3).expect(200);
+    const card = (await quote()).body;
+    const pix = (await pixQuote()).body;
+    for (const forged of [
+      { ...pixData(pix), discountMinor: 3702 },
+      { ...pixData(pix), totalMinor: 1 },
+      { ...pixData(pix), discountPercent: 100 },
+    ])
+      await place(forged).expect(400);
+    // Card revision + Pix method (and vice versa) is a stale quote, not a discount.
+    await place({ ...data(card), paymentMethod: 'SIMULATED_PIX' }).expect(409);
+    await place({ ...pixData(pix), paymentMethod: 'SIMULATED_CARD' }).expect(409);
+    expect(await prisma.order.count({ where: { userId: users[0] } })).toBe(0);
+    expect(
+      (await prisma.inventory.findUniqueOrThrow({ where: { productId: products[0] } })).quantity,
+    ).toBe(10);
+    expect((await getCart()).body.itemCount).toBe(3);
+    const created = (await place(data(card)).expect(201)).body;
+    expect(created).toMatchObject({ discountMinor: 0, totalMinor: 3702 });
+  });
+  it('rejects a stale Pix quote after a price change', async () => {
+    await add(2).expect(200);
+    const body = pixData((await pixQuote()).body);
+    await prisma.product.update({ where: { id: products[0] }, data: { priceMinor: 2000 } });
+    await place(body).expect(409);
+    const fresh = (await pixQuote().expect(200)).body;
+    expect([fresh.subtotalMinor, fresh.discountMinor, fresh.totalMinor]).toEqual([4000, 200, 3800]);
+    expect((await place(pixData(fresh)).expect(201)).body.totalMinor).toBe(3800);
   });
 });

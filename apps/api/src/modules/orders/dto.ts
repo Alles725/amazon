@@ -1,8 +1,10 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsIn, IsUUID, Matches } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsIn, IsOptional, IsUUID, Matches } from 'class-validator';
 import {
   AddressInput,
+  CheckoutPricing,
   CheckoutQuote,
+  CheckoutQuoteQuery,
   OrderLineResponse,
   OrderResponse,
   PlaceOrderRequest,
@@ -10,13 +12,30 @@ import {
 } from '@amazon-mvp/api-contract';
 import { CartResponseDto } from '../cart/dto';
 import { AddressInputDto } from '../users/address.dto';
+const PAYMENT_METHODS: SimulatedPayment[] = ['SIMULATED_CARD', 'SIMULATED_PIX'];
 export class PlaceOrderDto implements PlaceOrderRequest {
   @ApiProperty({ format: 'uuid' }) @IsUUID() cartId: string;
-  @ApiProperty() @Matches(/^[a-f0-9]{64}$/) revision: string;
+  @ApiProperty({ description: 'Revision of a quote for this same paymentMethod' })
+  @Matches(/^[a-f0-9]{64}$/)
+  revision: string;
   @ApiProperty({ format: 'uuid' }) @IsUUID() addressId: string;
-  @ApiProperty({ enum: ['SIMULATED_CARD', 'SIMULATED_PIX'] })
-  @IsIn(['SIMULATED_CARD', 'SIMULATED_PIX'])
+  @ApiProperty({ enum: PAYMENT_METHODS })
+  @IsIn(PAYMENT_METHODS)
   paymentMethod: SimulatedPayment;
+}
+export class CheckoutQuoteQueryDto implements CheckoutQuoteQuery {
+  @ApiPropertyOptional({
+    enum: PAYMENT_METHODS,
+    default: 'SIMULATED_CARD',
+    description: 'Payment method to price; SIMULATED_PIX applies the Pix discount',
+  })
+  @IsOptional()
+  @IsIn(PAYMENT_METHODS)
+  paymentMethod?: SimulatedPayment;
+}
+export class CheckoutPricingDto implements CheckoutPricing {
+  @ApiProperty({ type: 'integer', minimum: 0, maximum: 100, example: 5 })
+  pixDiscountPercent: number;
 }
 export class OrderParamsDto {
   @ApiProperty({ format: 'uuid' }) @IsUUID() orderId: string;
@@ -29,6 +48,8 @@ export class CheckoutQuoteDto implements CheckoutQuote {
   @ApiProperty() discountMinor: number;
   @ApiProperty() totalMinor: number;
   @ApiProperty() currency: string;
+  @ApiProperty({ enum: PAYMENT_METHODS }) paymentMethod: SimulatedPayment;
+  @ApiProperty({ type: 'integer', minimum: 0, maximum: 100 }) discountPercent: number;
 }
 export class OrderLineDto implements OrderLineResponse {
   @ApiProperty() productId: string;

@@ -10,7 +10,8 @@ vi.mock('react', async (original) => ({
   cache: (fn: unknown) => fn,
 }));
 vi.mock('next/headers', () => ({ cookies: () => ({ toString: () => 'amzmvp_sid=x' }) }));
-const { notFound, flags, session, fetchOrders } = vi.hoisted(() => ({
+const { notFound, flags, session, fetchOrders, pricing } = vi.hoisted(() => ({
+  pricing: vi.fn(),
   notFound: vi.fn(() => {
     throw new Error('NEXT_NOT_FOUND');
   }),
@@ -103,6 +104,11 @@ beforeEach(() => {
   Object.assign(flags, { productDetails: true, cart: true, checkout: true, orders: true });
   session.mockReset().mockResolvedValue(null);
   fetchOrders.mockReset().mockResolvedValue([]);
+  pricing
+    .mockReset()
+    .mockImplementation(
+      () => ({ ok: true, status: 200, json: async () => ({ pixDiscountPercent: 5 }) }) as Response,
+    );
   notFound.mockClear();
   globalThis.ResizeObserver = class {
     observe() {}
@@ -115,6 +121,7 @@ beforeEach(() => {
         ({ ok: status < 400, status, json: async () => body }) as Response;
       const path = url.replace('http://api/api/v1', '');
       if (path === '/addresses') return json([]);
+      if (path === '/orders/pricing') return pricing();
       const list = path.match(/^\/catalog\/products\?.*category=([^&]+)/);
       if (list)
         return json({
@@ -283,6 +290,44 @@ describe('product detail page', () => {
     flags.productDetails = false;
     await renderPage('p6');
     expect(screen.getByText('coming soon: Produto')).toBeTruthy();
+  });
+
+  it('advertises the Pix price with the API rate and the checkout rounding', async () => {
+    await renderPage('p6');
+    // 20520 cents - floor(20520 * 5 / 100) = 19494.
+    const overview = screen.getByRole('region', { name: 'Informações do produto' });
+    expect(overview.textContent).toMatch(/R\$\s194,94 no Pix \(5% de desconto\)/);
+    const buyBox = screen.getByRole('region', { name: 'Comprar produto' });
+    expect(buyBox.textContent).toMatch(/ou R\$\s194,94 no Pix \(5% de desconto\)/);
+    cleanup();
+    // Out of stock: the overview keeps the Pix price next to the price, the buy box does not.
+    await renderPage('p23');
+    expect(screen.getByRole('region', { name: 'Informações do produto' }).textContent).toMatch(
+      /R\$\s190,10 no Pix/,
+    );
+    expect(screen.getByRole('region', { name: 'Comprar produto' }).textContent).not.toContain(
+      'no Pix',
+    );
+  });
+
+  it('shows no Pix price without a rate from the API or without checkout', async () => {
+    pricing.mockImplementation(() => ({ ok: false, status: 500, json: async () => ({}) }));
+    await renderPage('p6');
+    expect(screen.queryByText(/no Pix/)).toBeNull();
+    cleanup();
+    pricing.mockImplementation(() => ({
+      ok: true,
+      status: 200,
+      json: async () => ({ pixDiscountPercent: 0 }),
+    }));
+    await renderPage('p6');
+    expect(screen.queryByText(/no Pix/)).toBeNull();
+    cleanup();
+    pricing.mockClear();
+    flags.checkout = false;
+    await renderPage('p6');
+    expect(screen.queryByText(/no Pix/)).toBeNull();
+    expect(pricing).not.toHaveBeenCalled();
   });
 
   it('builds metadata from the product', async () => {

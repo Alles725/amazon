@@ -156,4 +156,32 @@ openapi:
       loadConfig({ configDir: dir, environment: 'local', schema: ApiConfigSchema, env: {} }),
     ).toThrow(/database.url is required/);
   });
+
+  it('defaults the Pix discount to 5% and accepts an env override', () => {
+    const dir = writeConfigDir({ 'default.yaml': defaultYaml });
+    const load = (env: NodeJS.ProcessEnv) =>
+      loadConfig({
+        configDir: dir,
+        environment: 'local',
+        schema: ApiConfigSchema,
+        envMap: { 'checkout.pixDiscountPercent': 'PIX_DISCOUNT_PERCENT' },
+        env,
+      });
+    expect(load({}).checkout.pixDiscountPercent).toBe(5);
+    expect(load({ PIX_DISCOUNT_PERCENT: '0' }).checkout.pixDiscountPercent).toBe(0);
+    expect(load({ PIX_DISCOUNT_PERCENT: '100' }).checkout.pixDiscountPercent).toBe(100);
+  });
+
+  it.each(['-1', '101', '2.5', 'five'])('rejects a Pix discount of %s', (value) => {
+    const dir = writeConfigDir({ 'default.yaml': defaultYaml });
+    expect(() =>
+      loadConfig({
+        configDir: dir,
+        environment: 'local',
+        schema: ApiConfigSchema,
+        envMap: { 'checkout.pixDiscountPercent': 'PIX_DISCOUNT_PERCENT' },
+        env: { PIX_DISCOUNT_PERCENT: value },
+      }),
+    ).toThrow(/checkout.pixDiscountPercent/);
+  });
 });

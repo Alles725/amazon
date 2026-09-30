@@ -787,10 +787,51 @@
         ]
       }
     },
+    "/api/v1/orders/pricing": {
+      "get": {
+        "operationId": "OrdersController_pricing",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckoutPricingDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "orders"
+        ]
+      }
+    },
     "/api/v1/orders/quote": {
       "get": {
         "operationId": "OrdersController_quote",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "paymentMethod",
+            "required": false,
+            "in": "query",
+            "description": "Payment method to price; SIMULATED_PIX applies the Pix discount",
+            "schema": {
+              "default": "SIMULATED_CARD",
+              "enum": [
+                "SIMULATED_CARD",
+                "SIMULATED_PIX"
+              ],
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -1428,6 +1469,20 @@
           "quantity"
         ]
       },
+      "CheckoutPricingDto": {
+        "type": "object",
+        "properties": {
+          "pixDiscountPercent": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100,
+            "example": 5
+          }
+        },
+        "required": [
+          "pixDiscountPercent"
+        ]
+      },
       "CheckoutQuoteDto": {
         "type": "object",
         "properties": {
@@ -1451,6 +1506,18 @@
           },
           "currency": {
             "type": "string"
+          },
+          "paymentMethod": {
+            "type": "string",
+            "enum": [
+              "SIMULATED_CARD",
+              "SIMULATED_PIX"
+            ]
+          },
+          "discountPercent": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100
           }
         },
         "required": [
@@ -1460,7 +1527,9 @@
           "shippingMinor",
           "discountMinor",
           "totalMinor",
-          "currency"
+          "currency",
+          "paymentMethod",
+          "discountPercent"
         ]
       },
       "PlaceOrderDto": {
@@ -1471,7 +1540,8 @@
             "format": "uuid"
           },
           "revision": {
-            "type": "string"
+            "type": "string",
+            "description": "Revision of a quote for this same paymentMethod"
           },
           "addressId": {
             "type": "string",

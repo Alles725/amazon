@@ -1,77 +1,48 @@
-import { createHash, randomUUID } from 'node:crypto';
-import { HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { randomUUID } from 'node:crypto';
+import { Inject, Injectable } from '@nestjs/common';
 import {
   AddressInput,
-  CartResponse,
+  CheckoutPricing,
   CheckoutQuote,
-  ErrorCode,
   OrderResponse,
   PlaceOrderRequest,
   SimulatedPayment,
 } from '@amazon-mvp/api-contract';
+import { ApiConfig } from '@amazon-mvp/config-schema';
 import { Prisma } from '@amazon-mvp/database';
+import { API_CONFIG } from '../../config/api-config';
 import { PrismaService } from '../../common/prisma.service';
 import { ApiError } from '../../common/api-error';
 import { CART_API, CartApi } from '../cart/cart.api';
 import { CATALOG_API, CatalogApi } from '../catalog/catalog.api';
 import { USER_ADDRESSES_API, UserAddressesApi } from '../users/users.api';
+import { conflict, quoteCart } from './checkout-quote';
 import { OrdersApi } from './orders.api';
 
 type StoredOrder = Prisma.OrderGetPayload<{ include: { items: true } }>;
-const conflict = (message: string) =>
-  new ApiError(ErrorCode.CART_ITEM_UNAVAILABLE, message, HttpStatus.CONFLICT);
-
-/** Academic checkout: free shipping, no promotion engine, no real charge. */
-function quoteCart(cart: CartResponse): CheckoutQuote {
-  if (!cart.lines.length) throw conflict('Seu carrinho está vazio.');
-  if (
-    cart.lines.some(
-      (line) =>
-        line.product.currency !== cart.currency ||
-        !line.product.active ||
-        line.quantity > line.product.availableQuantity,
-    )
-  )
-    throw conflict('Revise os produtos e quantidades do carrinho.');
-  if (
-    !Number.isSafeInteger(cart.subtotalMinor) ||
-    cart.subtotalMinor < 0 ||
-    cart.subtotalMinor > 2147483647
-  )
-    throw conflict('O total do carrinho excede o limite permitido.');
-  const revision = createHash('sha256')
-    .update(
-      JSON.stringify([
-        cart.id,
-        cart.currency,
-        [...cart.lines]
-          .sort((a, b) => a.productId.localeCompare(b.productId))
-          .map((line) => [line.productId, line.quantity, line.unitPriceMinor]),
-      ]),
-    )
-    .digest('hex');
-  return {
-    cart,
-    revision,
-    subtotalMinor: cart.subtotalMinor,
-    shippingMinor: 0,
-    discountMinor: 0,
-    totalMinor: cart.subtotalMinor,
-    currency: cart.currency,
-  };
-}
 
 @Injectable()
 export class OrdersService implements OrdersApi {
+  private readonly checkoutPricing: CheckoutPricing;
   constructor(
     private readonly prisma: PrismaService,
     @Inject(CART_API) private readonly cart: CartApi,
     @Inject(CATALOG_API) private readonly catalog: CatalogApi,
     @Inject(USER_ADDRESSES_API) private readonly users: UserAddressesApi,
-  ) {}
+    @Inject(API_CONFIG) config: ApiConfig,
+  ) {
+    this.checkoutPricing = { pixDiscountPercent: config.checkout.pixDiscountPercent };
+  }
 
-  async quote(userId: string): Promise<CheckoutQuote> {
-    return quoteCart(await this.cart.getActiveCart(userId));
+  pricing(): CheckoutPricing {
+    return { ...this.checkoutPricing };
+  }
+
+  async quote(
+    userId: string,
+    paymentMethod: SimulatedPayment = 'SIMULATED_CARD',
+  ): Promise<CheckoutQuote> {
+    return quoteCart(await this.cart.getActiveCart(userId), paymentMethod, this.checkoutPricing);
   }
 
   async placeOrderFromCart(userId: string, input: PlaceOrderRequest): Promise<OrderResponse> {
@@ -98,17 +69,23 @@ export class OrdersService implements OrdersApi {
             lineTotalMinor: item.quantity * product.priceMinor,
           };
         });
-        const quote = quoteCart({
-          id: input.cartId,
-          userId,
-          lines,
-          itemCount: items.reduce((n, i) => n + i.quantity, 0),
-          subtotalMinor: lines.reduce((n, i) => n + i.lineTotalMinor, 0),
-          currency: products[0].currency,
-        });
+        // Totals and the discount are recomputed here from locked catalog prices and
+        // the server's own rate; nothing monetary is taken from the request.
+        const quote = quoteCart(
+          {
+            id: input.cartId,
+            userId,
+            lines,
+            itemCount: items.reduce((n, i) => n + i.quantity, 0),
+            subtotalMinor: lines.reduce((n, i) => n + i.lineTotalMinor, 0),
+            currency: products[0].currency,
+          },
+          input.paymentMethod,
+          this.checkoutPricing,
+        );
         if (quote.revision !== input.revision)
           throw conflict(
-            'Seu carrinho ou os preços mudaram. Revise o resumo e confirme novamente.',
+            'Seu carrinho, os preços ou a forma de pagamento mudaram. Revise o resumo e confirme novamente.',
           );
         const snapshot = {
           recipient: address.recipient,

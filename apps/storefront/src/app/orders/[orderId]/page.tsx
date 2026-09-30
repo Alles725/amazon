@@ -6,7 +6,7 @@ import { FeatureRoute } from '@/config/feature-gate';
 import { getServerSession } from '@/features/auth/server-session';
 import { formatCartMoney } from '@/features/cart/money';
 import { OrderShipment } from '@/features/orders/order-card';
-import { formatLongDate } from '@/features/orders/order-presentation';
+import { discountLabel, formatLongDate } from '@/features/orders/order-presentation';
 import { ordersFont } from '@/features/orders/orders-font';
 import { fetchOrder } from '@/features/orders/orders-server';
 
@@ -89,7 +89,7 @@ async function OrderDetailContent({ orderId }: { orderId: string }) {
               </div>
               {order.discountMinor > 0 && (
                 <div>
-                  <dt>Desconto:</dt>
+                  <dt>{discountLabel(order)}:</dt>
                   <dd>-{formatCartMoney(order.discountMinor, order.currency)}</dd>
                 </div>
               )}

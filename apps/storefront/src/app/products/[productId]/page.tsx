@@ -4,6 +4,7 @@ import type { CatalogProductDetails } from '@amazon-mvp/api-contract';
 import { FeatureRoute, isFeatureEnabled } from '@/config/feature-gate';
 import { getServerSession } from '@/features/auth/server-session';
 import { fetchOrders } from '@/features/orders/orders-server';
+import { getCheckoutPricing } from '@/features/checkout/pricing-server';
 import { RecordProductView } from '@/features/browsing-history/record-product-view';
 import { HorizontalRail } from '@/components/amazon/horizontal-rail';
 import { ProductCard } from '@/components/amazon/product-card';
@@ -106,9 +107,11 @@ export default async function ProductDetailPage({ params }: Params) {
   const familyIds = new Set(members.map((item) => item.product.id));
 
   const session = await getServerSession();
-  const [orders, address, related, brandProducts] = await Promise.all([
+  const [orders, address, pricing, related, brandProducts] = await Promise.all([
     session && isFeatureEnabled('orders') ? fetchOrders() : Promise.resolve(null),
     session && checkoutEnabled ? getDeliveryAddress() : Promise.resolve(null),
+    // The Pix price is only advertised when checkout (which grants it) is available.
+    checkoutEnabled ? getCheckoutPricing() : Promise.resolve(null),
     relatedProducts(product, familyIds),
     content.brand
       ? Promise.all(
@@ -123,6 +126,7 @@ export default async function ProductDetailPage({ params }: Params) {
     ? (members.find((item) => item.product.id === purchase.line.productId)?.options ?? [])
     : [];
   const story = brandStory(content.brand);
+  const pixDiscountPercent = pricing?.pixDiscountPercent ?? null;
   const reviewHref = `/products/${encodeURIComponent(product.slug)}/review`;
 
   return (
@@ -143,6 +147,7 @@ export default async function ProductDetailPage({ params }: Params) {
           content={content}
           dimensions={dimensions}
           brandHref={story ? '#brand-story' : undefined}
+          pixDiscountPercent={pixDiscountPercent}
         />
         <aside className="az-pdp-aside" aria-label="Opções de compra">
           <PrimeUpsell />
@@ -154,6 +159,7 @@ export default async function ProductDetailPage({ params }: Params) {
             installments={content.installments}
             fulfillment={content.fulfillment}
             address={address}
+            pixDiscountPercent={pixDiscountPercent}
           />
         </aside>
       </div>

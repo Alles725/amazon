@@ -18,6 +18,7 @@ sem cache. Não existe página, `if` ou rota específica por produto: o 8BitDo U
 | "Você comprou este produto…" | Pedidos reais do usuário (`fetchOrders()`, mesma fonte de "Seus pedidos") |
 | "Enviar para …" | Primeiro endereço salvo do usuário (`GET /addresses`, mesma ordem do checkout) |
 | Relacionados | `relatedProducts` + `rankRelated` (ver "Produtos relacionados" abaixo) |
+| Preço no Pix | Taxa de `GET /orders/pricing` (config da API) + `percentDiscountMinor` do api-contract |
 | Cards da Home | Curadoria (quais produtos, em que vitrine) do fixture; nome, preço e estoque do registro do catálogo (`features/home/home-catalog.ts`) |
 
 Conteúdo de apresentação **nunca** sobrescreve identidade, preço, estoque, descrição ou
@@ -68,8 +69,12 @@ um card por família (`variantOf` fica fora das vitrines).
 
 - **Prime**: não existe assinatura no projeto. O alerta "Sua assinatura Prime está pausada"
   é apenas visual e aparece só para usuários logados; o quadro "prime" do buy box também.
-- **Pix 5% off à vista**: não é exibido. O checkout não tem motor de promoções
-  (`discountMinor = 0`), então anunciar um valor diferente do cobrado seria falso.
+- **Pix à vista (PIX-001)**: "R$ X no Pix (5% de desconto)" abaixo do preço e "ou R$ X no
+  Pix" no buy box (este só com estoque). O checkout aplica esse desconto de fato: a taxa vem
+  de `GET /api/v1/orders/pricing` (configuração `checkout.pixDiscountPercent` da API) e o
+  valor usa a mesma função de arredondamento da cotação (`percentDiscountMinor`, para
+  baixo), então o preço anunciado por unidade é o cobrado. Sem checkout habilitado, sem
+  resposta da API ou com taxa 0, nada é anunciado. Ver docs/checkout.md.
   Parcelas "sem juros" são exibidas porque não alteram o total.
 - **Data de entrega**: não há estimativa de prazo; mostramos só "Entrega GRÁTIS" (o checkout
   não cobra frete).
@@ -134,7 +139,7 @@ produto o reconhece pelo ID.
   visitante → login, fora de estoque, inativo, pouco estoque, flags).
 - `test/product-page.spec.ts`: página inteira renderizada com API falsa — referência, banner
   de compra real, ausência de compras inventadas, produto simples, produto sem conteúdo, 404,
-  flag desligada e metadata.
+  flag desligada, metadata e preço Pix (taxa da API, arredondamento, ausência sem taxa/checkout).
 - `test/login-redirect.spec.ts`: `next` seguro.
 - API (integração, banco descartável): breadcrumb pela categoria mais profunda, listagem por
   subárvore, taxonomia do seed e conversão protegida do p6.

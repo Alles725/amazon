@@ -6,6 +6,7 @@ import { HorizontalRail } from '@/components/amazon/horizontal-rail';
 import { ProductCard } from '@/components/amazon/product-card';
 import { ProductImage } from '@/components/amazon/product-image';
 import { productPresentation } from '@/features/product/product-presentation';
+import { PixPrice } from '@/features/checkout/pix-price';
 import { useCart } from './cart-provider';
 import { formatCartMoney } from './money';
 
@@ -13,10 +14,13 @@ export function CartContent({
   products,
   catalogFailed,
   checkoutEnabled,
+  pixDiscountPercent = null,
 }: {
   products: CatalogItem[];
   catalogFailed: boolean;
   checkoutEnabled: boolean;
+  /** Rate from the API's checkout config (GET /orders/pricing); null = not advertised. */
+  pixDiscountPercent?: number | null;
 }) {
   const { cart, status, pending, error, notice, refresh, add, update, remove, clear } = useCart();
   const hasItems = status === 'ready' && Boolean(cart?.lines.length);
@@ -208,6 +212,15 @@ export function CartContent({
             <aside className="az-cart-summary" aria-label="Resumo da compra">
               <h2>Resumo do pedido</h2>
               <p>{subtotal}</p>
+              {checkoutEnabled && cart && (
+                // Same subtotal and rounding the checkout quote applies to Pix.
+                <PixPrice
+                  amountMinor={cart.subtotalMinor}
+                  currency={cart.currency}
+                  percent={pixDiscountPercent}
+                  prefix="ou "
+                />
+              )}
               {checkoutEnabled && !unavailable ? (
                 <Link href="/checkout" className="az-cart-button">
                   Continuar para finalizar a compra

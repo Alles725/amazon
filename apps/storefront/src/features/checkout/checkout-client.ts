@@ -4,6 +4,7 @@ import {
   CheckoutQuote,
   OrderResponse,
   PlaceOrderRequest,
+  SimulatedPayment,
   CHECKOUT_ROUTES,
   isApiErrorBody,
   CartResponse,
@@ -44,7 +45,13 @@ export const checkoutClient = {
       id ? 'PUT' : 'POST',
       data,
     ),
-  quote: () => request<CheckoutQuote>(CHECKOUT_ROUTES.quote),
+  /** Totals (and the Pix discount) are always computed by the API for this method. */
+  quote: (paymentMethod?: SimulatedPayment) =>
+    request<CheckoutQuote>(
+      paymentMethod
+        ? `${CHECKOUT_ROUTES.quote}?paymentMethod=${encodeURIComponent(paymentMethod)}`
+        : CHECKOUT_ROUTES.quote,
+    ),
   place: (data: PlaceOrderRequest) => request<OrderResponse>(CHECKOUT_ROUTES.orders, 'POST', data),
 };
 /** Used only to suppress confirmation while the provider and server quote disagree. */

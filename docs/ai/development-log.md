@@ -406,3 +406,20 @@ CUSTOMER_PAGE_ROUTES to app/layout.tsx.
 
 Validation: lint, typecheck, storefront unit tests (customer-pages.spec, 19 tests). Browser:
 7 pages at 390-1440 px, no overflow, footer and product-page links. See docs/help-pages.md.
+
+## 2026-09-30 — PIX-001
+
+Added checkout.pixDiscountPercent to the API config (Zod, integer 0-100, default 5, env
+PIX_DISCOUNT_PERCENT). GET /orders/quote accepts ?paymentMethod and returns discount and
+total plus paymentMethod/discountPercent; the revision now binds method and rate, so a quote
+for another method is a 409 stale quote with no stock taken. POST /orders recomputes and
+persists subtotal/discount/total inside the transaction; client money fields are rejected.
+The rounding rule floor(amount × rate / 100) lives once in api-contract
+(percentDiscountMinor), used by the API and the storefront. New public GET /orders/pricing is
+the storefront's only source for the rate: product page "R$ X no Pix (5% de desconto)", cart
+"ou R$ Y no Pix", checkout re-quotes on card↔Pix; confirmation and order details show
+"Desconto Pix". No migration (orders.discount_minor already existed).
+
+Validation: lint, typecheck, unit tests (rounding at 1/19/20/99999 cents), checkout
+integration suite with 6 new Pix cases on a disposable database, openapi regenerated.
+Browser: product page, cart, checkout switching methods, a Pix order and its details.
