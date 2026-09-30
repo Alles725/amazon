@@ -58,8 +58,27 @@ describe('shipped config/features.yaml', () => {
 
   it('ships unbuilt features disabled', () => {
     const registry = loadShipped();
-    for (const feature of ['catalog', 'account']) {
+    for (const feature of ['catalog']) {
       expect(registry.isEnabled(feature)).toBe(false);
+    }
+  });
+
+  it('enables the account area destinations ("Sua conta")', () => {
+    const registry = loadShipped();
+    for (const feature of [
+      'account',
+      'security',
+      'addresses',
+      'lists',
+      'giftCards',
+      'refunds',
+      'messages',
+      'prime',
+      'subscriptions',
+      'subscribeAndSave',
+    ]) {
+      expect(registry.isEnabled(feature)).toBe(true);
+      expect(registry.routeState(feature)).toBe('enabled');
     }
   });
 

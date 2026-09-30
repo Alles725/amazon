@@ -23,6 +23,7 @@ model User {
   carts     Cart[]
   orders    Order[]
   addresses Address[]
+  lists     List[]
 
   @@map("users")
 }
@@ -38,6 +39,8 @@ model Address {
   neighborhood String
   city         String
   state        String   @db.Char(2)
+  // At most one default per user; enforced by UsersRepository under a per-user lock.
+  isDefault    Boolean  @default(false) @map("is_default")
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -292,4 +295,35 @@ model ReviewRatingBaseline {
 
   @@index([listingKey])
   @@map("review_rating_baselines")
+}
+
+// Lists module ("Suas listas"). Items reference catalog products by id only —
+// no foreign key into the catalog's tables; product data is read through
+// CATALOG_API, and items whose product no longer exists are simply not shown.
+model List {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  name      String
+  // The lazily created "Lista de desejos". Exactly one per user once created.
+  isDefault Boolean  @default(false) @map("is_default")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user  User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items ListItem[]
+
+  @@index([userId])
+  @@map("lists")
+}
+
+model ListItem {
+  id        String   @id @default(uuid()) @db.Uuid
+  listId    String   @map("list_id") @db.Uuid
+  productId String   @map("product_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at")
+
+  list List @relation(fields: [listId], references: [id], onDelete: Cascade)
+
+  @@unique([listId, productId])
+  @@map("list_items")
 }

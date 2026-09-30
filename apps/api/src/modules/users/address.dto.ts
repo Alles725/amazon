@@ -10,7 +10,7 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { AddressInput, SavedAddress } from '@amazon-mvp/api-contract';
+import { AccountAddress, AddressInput, SavedAddress } from '@amazon-mvp/api-contract';
 const trim = ({ value }: { value: unknown }) => (typeof value === 'string' ? value.trim() : value);
 
 export class AddressInputDto implements AddressInput {
@@ -63,6 +63,10 @@ export class AddressInputDto implements AddressInput {
 }
 export class SavedAddressDto extends AddressInputDto implements SavedAddress {
   @ApiProperty({ format: 'uuid' }) id: string;
+}
+export class AccountAddressDto extends SavedAddressDto implements AccountAddress {
+  @ApiProperty({ description: 'At most one address per account is the default' })
+  isDefault: boolean;
 }
 export class AddressParamsDto {
   @ApiProperty({ format: 'uuid' }) @IsUUID() addressId: string;

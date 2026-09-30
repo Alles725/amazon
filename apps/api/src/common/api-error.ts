@@ -25,6 +25,16 @@ export class ApiError extends HttpException {
     );
   }
 
+  static currentPasswordInvalid() {
+    // Same code and message as a failed login; 403 because the session itself is
+    // valid (a 401 would read as "signed out" to clients).
+    return new ApiError(
+      ErrorCode.AUTH_INVALID_CREDENTIALS,
+      'Invalid credentials',
+      HttpStatus.FORBIDDEN,
+    );
+  }
+
   static emailAlreadyRegistered() {
     return new ApiError(
       ErrorCode.AUTH_EMAIL_ALREADY_REGISTERED,

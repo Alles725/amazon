@@ -18,6 +18,9 @@ export const ErrorCode = {
   FEATURE_DISABLED: 'FEATURE_DISABLED',
   CART_ITEM_UNAVAILABLE: 'CART_ITEM_UNAVAILABLE',
   CART_LIMIT_EXCEEDED: 'CART_LIMIT_EXCEEDED',
+  // Account area: lists
+  LIST_LIMIT_EXCEEDED: 'LIST_LIMIT_EXCEEDED',
+  LIST_DEFAULT_PROTECTED: 'LIST_DEFAULT_PROTECTED',
   INTERNAL_ERROR: 'INTERNAL_ERROR',
 } as const;
 export type ErrorCode = (typeof ErrorCode)[keyof typeof ErrorCode];
@@ -389,4 +392,76 @@ export const REVIEW_ROUTES = {
   viewer: `${API_PREFIX}/reviews/viewer`,
   mine: `${API_PREFIX}/reviews/mine`,
   helpful: (reviewId: string) => `${API_PREFIX}/reviews/${encodeURIComponent(reviewId)}/helpful`,
+} as const;
+
+// ---------------------------------------------------------------------------
+// Account area ("Sua conta"): addresses management, access & security, lists.
+// ---------------------------------------------------------------------------
+
+/** A saved address as the account area sees it. Checkout keeps using
+ * SavedAddress; lists come back default first, then oldest first. */
+export interface AccountAddress extends SavedAddress {
+  isDefault: boolean;
+}
+
+export interface UpdateProfileRequest {
+  displayName: string;
+}
+/** Requires the current password; other sessions of the account are revoked. */
+export interface ChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
+}
+export interface ChangePasswordResponse {
+  success: true;
+  /** How many other signed-in sessions were ended. The current one is kept. */
+  revokedSessions: number;
+}
+/** Requires the current password; other sessions of the account are revoked. */
+export interface ChangeEmailRequest {
+  email: string;
+  currentPassword: string;
+}
+/** Same rule as registration. */
+export const PASSWORD_MIN_LENGTH = 12;
+export const PASSWORD_MAX_LENGTH = 128;
+export const DISPLAY_NAME_MIN_LENGTH = 2;
+export const DISPLAY_NAME_MAX_LENGTH = 80;
+
+export const ACCOUNT_ROUTES = {
+  profile: `${API_PREFIX}/account/profile`,
+  password: `${API_PREFIX}/account/password`,
+  email: `${API_PREFIX}/account/email`,
+} as const;
+
+export const DEFAULT_LIST_NAME = 'Lista de desejos';
+export const LIST_NAME_MAX_LENGTH = 50;
+export const MAX_LISTS_PER_USER = 20;
+export const MAX_ITEMS_PER_LIST = 100;
+
+export interface ListSummary {
+  id: string;
+  name: string;
+  isDefault: boolean;
+  itemCount: number;
+  createdAt: string;
+}
+export interface ListItemResponse {
+  productId: string;
+  addedAt: string;
+  /** Live catalog data (price, stock), read through the catalog boundary. */
+  product: CatalogItem;
+}
+export interface ListDetails extends ListSummary {
+  /** Newest first. Products that no longer exist in the catalog are omitted. */
+  items: ListItemResponse[];
+}
+export interface ListNameRequest {
+  name: string;
+}
+export interface AddListItemRequest {
+  productId: string;
+}
+export const LIST_ROUTES = {
+  lists: `${API_PREFIX}/lists`,
 } as const;

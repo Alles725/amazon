@@ -359,3 +359,11 @@ hub is part of the authenticated shell and does not enable account management.
 - The four 8BitDo demo texts no longer carry "Compra verificada" (no order behind them).
 - Not built: customer photos/videos (no file storage), deleting a review, reporting a
   review (still links to /help). The badge is recalculated only when a review is saved.
+
+## Account hub destinations ("Sua conta") (ACCOUNT-001) — 2026-09-30
+
+- Addresses, access/security and lists are real; the other six account pages are honest
+  empty-state pages. All require login.
+- Limits: no rate limiting on current-password confirmation (same as login); e-mail change
+  sends no confirmation e-mail; a list's sidebar count can include products deleted from
+  the catalog.

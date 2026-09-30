@@ -1,0 +1,674 @@
+/*
+ * Account-area pages ("Sua conta › …"): addresses, access & security, lists and
+ * the informational account pages. Scoped to .az-acct* so nothing else on the
+ * site is affected. Builds on .amazon-account-page from globals.css.
+ */
+.az-acct {
+  --acct-text: #0f1111;
+  --acct-muted: #565959;
+  --acct-link: #2162a1;
+  --acct-link-hover: #c7511f;
+  --acct-border: #d5d9d9;
+  --acct-border-strong: #adb1b8;
+  --acct-focus: #007185;
+  --acct-yellow: #ffd814;
+  --acct-yellow-border: #fcd200;
+  --acct-error: #b12704;
+  --acct-success: #067d62;
+}
+.az-acct-main {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 14px 16px 56px;
+  font: 14px/20px Arial, Helvetica, sans-serif;
+  color: var(--acct-text);
+}
+.az-acct-main--wide {
+  max-width: 1240px;
+}
+.az-acct-main h1,
+.az-acct-main h2,
+.az-acct-main h3 {
+  font-family: Arial, Helvetica, sans-serif;
+  letter-spacing: normal;
+}
+.az-acct .az-acct-main a,
+.az-acct-linkbutton {
+  color: var(--acct-link);
+}
+.az-acct .az-acct-main a:hover,
+.az-acct-linkbutton:hover:not(:disabled) {
+  color: var(--acct-link-hover);
+  text-decoration: underline;
+}
+.az-acct-main :focus-visible {
+  outline: 2px solid var(--acct-focus);
+  outline-offset: 2px;
+}
+.az-acct-crumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.az-acct-crumbs li + li::before {
+  content: '\203A';
+  margin-right: 6px;
+  color: var(--acct-muted);
+}
+.az-acct-crumbs [aria-current='page'] {
+  color: #c45500;
+}
+.az-acct-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+  margin: 16px 0 12px;
+}
+.az-acct-title {
+  margin: 0;
+  font-size: 28px;
+  line-height: 36px;
+  font-weight: 400;
+}
+.az-acct-lead {
+  margin: 0 0 18px;
+  color: var(--acct-muted);
+}
+
+/* Buttons ---------------------------------------------------------------- */
+.az-acct-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 31px;
+  padding: 0 14px;
+  border: 1px solid var(--acct-border);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(213, 217, 217, 0.5);
+  color: var(--acct-text);
+  font: 13px Arial, Helvetica, sans-serif;
+  cursor: pointer;
+  text-decoration: none;
+}
+.az-acct-button:hover:not(:disabled) {
+  background: #f7fafa;
+}
+.az-acct-button--primary {
+  background: var(--acct-yellow);
+  border-color: var(--acct-yellow-border);
+}
+.az-acct-button--primary:hover:not(:disabled) {
+  background: #f7ca00;
+}
+.az-acct-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.az-acct .az-acct-main a.az-acct-button,
+.az-acct .az-acct-main a.az-acct-button:hover {
+  color: var(--acct-text);
+  text-decoration: none;
+}
+.az-acct-linkbutton {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+}
+.az-acct-linkbutton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Messages ---------------------------------------------------------------- */
+.az-acct-alert {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin: 0 0 20px;
+  padding: 14px 18px;
+  border: 1px solid #8ec3d0;
+  border-radius: 8px;
+  box-shadow: inset 0 0 0 4px #f0f9fb;
+  background: #fff;
+}
+.az-acct-alert svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.az-acct-alert p {
+  margin: 0 0 6px;
+}
+.az-acct-alert p:last-child {
+  margin-bottom: 0;
+}
+.az-acct-error {
+  margin: 0 0 14px;
+  padding: 10px 14px;
+  border: 1px solid var(--acct-error);
+  border-radius: 8px;
+  color: var(--acct-error);
+  overflow-wrap: anywhere;
+}
+.az-acct-success {
+  margin: 0 0 14px;
+  padding: 10px 14px;
+  border: 1px solid var(--acct-success);
+  border-radius: 8px;
+  color: var(--acct-success);
+}
+.az-acct-status:empty {
+  display: none;
+}
+
+/* Boxes (security rows, informational panels) ------------------------------ */
+.az-acct-box {
+  margin: 0 0 20px;
+  border: 1px solid var(--acct-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.az-acct-box__heading {
+  margin: 0;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--acct-border);
+  background: #f0f2f2;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 22px;
+}
+.az-acct-box__body {
+  padding: 18px;
+}
+.az-acct-empty {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+}
+.az-acct-box__body > p + p,
+.az-acct-box__body > .az-acct-muted {
+  margin-top: 6px;
+}
+.az-acct-muted {
+  margin: 0;
+  color: var(--acct-muted);
+}
+.az-acct-note {
+  margin-top: 16px;
+}
+.az-acct-rows {
+  margin: 0 0 20px;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--acct-border);
+  border-radius: 8px;
+}
+.az-acct-row {
+  padding: 16px 18px;
+}
+.az-acct-row + .az-acct-row {
+  border-top: 1px solid var(--acct-border);
+}
+.az-acct-row__summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.az-acct-row__label {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+}
+.az-acct-row__value {
+  margin: 2px 0 0;
+  overflow-wrap: anywhere;
+}
+.az-acct-row__summary .az-acct-button {
+  min-width: 96px;
+  flex-shrink: 0;
+}
+.az-acct-form {
+  display: grid;
+  gap: 12px;
+  max-width: 420px;
+  margin-top: 14px;
+}
+.az-acct-form label {
+  display: grid;
+  gap: 4px;
+  font-weight: 700;
+  font-size: 13px;
+}
+.az-acct-form input,
+.az-acct-inline-form input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 31px;
+  padding: 3px 7px;
+  border: 1px solid #888c8c;
+  border-radius: 3px;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5), 0 1px 0 rgba(0, 0, 0, 0.07) inset;
+  font: 13px Arial, Helvetica, sans-serif;
+  color: var(--acct-text);
+}
+.az-acct-form input:focus,
+.az-acct-inline-form input:focus {
+  border-color: #e77600;
+  box-shadow: 0 0 3px 2px rgba(228, 121, 17, 0.5);
+  outline: none;
+}
+.az-acct-form__hint {
+  font-weight: 400;
+  color: var(--acct-muted);
+  font-size: 12px;
+}
+.az-acct-form__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.az-acct-done {
+  margin-top: 4px;
+}
+
+/* Addresses ---------------------------------------------------------------- */
+.az-acct-addresses {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.az-acct-address {
+  display: flex;
+  flex-direction: column;
+  min-height: 266px;
+  border: 1px solid #bbbfbf;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.az-acct-address--default {
+  border-color: #bbbfbf;
+}
+.az-acct-address__badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 6px 18px;
+  border-bottom: 1px solid var(--acct-border);
+  color: var(--acct-muted);
+  font-size: 12px;
+}
+.az-acct-address__badge strong {
+  color: var(--acct-text);
+}
+.az-acct-address__body {
+  flex: 1;
+  padding: 14px 18px;
+  font-style: normal;
+  overflow-wrap: anywhere;
+}
+.az-acct-address__body strong {
+  display: block;
+  font-size: 14px;
+}
+.az-acct-address__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 0;
+  padding: 0 18px 16px;
+}
+.az-acct-address__actions > * + *::before {
+  content: '|';
+  margin: 0 8px;
+  color: var(--acct-border);
+}
+.az-acct-address__confirm {
+  margin: 0 18px 16px;
+  padding: 10px;
+  border-radius: 8px;
+  background: #f7f8f8;
+}
+.az-acct-address__confirm p {
+  margin: 0 0 8px;
+  font-weight: 700;
+}
+.az-acct-address-add {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 266px;
+  border: 2px dashed #c7c7c7;
+  border-radius: 8px;
+  background: #fff;
+  color: #565959;
+  font: 700 22px/28px Arial, Helvetica, sans-serif;
+  cursor: pointer;
+}
+.az-acct-address-add:hover:not(:disabled) {
+  border-color: var(--acct-border-strong);
+}
+.az-acct-address-add svg {
+  color: #c7c7c7;
+}
+.az-acct-editor {
+  margin: 0 0 24px;
+  padding: 20px;
+  border: 1px solid var(--acct-border);
+  border-radius: 8px;
+}
+.az-acct-editor h2 {
+  margin: 0;
+  font-size: 20px;
+  line-height: 28px;
+}
+.az-acct-editor .az-checkout-address-form input {
+  min-height: 31px;
+  border: 1px solid #888c8c;
+  border-radius: 3px;
+  padding: 3px 7px;
+  font: 13px Arial, Helvetica, sans-serif;
+  color: var(--acct-text);
+}
+
+/* Lists --------------------------------------------------------------------- */
+.az-acct-lists {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+.az-acct-lists__nav {
+  border: 1px solid var(--acct-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.az-acct-lists__nav ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.az-acct-lists__nav li + li {
+  border-top: 1px solid var(--acct-border);
+}
+.az-acct-lists__nav a {
+  display: block;
+  padding: 12px 16px;
+}
+.az-acct .az-acct-main .az-acct-lists__nav a {
+  color: var(--acct-text);
+}
+.az-acct-lists__nav a[aria-current='page'] {
+  background: #edfdff;
+  box-shadow: inset 4px 0 0 var(--acct-focus);
+}
+.az-acct-lists__nav strong {
+  display: block;
+  overflow-wrap: anywhere;
+}
+.az-acct-lists__nav span {
+  color: var(--acct-muted);
+  font-size: 12px;
+}
+.az-acct-list-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--acct-border);
+}
+.az-acct-list-head h2 {
+  margin: 0;
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+.az-acct-list-head__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  align-items: center;
+}
+.az-acct-inline-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 8px;
+  margin: 12px 0;
+}
+.az-acct-inline-form label {
+  display: grid;
+  gap: 4px;
+  flex: 1 1 220px;
+  max-width: 360px;
+  font-weight: 700;
+  font-size: 13px;
+}
+.az-acct-items {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.az-acct-item {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr) auto;
+  gap: 20px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--acct-border);
+}
+.az-acct-item__image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 150px;
+}
+.az-acct-item__image .az-product-photo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+.az-acct-item h3 {
+  margin: 0 0 6px;
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 400;
+  overflow-wrap: anywhere;
+}
+.az-acct-item__price {
+  margin: 0 0 4px;
+  font-size: 18px;
+  font-weight: 700;
+}
+.az-acct-item__stock {
+  margin: 0 0 4px;
+}
+.az-acct-item__stock--ok {
+  color: #007600;
+}
+.az-acct-item__stock--low {
+  color: var(--acct-error);
+}
+.az-acct-item__stock--out {
+  color: var(--acct-error);
+}
+.az-acct-item__actions {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  min-width: 180px;
+}
+.az-acct-item__actions .az-acct-button {
+  border-radius: 20px;
+}
+.az-acct-list-empty {
+  padding: 28px 0;
+}
+
+/* Product page: "Adicionar à lista" --------------------------------------- */
+.az-add-to-list {
+  position: relative;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #d5d9d9;
+}
+.az-add-to-list__group {
+  display: flex;
+}
+.az-add-to-list__main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 31px;
+  border: 1px solid #d5d9d9;
+  border-radius: 8px 0 0 8px;
+  background: #fff;
+  color: #0f1111;
+  font: 13px Arial, Helvetica, sans-serif;
+  cursor: pointer;
+  text-decoration: none;
+}
+a.az-add-to-list__main {
+  border-radius: 8px;
+}
+.az-add-to-list__toggle {
+  width: 34px;
+  border: 1px solid #d5d9d9;
+  border-left: 0;
+  border-radius: 0 8px 8px 0;
+  background: #fff;
+  cursor: pointer;
+}
+.az-add-to-list__main:hover:not(:disabled),
+.az-add-to-list__toggle:hover:not(:disabled) {
+  background: #f7fafa;
+}
+.az-add-to-list button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.az-add-to-list :focus-visible {
+  outline: 2px solid #007185;
+  outline-offset: 2px;
+}
+.az-add-to-list__menu {
+  position: absolute;
+  z-index: 20;
+  left: 0;
+  right: 0;
+  margin: 4px 0 0;
+  padding: 6px 0;
+  list-style: none;
+  border: 1px solid #d5d9d9;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(15, 17, 17, 0.15);
+}
+.az-add-to-list__menu button {
+  display: block;
+  width: 100%;
+  padding: 8px 14px;
+  border: 0;
+  background: none;
+  font: 13px Arial, Helvetica, sans-serif;
+  color: #0f1111;
+  text-align: left;
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+.az-add-to-list__menu button:hover,
+.az-add-to-list__menu button:focus-visible {
+  background: #f0f2f2;
+}
+.az-add-to-list__menu p {
+  margin: 0;
+  padding: 8px 14px;
+  color: #565959;
+}
+.az-add-to-list__feedback {
+  margin: 8px 0 0;
+  font-size: 13px;
+}
+.az-add-to-list__feedback:empty {
+  display: none;
+}
+.az-add-to-list__feedback a {
+  color: #2162a1;
+}
+.az-add-to-list__error {
+  color: #b12704;
+}
+
+/* Responsive ------------------------------------------------------------------ */
+@media (max-width: 900px) {
+  .az-acct-addresses {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .az-acct-lists {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .az-acct-item {
+    grid-template-columns: 120px minmax(0, 1fr);
+  }
+  .az-acct-item__image {
+    height: 120px;
+  }
+  .az-acct-item__actions {
+    grid-column: 2;
+    min-width: 0;
+    grid-template-columns: repeat(auto-fit, minmax(150px, max-content));
+  }
+}
+@media (max-width: 600px) {
+  .az-acct-title {
+    font-size: 22px;
+    line-height: 28px;
+  }
+  .az-acct-addresses {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .az-acct-address,
+  .az-acct-address-add {
+    min-height: 0;
+  }
+  .az-acct-address-add {
+    padding: 28px 0;
+  }
+  .az-acct-row__summary {
+    flex-wrap: wrap;
+  }
+  .az-acct-item {
+    grid-template-columns: 84px minmax(0, 1fr);
+    gap: 12px;
+  }
+  .az-acct-item__image {
+    height: 84px;
+  }
+  .az-acct-item__actions {
+    grid-column: 1 / -1;
+    grid-template-columns: 1fr 1fr;
+  }
+  .az-acct-editor {
+    padding: 14px;
+  }
+}

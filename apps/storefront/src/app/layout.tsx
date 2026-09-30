@@ -21,6 +21,18 @@ export const dynamic = 'force-dynamic';
 // generic site navigation. Each brings its own Amazon-style header/footer
 // instead.
 const BARE_ROUTES = ['/login', '/', '/account', '/cart', '/sell', '/help', ...CORPORATE_ROUTES];
+// "Sua conta" destinations (features/account) bring the same Amazon chrome.
+const ACCOUNT_AREA_ROUTES = [
+  '/security',
+  '/addresses',
+  '/lists',
+  '/prime',
+  '/gift-cards',
+  '/refunds',
+  '/messages',
+  '/subscriptions',
+  '/subscribe-and-save',
+];
 // Help and payment articles (features/customer-pages) do the same.
 const CUSTOMER_PAGE_ROUTES = [
   '/payment-methods',
@@ -36,6 +48,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const pathname = headers().get('x-pathname') ?? '';
   const bare =
     BARE_ROUTES.includes(pathname) ||
+    ACCOUNT_AREA_ROUTES.includes(pathname) ||
     CUSTOMER_PAGE_ROUTES.includes(pathname) ||
     pathname === '/checkout' ||
     pathname.startsWith('/checkout/') ||

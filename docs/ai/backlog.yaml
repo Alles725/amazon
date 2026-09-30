@@ -383,6 +383,14 @@ iterations:
         note: >-
           7 help-article pages from typed content (features/customer-pages) describing the
           store's real behaviour; unavailable programmes are stated as such.
+      - id: ACCOUNT-001
+        owner: dev2
+        status: done
+        title: Account hub destinations ("Sua conta")
+        note: >-
+          Addresses (delete, default), security (name, password, e-mail with session
+          revocation) and lists (new module, two tables) are real; six pages are truthful
+          empty states.
 
 next_up:
   - id: FIRSTRUN-001

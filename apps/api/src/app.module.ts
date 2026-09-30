@@ -7,6 +7,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { CartModule } from './modules/cart/cart.module';
 import { CatalogModule } from './modules/catalog/catalog.module';
 import { HealthModule } from './modules/health/health.module';
+import { ListsModule } from './modules/lists/lists.module';
 import { OrdersModule } from './modules/orders/orders.module';
 import { ReviewsModule } from './modules/reviews/reviews.module';
 import { UsersModule } from './modules/users/users.module';
@@ -23,6 +24,7 @@ import { UsersModule } from './modules/users/users.module';
     CartModule,
     OrdersModule,
     ReviewsModule,
+    ListsModule,
   ],
 })
 export class AppModule implements NestModule {
