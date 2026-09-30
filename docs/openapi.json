@@ -663,6 +663,36 @@
         "operationId": "CatalogController_list",
         "parameters": [
           {
+            "name": "category",
+            "required": false,
+            "in": "query",
+            "description": "Category slug; includes the whole subtree",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "description": "Text search, case- and accent-insensitive. Every word must appear in the name, the description or a category name of the product.",
+            "schema": {
+              "maxLength": 100,
+              "example": "fone bluetooth",
+              "type": "string"
+            }
+          },
+          {
+            "name": "slugs",
+            "required": false,
+            "in": "query",
+            "description": "Comma-separated product slugs (at most 48); only these products are listed",
+            "schema": {
+              "example": "p1,p6",
+              "type": "string"
+            }
+          },
+          {
             "name": "page",
             "required": false,
             "in": "query",
@@ -685,10 +715,113 @@
             }
           },
           {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "relevance: text matches first (name > category > description), alphabetical without q; price-asc / price-desc: by priceMinor; newest: most recently created",
+            "schema": {
+              "default": "relevance",
+              "enum": [
+                "relevance",
+                "price-asc",
+                "price-desc",
+                "newest"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "minPriceMinor",
+            "required": false,
+            "in": "query",
+            "description": "Inclusive minimum price, integer minor units",
+            "schema": {
+              "minimum": 0,
+              "type": "number"
+            }
+          },
+          {
+            "name": "maxPriceMinor",
+            "required": false,
+            "in": "query",
+            "description": "Exclusive maximum price, integer minor units",
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "inStock",
+            "required": false,
+            "in": "query",
+            "description": "Only products with unreserved stock",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogPageDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "catalog"
+        ]
+      }
+    },
+    "/api/v1/catalog/categories": {
+      "get": {
+        "operationId": "CatalogBrowseController_categories",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CatalogCategoryNodeDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "catalog"
+        ]
+      }
+    },
+    "/api/v1/catalog/facets": {
+      "get": {
+        "operationId": "CatalogBrowseController_facets",
+        "parameters": [
+          {
             "name": "category",
             "required": false,
             "in": "query",
+            "description": "Category slug; includes the whole subtree",
             "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "description": "Text search, case- and accent-insensitive. Every word must appear in the name, the description or a category name of the product.",
+            "schema": {
+              "maxLength": 100,
+              "example": "fone bluetooth",
               "type": "string"
             }
           },
@@ -709,7 +842,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CatalogPageDto"
+                  "$ref": "#/components/schemas/CatalogFacetsDto"
                 }
               }
             }
@@ -2538,6 +2671,107 @@
         "required": [
           "items",
           "total"
+        ]
+      },
+      "CatalogCategoryNodeDto": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "parentSlug": {
+            "type": "string",
+            "nullable": true,
+            "description": "null for a root category"
+          }
+        },
+        "required": [
+          "slug",
+          "name",
+          "parentSlug"
+        ]
+      },
+      "CatalogPriceBucketDto": {
+        "type": "object",
+        "properties": {
+          "minMinor": {
+            "type": "integer",
+            "description": "Inclusive, integer minor units"
+          },
+          "maxMinor": {
+            "type": "integer",
+            "nullable": true,
+            "description": "Exclusive, integer minor units; null for the open-ended last bucket"
+          },
+          "count": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "minMinor",
+          "maxMinor",
+          "count"
+        ]
+      },
+      "CatalogCategoryCountDto": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string"
+          },
+          "count": {
+            "type": "integer",
+            "description": "Matched products in the whole subtree"
+          }
+        },
+        "required": [
+          "slug",
+          "count"
+        ]
+      },
+      "CatalogFacetsDto": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "integer"
+          },
+          "inStock": {
+            "type": "integer"
+          },
+          "priceBuckets": {
+            "description": "Buckets bounded by 5000, 10000, 20000, 50000, 100000, 200000 (minor units)",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CatalogPriceBucketDto"
+            }
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CatalogCategoryCountDto"
+            }
+          },
+          "slugs": {
+            "description": "Slugs of the matched products (capped), for presentation-only facets",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "slugsTruncated": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "total",
+          "inStock",
+          "priceBuckets",
+          "categories",
+          "slugs",
+          "slugsTruncated"
         ]
       },
       "CartItemDto": {

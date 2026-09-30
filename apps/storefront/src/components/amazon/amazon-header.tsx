@@ -7,6 +7,8 @@ import { AllMenu } from '@/components/amazon/all-menu';
 import { BrowsingHistoryMenu } from '@/features/browsing-history/browsing-history-menu';
 import { getServerSession } from '@/features/auth/server-session';
 import { isFeatureEnabled } from '@/config/feature-gate';
+import { CATALOG_SEARCH_MAX_LENGTH } from '@amazon-mvp/api-contract';
+import { searchDepartments } from '@/features/browse/browse-server';
 
 // "Todos" is rendered separately by AllMenu, always as the first navbar item.
 const NAV_LINKS = [
@@ -20,11 +22,19 @@ const NAV_LINKS = [
   { label: 'Ideias de Presente', href: '/products' },
 ];
 
-/** `currentHref` marks the navbar item of the page being shown (aria-current). */
-export async function AmazonHeader({ currentHref }: { currentHref?: string } = {}) {
+/** `currentHref` marks the navbar item of the page being shown (aria-current).
+ * `search` pre-fills the search box on result pages. */
+export async function AmazonHeader({
+  currentHref,
+  search,
+}: { currentHref?: string; search?: { q: string; category: string } } = {}) {
   const session = await getServerSession();
   const firstName = session?.user.displayName.split(' ')[0];
   const browsingHistory = isFeatureEnabled('browsingHistory');
+  // Departments are the catalog's root categories; they narrow the search to a subtree.
+  const departments = isFeatureEnabled('catalog')
+    ? await searchDepartments(search?.category)
+    : { options: [], selected: '' };
 
   return (
     <header className="az-header">
@@ -47,15 +57,18 @@ export async function AmazonHeader({ currentHref }: { currentHref?: string } = {
           </label>
           <select
             id="az-search-department"
-            name="department"
+            name="category"
             className="az-search__department"
-            defaultValue="all"
+            // Remount when the page changes department (defaultValue is read once).
+            key={`department-${departments.selected}`}
+            defaultValue={departments.selected}
           >
-            <option value="all">Todos</option>
-            <option value="electronics">Eletrônicos</option>
-            <option value="books">Livros</option>
-            <option value="fashion">Moda</option>
-            <option value="home">Casa</option>
+            <option value="">Todos</option>
+            {departments.options.map((option) => (
+              <option key={option.slug} value={option.slug}>
+                {option.name}
+              </option>
+            ))}
           </select>
           <label htmlFor="az-search-input" className="visually-hidden">
             Pesquisar Amazon.com.br
@@ -67,6 +80,9 @@ export async function AmazonHeader({ currentHref }: { currentHref?: string } = {
             className="az-search__input"
             placeholder="Pesquisar Amazon.com.br"
             autoComplete="off"
+            maxLength={CATALOG_SEARCH_MAX_LENGTH}
+            key={`query-${search?.q ?? ''}`}
+            defaultValue={search?.q}
           />
           <button type="submit" className="az-search__button" aria-label="Pesquisar">
             <SearchIcon />

@@ -2787,6 +2787,8 @@ button.az-history-menu__trigger {
 .az-pdp-details__subrank { display: block; margin: 4px 0 0 12px; }
 .az-pdp .az-pdp-description { font-size: 13px; padding-left: 14px; white-space: pre-line; overflow-wrap: anywhere; }
 .az-pdp-brand-story { background: #000; }
+.az-pdp-brand a, .az-pdp-brand-listing a { color: #007185; } .az-pdp-brand a:hover, .az-pdp-brand-listing a:hover, .az-pdp-breadcrumb a:hover { color: #c7511f; text-decoration: underline; }
+.az-pdp-brand-listing { margin: 0 0 10px; font-size: 14px; }
 .az-pdp-brand-rail .az-rail__track { gap: 16px; padding: 16px; align-items: stretch; }
 .az-pdp-brand-card { flex: 0 0 auto; background: #fff; border-radius: 2px; overflow: hidden; }
 .az-pdp-brand-card--banner { width: min(620px, 80vw); background: #000; display: flex; align-items: center; }

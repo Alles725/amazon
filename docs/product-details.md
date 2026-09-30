@@ -87,9 +87,10 @@ um card por família (`variantOf` fica fora das vitrines).
   `/products/<slug>/review` (flag `productReviews` ligada) cria ou edita a avaliação do
   cliente; "Útil" grava um voto por cliente. Não há armazenamento de arquivos: a seção
   "Fotos e vídeos de clientes" continua oculta enquanto não houver mídia real.
-- **Breadcrumb e marca**: não existe página de listagem por categoria ou marca (a rota
-  `/products` ainda é placeholder), então os níveis são texto; `ProductBreadcrumb` aceita
-  `hrefFor` para quando existir. "Marca" leva à seção "Da marca" quando há conteúdo.
+- **Breadcrumb e marca**: com a flag `catalog` ligada, cada nível do breadcrumb abre a
+  listagem da categoria (`/products?category=<slug>`), "Marca: X" e "Da marca" abrem a
+  listagem da marca (`/products?brand=<chave>`) — ver [browse.md](browse.md). Com a flag
+  desligada os níveis voltam a ser texto e "Marca" leva à seção "Da marca".
 
 ## Dados e seed
 

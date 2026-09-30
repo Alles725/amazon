@@ -25,6 +25,8 @@ export interface Product {
 export interface Category {
   id: string;
   name: string;
+  /** Catalog category slug the tile opens (/products?category=...); none = all products. */
+  category?: string;
   image?: ProductPhoto;
   glyph: GlyphKind;
 }
@@ -76,16 +78,41 @@ export const RECOMMENDED = varied(
 export const ALSO_CONSIDER = varied([...PRODUCTS].reverse(), [...BEST_SELLERS, ...RECOMMENDED]);
 
 export const CATEGORIES: Category[] = [
-  { id: 'c1', image: PRODUCTS[1].image, name: 'Eletrônicos', glyph: 'headphones' },
-  { id: 'c2', image: PRODUCTS[8].image, name: 'Computadores', glyph: 'laptop' },
-  { id: 'c3', image: PRODUCTS[3].image, name: 'Casa e Cozinha', glyph: 'airfryer' },
-  { id: 'c4', image: PRODUCTS[12].image, name: 'Livros', glyph: 'book' },
-  { id: 'c5', image: PRODUCTS[7].image, name: 'Beleza', glyph: 'beauty' },
-  { id: 'c6', image: PRODUCTS[4].image, name: 'Moda', glyph: 'sneaker' },
-  { id: 'c7', image: PRODUCTS[5].image, name: 'Games', glyph: 'controller' },
+  {
+    id: 'c1',
+    category: 'eletronicos',
+    image: PRODUCTS[1].image,
+    name: 'Eletrônicos',
+    glyph: 'headphones',
+  },
+  {
+    id: 'c2',
+    category: 'computadores',
+    image: PRODUCTS[8].image,
+    name: 'Computadores',
+    glyph: 'laptop',
+  },
+  {
+    id: 'c3',
+    category: 'cozinha',
+    image: PRODUCTS[3].image,
+    name: 'Casa e Cozinha',
+    glyph: 'airfryer',
+  },
+  { id: 'c4', category: 'livros', image: PRODUCTS[12].image, name: 'Livros', glyph: 'book' },
+  { id: 'c5', category: 'beleza', image: PRODUCTS[7].image, name: 'Beleza', glyph: 'beauty' },
+  { id: 'c6', category: 'moda', image: PRODUCTS[4].image, name: 'Moda', glyph: 'sneaker' },
+  {
+    id: 'c7',
+    category: 'games-e-consoles',
+    image: PRODUCTS[5].image,
+    name: 'Games',
+    glyph: 'controller',
+  },
   { id: 'c8', image: PRODUCTS[9].image, name: 'Ofertas', glyph: 'watch' },
   {
     id: 'c9',
+    category: 'esportes',
     image: PRODUCTS.find((product) => product.glyph === 'fitness')?.image,
     name: 'Esportes',
     glyph: 'fitness',

@@ -63,8 +63,8 @@ export function PurchaseNotice({
   );
 }
 
-/** Each level links only when a category listing exists; there is none yet
- * (the /products listing is still a placeholder), so levels render as text. */
+/** Each level links to its category listing when `hrefFor` is given (the product page
+ * passes it while the catalog listing is enabled); otherwise levels render as text. */
 export function ProductBreadcrumb({
   path,
   hrefFor,

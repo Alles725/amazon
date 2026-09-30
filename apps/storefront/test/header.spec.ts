@@ -4,20 +4,32 @@ import { afterEach, expect, it, vi } from 'vitest';
 import { AmazonHeader } from '../src/components/amazon/amazon-header';
 import { ALL_MENU_SECTIONS } from '../src/components/amazon/all-menu';
 
-const { features } = vi.hoisted(() => ({ features: { browsingHistory: true } }));
+const { features } = vi.hoisted(() => ({
+  features: { browsingHistory: true, catalog: false } as Record<string, boolean>,
+}));
 
 vi.mock('server-only', () => ({}));
 vi.mock('../src/config/feature-gate', () => ({
-  isFeatureEnabled: (feature: string) => features[feature as keyof typeof features] ?? false,
+  isFeatureEnabled: (feature: string) => features[feature] ?? false,
 }));
 vi.mock('../src/features/auth/server-session', () => ({ getServerSession: async () => null }));
 vi.mock('../src/features/cart/cart-header-link', () => ({ CartHeaderLink: () => null }));
 vi.mock('../src/components/amazon/account-menu', () => ({ AccountMenu: () => null }));
 vi.mock('../src/features/cart/cart-provider', () => ({ useCart: () => ({ cart: null }) }));
+vi.mock('../src/features/browse/browse-server', () => ({
+  searchDepartments: async (category?: string) => ({
+    options: [
+      { slug: 'eletronicos', name: 'Eletrônicos', parentSlug: null },
+      { slug: 'livros', name: 'Livros', parentSlug: null },
+    ],
+    selected: category ? 'livros' : '',
+  }),
+}));
 
 afterEach(() => {
   cleanup();
   features.browsingHistory = true;
+  features.catalog = false;
 });
 
 const renderHeader = async () => render(await AmazonHeader());
@@ -73,7 +85,11 @@ it('lists every section and link of the "Todos" menu', async () => {
   fireEvent.click(openButton());
   const dialog = screen.getByRole('dialog', { name: 'Menu Todos' });
 
-  expect(within(dialog).getAllByRole('heading').map((heading) => heading.textContent)).toEqual([
+  expect(
+    within(dialog)
+      .getAllByRole('heading')
+      .map((heading) => heading.textContent),
+  ).toEqual([
     'Destaques',
     'Conteúdo digital e dispositivos',
     'Comprar por categoria',
@@ -97,9 +113,7 @@ it('lists every section and link of the "Todos" menu', async () => {
 
 it('shows the browsing history flyout trigger only when its feature is enabled', async () => {
   await renderHeader();
-  expect(
-    within(navbar()).getByRole('button', { name: 'Histórico de navegação' }),
-  ).toBeTruthy();
+  expect(within(navbar()).getByRole('button', { name: 'Histórico de navegação' })).toBeTruthy();
   cleanup();
 
   features.browsingHistory = false;
@@ -108,4 +122,28 @@ it('shows the browsing history flyout trigger only when its feature is enabled',
   expect(
     within(navbar()).getByRole('link', { name: 'Histórico de navegação' }).getAttribute('href'),
   ).toBe('/products');
+});
+
+it('searches the catalog: departments are the root categories and results keep the query', async () => {
+  features.catalog = true;
+  render(await AmazonHeader({ search: { q: 'fone', category: 'literatura' } }));
+  const form = screen.getByRole('search');
+  expect(form.getAttribute('action')).toBe('/products');
+  const select = within(form).getByLabelText('Selecionar departamento') as HTMLSelectElement;
+  expect(select.name).toBe('category');
+  expect(Array.from(select.options).map((option) => [option.value, option.text])).toEqual([
+    ['', 'Todos'],
+    ['eletronicos', 'Eletrônicos'],
+    ['livros', 'Livros'],
+  ]);
+  expect(select.value).toBe('livros');
+  expect((within(form).getByLabelText('Pesquisar Amazon.com.br') as HTMLInputElement).value).toBe(
+    'fone',
+  );
+});
+
+it('offers only "Todos" while the catalog listing is disabled', async () => {
+  await renderHeader();
+  const select = screen.getByLabelText('Selecionar departamento') as HTMLSelectElement;
+  expect(Array.from(select.options).map((option) => option.text)).toEqual(['Todos']);
 });

@@ -293,13 +293,12 @@ iterations:
           seeded as DEMO fixtures. No media upload (no file storage).
       - id: BROWSE-001
         owner: dev2
-        status: planned
+        status: done
         title: Category and brand listing pages (and real search results)
         note: >-
-          /products is still a placeholder. API already filters by category subtree.
-          Then pass hrefFor to ProductBreadcrumb, link "Marca:" to the brand listing and
-          point Home "Ver mais" / header search to real results. Brand is presentation
-          data today (config/demo-product-content.json).
+          Real listing with search, category, brand, price and stock filters, sort and
+          pagination; API gained q/sort/price/stock filters plus categories and facets
+          endpoints. No migration.
       - id: NOTFOUND-001
         owner: dev2
         status: planned

@@ -461,3 +461,27 @@ Validation: lint, typecheck, unit tests, account integration suite (ownership, s
 invalidation) on a disposable database, drift check clean, openapi regenerated. Browser:
 all nine pages, guest redirects, checkout preselecting the default address. See
 docs/account.md.
+
+## 2026-09-30 — BROWSE-001
+
+/products is the real listing (flag catalog on): header search, category (?category=),
+brand (?brand=), price, stock, sort and pagination of 48, all in the URL. GET
+/catalog/products gained q (case- and accent-insensitive over name, description and category
+names), sort (relevance, price-asc, price-desc, newest), minPriceMinor/maxPriceMinor and
+inStock; new public GET /catalog/categories and GET /catalog/facets. No migration. Brand
+stays presentation data: brand → slugs on the storefront server → ?slugs=. The product
+breadcrumb, "Marca: X", "Da marca", the Home category tiles and the header department
+select (real root categories) now open listings. States: loading, error with retry, no
+results, invalid/out-of-range page, unknown category/brand; filters behind "Filtros" on
+phones.
+
+With this front every flag in config/features.yaml is on, so the "ships unbuilt features
+disabled" assertion was removed from features.spec (Coming Soon is still covered by the
+registry tests with inline config).
+
+Validation of the six fronts together: lint, typecheck, unit tests (config-schema 18, API
+46, storefront 267), full API integration suite on a disposable database, drift check
+clean, openapi regenerated. Browser journey: search → product (Pix price, ratings,
+breadcrumb/brand links) → list → cart → checkout with Pix → confirmation → order listed on
+/payment-methods → verified review; account and footer pages; 390/1440 px without overflow.
+See docs/browse.md.

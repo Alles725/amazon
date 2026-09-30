@@ -2,8 +2,8 @@
 
 ## Current objective
 
-ACCOUNT-001 — see the development log entry of 2026-09-30 and current-state.md. PR preparation is on
-feat/hub-da-conta, part of a stacked chain of six branches to merge in order: institutional
+BROWSE-001 — see the development log entry of 2026-09-30 and current-state.md. PR preparation is on
+feat/busca-e-listagens, part of a stacked chain of six branches to merge in order: institutional
 footer pages, help/payment pages, Pix discount, reviews, account hub, listing and search.
 Commit, push and PR await the final explicit approval.
 

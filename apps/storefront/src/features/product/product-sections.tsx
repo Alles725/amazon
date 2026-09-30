@@ -69,13 +69,21 @@ export function ProductDescription({ description }: { description: string | null
 export function BrandStorySection({
   story,
   products,
+  listingHref,
 }: {
   story: BrandStory;
   products: Array<{ product: CatalogItem; image?: ProductPhoto }>;
+  /** Brand listing page, when the catalog listing is enabled. */
+  listingHref?: string;
 }) {
   return (
     <section className="az-pdp-section" id="brand-story" aria-labelledby="brand-story-title">
       <h2 id="brand-story-title">Da marca</h2>
+      {listingHref && (
+        <p className="az-pdp-brand-listing">
+          <Link href={listingHref}>Ver todos os produtos da marca {story.name}</Link>
+        </p>
+      )}
       <div className="az-pdp-brand-story">
         <HorizontalRail label={`Conteúdo da marca ${story.name}`} className="az-pdp-brand-rail">
           {story.banner && (
