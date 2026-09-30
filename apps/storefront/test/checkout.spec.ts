@@ -58,6 +58,21 @@ const quote: CheckoutQuote = {
   shippingMinor: 0,
   discountMinor: 0,
   totalMinor: 1099,
+  paymentMethod: 'SIMULATED_CARD',
+  discountPercent: 0,
+};
+// What the API answers for Pix: 5% of 1099 = 54.95 -> 54 (rounded down).
+const pixQuote: CheckoutQuote = {
+  ...quote,
+  revision: 'pix-revision',
+  discountMinor: 54,
+  totalMinor: 1045,
+  paymentMethod: 'SIMULATED_PIX',
+  discountPercent: 5,
+};
+const choosePix = async () => {
+  fireEvent.click(screen.getByRole('radio', { name: 'Pix simulado' }));
+  await ready();
 };
 function state() {
   return {
@@ -84,7 +99,9 @@ beforeEach(() => {
   vi.clearAllMocks();
   vi.mocked(useCart).mockReturnValue(state());
   vi.mocked(checkoutClient.addresses).mockResolvedValue([address]);
-  vi.mocked(checkoutClient.quote).mockResolvedValue(quote);
+  vi.mocked(checkoutClient.quote).mockImplementation(async (method) =>
+    method === 'SIMULATED_PIX' ? pixQuote : quote,
+  );
 });
 afterEach(cleanup);
 it('requires a saved address and payment before calling the API', async () => {
@@ -126,12 +143,12 @@ it('refreshes the cart only after success and navigates to the persisted order',
   vi.mocked(checkoutClient.place).mockResolvedValue({ id: 'saved-order' } as OrderResponse);
   render(createElement(CheckoutContent, { name: 'Teste' }));
   await ready();
-  fireEvent.click(screen.getByRole('radio', { name: 'Pix simulado' }));
+  await choosePix();
   fireEvent.click(screen.getAllByRole('button', { name: 'Confirmar pedido' })[0]);
   await waitFor(() => expect(push).toHaveBeenCalledWith('/checkout/success/saved-order'));
   expect(checkoutClient.place).toHaveBeenCalledWith({
     cartId: 'cart',
-    revision: 'revision',
+    revision: 'pix-revision',
     addressId: 'address',
     paymentMethod: 'SIMULATED_PIX',
   });
@@ -146,7 +163,7 @@ it('retries the same request after a lost response even if the cart became empty
     .mockResolvedValueOnce({ id: 'same-order' } as OrderResponse);
   const view = render(createElement(CheckoutContent, { name: 'Teste' }));
   await ready();
-  fireEvent.click(screen.getByRole('radio', { name: 'Pix simulado' }));
+  await choosePix();
   fireEvent.click(screen.getAllByRole('button', { name: 'Confirmar pedido' })[0]);
   await screen.findAllByRole('button', { name: 'Tentar confirmar novamente' });
   expect(model.refresh).not.toHaveBeenCalled();
@@ -165,7 +182,7 @@ it('returns expired sessions to login without clearing the cart', async () => {
   vi.mocked(checkoutClient.place).mockRejectedValue(new CheckoutError('Entre novamente', 401));
   render(createElement(CheckoutContent, { name: 'Teste' }));
   await ready();
-  fireEvent.click(screen.getByRole('radio', { name: 'Pix simulado' }));
+  await choosePix();
   fireEvent.click(screen.getAllByRole('button', { name: 'Confirmar pedido' })[0]);
   await waitFor(() => expect(push).toHaveBeenCalledWith('/login?next=checkout'));
   expect(model.clear).not.toHaveBeenCalled();
@@ -178,4 +195,48 @@ it('shows the empty state without allowing confirmation', () => {
   render(createElement(CheckoutContent, { name: 'Teste' }));
   expect(screen.getByRole('heading', { name: 'Seu carrinho está vazio' })).toBeTruthy();
   expect(screen.queryByRole('button', { name: 'Confirmar pedido' })).toBeNull();
+});
+it('re-quotes from the API when switching card and Pix, showing the Pix discount', async () => {
+  render(createElement(CheckoutContent, { name: 'Teste', pixDiscountPercent: 5 }));
+  await ready();
+  expect(checkoutClient.quote).toHaveBeenLastCalledWith('SIMULATED_CARD');
+  const summary = screen.getByRole('complementary', { name: 'Resumo do pedido' });
+  expect(summary.textContent).not.toContain('Desconto Pix');
+  const pix = screen.getByRole('radio', { name: 'Pix simulado' });
+  expect(document.getElementById(pix.getAttribute('aria-describedby')!)?.textContent).toBe(
+    '5% de desconto à vista no Pix',
+  );
+  await choosePix();
+  expect(checkoutClient.quote).toHaveBeenLastCalledWith('SIMULATED_PIX');
+  expect(summary.textContent).toContain('Desconto Pix (5%)');
+  expect(summary.textContent).toMatch(/−\sR\$\s0,54/);
+  expect(summary.textContent).toMatch(/Total do pedidoR\$\s10,45/);
+  fireEvent.click(screen.getByRole('radio', { name: 'Cartão fictício · Visa final 4242' }));
+  await ready();
+  expect(checkoutClient.quote).toHaveBeenLastCalledWith('SIMULATED_CARD');
+  expect(summary.textContent).not.toContain('Desconto Pix');
+  expect(summary.textContent).toMatch(/Total do pedidoR\$\s10,99/);
+  fireEvent.click(screen.getAllByRole('button', { name: 'Confirmar pedido' })[0]);
+  await waitFor(() =>
+    expect(checkoutClient.place).toHaveBeenCalledWith(
+      expect.objectContaining({ revision: 'revision', paymentMethod: 'SIMULATED_CARD' }),
+    ),
+  );
+});
+it('keeps confirmation disabled while the quote is for another payment method', async () => {
+  render(createElement(CheckoutContent, { name: 'Teste' }));
+  await ready();
+  let answer: (value: CheckoutQuote) => void = () => {};
+  vi.mocked(checkoutClient.quote).mockImplementationOnce(
+    () => new Promise<CheckoutQuote>((resolve) => (answer = resolve)),
+  );
+  fireEvent.click(screen.getByRole('radio', { name: 'Pix simulado' }));
+  const confirm = screen.getAllByRole('button', { name: 'Confirmar pedido' })[0];
+  expect(confirm.hasAttribute('disabled')).toBe(true);
+  fireEvent.click(confirm);
+  expect(checkoutClient.place).not.toHaveBeenCalled();
+  // No advertised rate without the API's pricing.
+  expect(screen.queryByText(/de desconto à vista no Pix/)).toBeNull();
+  answer(pixQuote);
+  await ready();
 });

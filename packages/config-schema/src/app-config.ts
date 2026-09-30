@@ -22,6 +22,16 @@ export const ApiConfigSchema = z.object({
     enabled: z.boolean(),
     path: z.string().startsWith('/'),
   }),
+  /**
+   * Checkout pricing rules. The API is their only owner: the storefront reads them
+   * through GET /api/v1/orders/pricing, never from this file.
+   */
+  checkout: z
+    .object({
+      /** "X% de desconto à vista no Pix". Whole percent so money math stays integer. */
+      pixDiscountPercent: z.number().int().min(0).max(100).default(5),
+    })
+    .default({}),
 });
 export type ApiConfig = z.infer<typeof ApiConfigSchema>;
 

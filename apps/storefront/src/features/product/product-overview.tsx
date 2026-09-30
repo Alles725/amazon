@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { CatalogItem } from '@amazon-mvp/api-contract';
 import { formatCartMoney } from '@/features/cart/money';
+import { PixPrice } from '@/features/checkout/pix-price';
 import type { ProductContent } from './product-content';
 import { ProductPrice } from './product-price';
 import { ProductStars } from './product-stars';
@@ -17,11 +18,14 @@ export function ProductOverview({
   content,
   dimensions,
   brandHref,
+  pixDiscountPercent = null,
 }: {
   product: CatalogItem;
   content: ProductContent;
   dimensions: VariantDimension[];
   brandHref?: string;
+  /** Rate from the API's checkout config (GET /orders/pricing); null = not advertised. */
+  pixDiscountPercent?: number | null;
 }) {
   const discount = discountPercent(product.priceMinor, content.oldPriceMinor);
   const plan =
@@ -67,6 +71,13 @@ export function ProductOverview({
           {discount && <span className="az-pdp-discount">-{discount}%</span>}
           <ProductPrice amount={product.priceMinor} currency={product.currency} />
         </p>
+        {product.active && (
+          <PixPrice
+            amountMinor={product.priceMinor}
+            currency={product.currency}
+            percent={pixDiscountPercent}
+          />
+        )}
         {content.oldPriceMinor && discount && (
           <p className="az-pdp-muted">
             De: <del>{formatCartMoney(content.oldPriceMinor, product.currency)}</del>

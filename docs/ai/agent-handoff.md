@@ -2,8 +2,8 @@
 
 ## Current objective
 
-FOOTER-002 — see the development log entry of 2026-09-30 and current-state.md. PR preparation is on
-feat/paginas-ajuda-pagamento, part of a stacked chain of six branches to merge in order: institutional
+PIX-001 — see the development log entry of 2026-09-30 and current-state.md. PR preparation is on
+feat/desconto-pix, part of a stacked chain of six branches to merge in order: institutional
 footer pages, help/payment pages, Pix discount, reviews, account hub, listing and search.
 Commit, push and PR await the final explicit approval.
 

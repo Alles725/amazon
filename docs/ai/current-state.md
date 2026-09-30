@@ -343,3 +343,12 @@ hub is part of the authenticated shell and does not enable account management.
 - Not available in this store and said so on the page: loyalty points, the credit card,
   content/devices management, online returns/cancellations, delivery dates and tracking;
   the recall list is empty because no recall records exist.
+
+## Pix discount (PIX-001) — 2026-09-30
+
+- Pix discount is computed server-side in the quote and again in the order transaction;
+  the rate comes from API config and reaches the storefront only through /orders/pricing.
+- Limits: the rate is not stored on the order (details say "Desconto Pix" without the
+  percentage); OpenAPI lists /orders/pricing under the session-protected tag although the
+  endpoint is public; per-unit Pix prices can differ by a cent or two from the subtotal
+  discount checkout charges.

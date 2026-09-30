@@ -1,0 +1,26 @@
+/* PIX-001: "R$ X no Pix (5% de desconto)" on product, cart and checkout. */
+.az-pix-price {
+  margin: 4px 0;
+  color: #0f1111;
+  font-size: 14px;
+  line-height: 20px;
+}
+.az-pix-price strong {
+  font-weight: 700;
+}
+.az-pix-price__rate {
+  color: #067d62;
+  white-space: nowrap;
+}
+.az-pix-price--small {
+  font-size: 13px;
+}
+/* Under the "Pix simulado" radio (17px input + 8px gap), inside the payment grid. */
+.az-checkout-pix-hint {
+  margin: -8px 0 0 25px;
+  color: #067d62;
+  font-size: 13px;
+}
+.az-checkout-summary .az-checkout-discount dd {
+  color: #067d62;
+}

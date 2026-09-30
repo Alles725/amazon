@@ -312,12 +312,12 @@ iterations:
           middleware.
       - id: PIX-001
         owner: dev1
-        status: planned
+        status: done
         title: Pix discount ("5% off à vista no Pix") applied by checkout
         note: >-
-          Checkout has no promotion engine (discountMinor is always 0), so the product
-          page deliberately hides the Pix price. Implement the discount server-side in the
-          order quote/transaction first; only then show it on the product page and cart.
+          Server-side discount in quote and transaction, rate in validated API config,
+          single rounding rule in api-contract, shown on product page, cart, checkout and
+          order pages. 6 new integration cases.
 
       - id: CATALOG-BATCH-001
         owner: dev1

@@ -14,29 +14,70 @@ simplificado, endereço/pagamento/produtos à esquerda e resumo à direita.
   sourceCartId único. Pedidos antigos continuam válidos, com metadados opcionais.
 - Pagamento aceita somente SIMULATED_CARD ou SIMULATED_PIX. A opção cartão mostra
   Visa 4242 fictício; não coleta nem armazena número de cartão, CVV ou credenciais.
-- Frete é zero nesta simulação, sem cálculo de prazo. Não existe motor de descontos.
-  O total usa preços atuais do catálogo, em centavos inteiros. Não se usa o preço
-  anterior promocional da apresentação como desconto real.
+- Frete é zero nesta simulação, sem cálculo de prazo. O único desconto é o do Pix
+  (abaixo); não existe motor de promoções. O total usa preços atuais do catálogo, em
+  centavos inteiros. Não se usa o preço anterior promocional da apresentação como
+  desconto real.
+
+## Desconto Pix (PIX-001)
+
+"5% de desconto à vista no Pix", calculado somente pela API.
+
+- **Configuração**: `checkout.pixDiscountPercent` em `apps/api/config/default.yaml`
+  (padrão 5), sobrescrito por `PIX_DISCOUNT_PERCENT`. Validado pelo Zod em
+  `packages/config-schema` no startup: inteiro de 0 a 100 (0 desliga o desconto); valor
+  inválido impede a API de subir.
+- **Regra de arredondamento** (`percentDiscountMinor` em `@amazon-mvp/api-contract`):
+  `descontoMinor = floor(subtotalMinor × taxa / 100)`, só com inteiros. Arredonda para
+  baixo: o cliente nunca recebe mais que a taxa anunciada, e o preço Pix anunciado por
+  unidade nunca é menor do que o cobrado. Exemplos a 5%: 1 → 0, 19 → 0, 20 → 1,
+  3.702 → 185, 99.999 → 4.999 centavos. Aplica-se ao subtotal dos itens (não por linha);
+  `total = subtotal + frete − desconto`.
+- **Cotação**: `GET /orders/quote?paymentMethod=SIMULATED_PIX|SIMULATED_CARD` (omitido =
+  cartão, sem desconto) devolve subtotal, desconto, total, `paymentMethod` e
+  `discountPercent`. A `revision` passa a incluir a forma de pagamento e a taxa, além das
+  linhas e preços.
+- **Confirmação**: o POST recalcula tudo dentro da transação, a partir dos preços
+  bloqueados e da taxa do servidor, e grava `subtotalMinor`, `discountMinor` e
+  `totalMinor` no pedido. Campos monetários enviados pelo cliente são rejeitados (400).
+  Uma revisão feita para outra forma de pagamento (cotou cartão, confirmou Pix, ou
+  vice-versa) ou com outra taxa é tratada como cotação desatualizada (409), sem baixar
+  estoque. A repetição com o mesmo `sourceCartId` devolve o pedido original com o
+  desconto já gravado, mesmo que o reenvio traga outra forma de pagamento.
+- **Taxa pública**: `GET /orders/pricing` (sem sessão) devolve `{ pixDiscountPercent }`.
+  É a única fonte da taxa para o storefront, que nunca importa `apps/api` nem lê a
+  configuração da API: a página de produto mostra "R$ X no Pix (5% de desconto)", o
+  carrinho "ou R$ Y no Pix" e o checkout o aviso ao lado da opção Pix, todos com a mesma
+  função de arredondamento. Se a API não responder, nada é anunciado.
+- **Storefront**: ao escolher Pix ou cartão, o checkout pede nova cotação à API e só
+  libera "Confirmar pedido" quando a cotação corresponde à forma selecionada. O resumo
+  mostra "Desconto Pix (5%)" e o novo total; cartão não mostra desconto. A confirmação e
+  os detalhes do pedido mostram a linha "Desconto Pix" quando `discountMinor > 0` (a taxa
+  não é gravada no pedido, por isso o percentual não aparece ali).
 - Status inicial PENDING. Não há gateway, cobrança, logística nem transição automática
   para PAID. `/orders` continua sendo a página ainda não implementada; a confirmação
   real fica em `/checkout/success/:orderId` e pode ser recarregada.
 
 ## Contrato e consistência
 
-Todos os endpoints exigem a sessão existente:
+Endpoints:
 
 | Endpoint | Função |
 | --- | --- |
 | GET/POST `/api/v1/addresses` | Listar/cadastrar endereços próprios |
 | PUT `/api/v1/addresses/:addressId` | Editar endereço próprio |
-| GET `/api/v1/orders/quote` | Recalcular carrinho, frete, total e revisão |
+| GET `/api/v1/orders/pricing` | Taxa do desconto Pix (público, sem sessão) |
+| GET `/api/v1/orders/quote` | Recalcular carrinho, frete, desconto, total e revisão para `paymentMethod` |
 | POST `/api/v1/orders` | Confirmar cartId, revision, addressId e paymentMethod |
 | GET `/api/v1/orders` | Últimos 50 pedidos do usuário |
 | GET `/api/v1/orders/:orderId` | Pedido e itens congelados, somente do proprietário |
 
-O servidor valida dados e propriedade; não aceita usuário, preço ou total enviados
-pelo cliente. Uma revisão do carrinho detecta alterações de quantidades/preços
-entre a revisão e a confirmação, exigindo nova revisão antes de comprar.
+Com exceção de `/orders/pricing`, todos exigem a sessão existente.
+
+O servidor valida dados e propriedade; não aceita usuário, preço, desconto ou total
+enviados pelo cliente. Uma revisão do carrinho detecta alterações de quantidades,
+preços, forma de pagamento ou taxa Pix entre a revisão e a confirmação, exigindo nova
+revisão antes de comprar.
 
 A transação compartilha o bloqueio por usuário das mutações do carrinho. O catálogo
 bloqueia produtos em ordem estável e desconta estoque com verificação atômica.
@@ -60,7 +101,13 @@ trocar de arquivo de flags, reiniciar o storefront porque as flags são lidas um
 
 `apps/api/test/checkout.e2e-spec.ts` usa PostgreSQL e cobre sessão, endereço de
 outro usuário, dados obrigatórios, carrinho vazio, snapshots, revisão desatualizada,
-concorrência, repetição, estoque e rollback de falha injetada. A suíte deve rodar
-em banco descartável. `apps/storefront/test/checkout.spec.ts` cobre validação,
-mutações existentes, sincronização do resumo, sucesso, expiração de sessão e
-repetição da mesma confirmação após perda de resposta.
+concorrência, repetição, estoque e rollback de falha injetada; e, para o Pix, taxa
+pública, cotação cartão × Pix, arredondamento (1, 19, 20, 99.999 centavos), desconto
+gravado e mantido em repetições, totais forjados e revisão de outra forma de
+pagamento. A suíte deve rodar em banco descartável.
+`apps/api/src/modules/orders/checkout-quote.spec.ts` testa a regra de arredondamento e
+a revisão; `packages/config-schema` testa padrão e limites da taxa.
+`apps/storefront/test/checkout.spec.ts` cobre validação, mutações existentes,
+sincronização do resumo, troca cartão ↔ Pix com nova cotação, sucesso, expiração de
+sessão e repetição da mesma confirmação após perda de resposta;
+`test/pix-price.spec.ts` e `test/product-page.spec.ts` cobrem o preço Pix anunciado.

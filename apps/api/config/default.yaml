@@ -17,3 +17,8 @@ session:
 openapi:
   enabled: true
   path: /api/docs
+
+checkout:
+  # "5% de desconto à vista no Pix". Whole percent, 0-100 (0 disables the discount).
+  # Overridden by PIX_DISCOUNT_PERCENT.
+  pixDiscountPercent: 5

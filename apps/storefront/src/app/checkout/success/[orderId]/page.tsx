@@ -7,6 +7,7 @@ import { getConfig } from '@/config/storefront-config';
 import { getServerSession } from '@/features/auth/server-session';
 import { CheckoutShell } from '@/features/checkout/checkout-shell';
 import { formatCartMoney } from '@/features/cart/money';
+import { discountLabel } from '@/features/orders/order-presentation';
 export default async function CheckoutSuccess({ params }: { params: { orderId: string } }) {
   if (!isFeatureEnabled('checkout'))
     return (
@@ -72,7 +73,13 @@ export default async function CheckoutSuccess({ params }: { params: { orderId: s
               </li>
             ))}
           </ul>
+          <p>Subtotal: {formatCartMoney(order.subtotalMinor, order.currency)}</p>
           <p>Frete: {formatCartMoney(order.shippingMinor, order.currency)}</p>
+          {order.discountMinor > 0 && (
+            <p>
+              {discountLabel(order)}: −{formatCartMoney(order.discountMinor, order.currency)}
+            </p>
+          )}
           <p className="az-checkout-total">
             Total: <strong>{formatCartMoney(order.totalMinor, order.currency)}</strong>
           </p>

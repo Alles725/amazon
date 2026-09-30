@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { CatalogItem, MAX_CART_QUANTITY } from '@amazon-mvp/api-contract';
 import { useCart } from '@/features/cart/cart-provider';
 import { formatCartMoney } from '@/features/cart/money';
+import { PixPrice } from '@/features/checkout/pix-price';
 import { ProductPrice } from './product-price';
 
 /** Amazon's quantity menu stops at 30 even when more stock exists. */
@@ -28,6 +29,7 @@ export function ProductPurchase({
   installments,
   fulfillment,
   address,
+  pixDiscountPercent = null,
 }: {
   product: CatalogItem;
   cartEnabled: boolean;
@@ -35,6 +37,8 @@ export function ProductPurchase({
   installments?: { count: number };
   fulfillment?: { shippedBy?: string; soldBy?: string; returns?: string };
   address?: DeliveryAddress | null;
+  /** Rate from the API's checkout config (GET /orders/pricing); null = not advertised. */
+  pixDiscountPercent?: number | null;
 }) {
   const router = useRouter();
   const { cart, status, pending, error, notice, add, refresh } = useCart();
@@ -76,6 +80,15 @@ export function ProductPurchase({
   return (
     <section className="az-pdp-buy" aria-label="Comprar produto" aria-busy={pending || buying}>
       <ProductPrice amount={product.priceMinor} currency={product.currency} />
+      {product.inStock && checkoutEnabled && (
+        <PixPrice
+          amountMinor={product.priceMinor}
+          currency={product.currency}
+          percent={pixDiscountPercent}
+          prefix="ou "
+          className="az-pix-price--small"
+        />
+      )}
       {installments && product.inStock && (
         <p className="az-pdp-buy__installments">
           ou em até {installments.count}x de{' '}

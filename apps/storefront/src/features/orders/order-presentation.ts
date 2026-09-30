@@ -143,3 +143,8 @@ export function distinctOrderedProducts(orders: OrderResponse[]): OrderedProduct
     }
   return products;
 }
+
+/** Label of the order's persisted discount. The only discount checkout grants is the
+ * Pix one (PIX-001); the rate itself is not stored, so no percentage is shown. */
+export const discountLabel = (order: Pick<OrderResponse, 'paymentMethod'>): string =>
+  order.paymentMethod === 'SIMULATED_PIX' ? 'Desconto Pix' : 'Desconto';

@@ -181,12 +181,17 @@ export interface SavedAddress extends AddressInput {
 export type SimulatedPayment = 'SIMULATED_CARD' | 'SIMULATED_PIX';
 export interface CheckoutQuote {
   cart: CartResponse;
+  /** Binds the cart lines, prices, payment method and discount rate that were quoted. */
   revision: string;
   subtotalMinor: number;
   shippingMinor: number;
   discountMinor: number;
   totalMinor: number;
   currency: string;
+  /** Payment method this quote was computed for (SIMULATED_CARD when none was given). */
+  paymentMethod: SimulatedPayment;
+  /** Whole percent applied to the subtotal (the Pix rate for SIMULATED_PIX, else 0). */
+  discountPercent: number;
 }
 export interface PlaceOrderRequest {
   cartId: string;
@@ -224,4 +229,56 @@ export const CHECKOUT_ROUTES = {
   addresses: `${API_PREFIX}/addresses`,
   quote: `${API_PREFIX}/orders/quote`,
   orders: `${API_PREFIX}/orders`,
+  pricing: `${API_PREFIX}/orders/pricing`,
 } as const;
+
+// ---------------------------------------------------------------------------
+// Checkout pricing: "X% de desconto à vista no Pix" (PIX-001)
+// ---------------------------------------------------------------------------
+
+/** GET /orders/quote?paymentMethod=... — omitted means SIMULATED_CARD (no discount). */
+export interface CheckoutQuoteQuery {
+  paymentMethod?: SimulatedPayment;
+}
+
+/**
+ * Public pricing rules owned by the API configuration (checkout.pixDiscountPercent).
+ * The storefront reads the rate here instead of hard-coding or re-reading config.
+ */
+export interface CheckoutPricing {
+  /** Whole percent, 0-100. 0 means Pix has no discount. */
+  pixDiscountPercent: number;
+}
+
+/**
+ * The single rounding rule for percentage discounts, shared by the API (quote and
+ * order transaction) and the storefront (advertised Pix price):
+ *
+ *   discountMinor = floor(amountMinor * percent / 100)
+ *
+ * Rounding down means the customer never gets more than the configured percent and
+ * an advertised per-unit Pix price is never lower than what checkout charges.
+ * Integer inputs only (money is integer minor units; the rate is a whole percent).
+ */
+export function percentDiscountMinor(amountMinor: number, percent: number): number {
+  if (!Number.isSafeInteger(amountMinor) || amountMinor < 0)
+    throw new RangeError('amountMinor must be a non-negative safe integer');
+  if (!Number.isInteger(percent) || percent < 0 || percent > 100)
+    throw new RangeError('percent must be a whole number between 0 and 100');
+  const scaled = amountMinor * percent;
+  if (!Number.isSafeInteger(scaled)) throw new RangeError('amountMinor is too large');
+  return (scaled - (scaled % 100)) / 100;
+}
+
+/** Rate that applies to a payment method under the given pricing rules. */
+export function paymentDiscountPercent(
+  paymentMethod: SimulatedPayment,
+  pricing: CheckoutPricing,
+): number {
+  return paymentMethod === 'SIMULATED_PIX' ? pricing.pixDiscountPercent : 0;
+}
+
+/** Amount charged when paying `amountMinor` with Pix (amount minus the rounded discount). */
+export function pixPriceMinor(amountMinor: number, pricing: CheckoutPricing): number {
+  return amountMinor - percentDiscountMinor(amountMinor, pricing.pixDiscountPercent);
+}

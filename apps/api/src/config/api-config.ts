@@ -14,6 +14,7 @@ const ENV_MAP = {
   'session.secureCookie': 'SESSION_SECURE_COOKIE',
   'session.sameSite': 'SESSION_SAME_SITE',
   'openapi.enabled': 'OPENAPI_ENABLED',
+  'checkout.pixDiscountPercent': 'PIX_DISCOUNT_PERCENT',
 };
 
 /** Throws ConfigValidationError -> process exits before serving traffic. */

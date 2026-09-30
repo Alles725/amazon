@@ -4,6 +4,7 @@ import { AmazonFooter } from '@/components/amazon/amazon-footer';
 import { FeatureRoute, isFeatureEnabled } from '@/config/feature-gate';
 import { getConfig } from '@/config/storefront-config';
 import { CartContent } from '@/features/cart/cart-content';
+import { getCheckoutPricing } from '@/features/checkout/pricing-server';
 
 export default async function CartPage() {
   if (!isFeatureEnabled('cart'))
@@ -25,6 +26,8 @@ export default async function CartPage() {
   } catch {
     catalogFailed = true;
   }
+  const checkoutEnabled = isFeatureEnabled('checkout');
+  const pricing = checkoutEnabled ? await getCheckoutPricing() : null;
 
   return (
     <div className="amazon-cart-page" id="top">
@@ -32,7 +35,8 @@ export default async function CartPage() {
       <CartContent
         products={catalog.items}
         catalogFailed={catalogFailed}
-        checkoutEnabled={isFeatureEnabled('checkout')}
+        checkoutEnabled={checkoutEnabled}
+        pixDiscountPercent={pricing?.pixDiscountPercent ?? null}
       />
       <AmazonFooter />
     </div>
