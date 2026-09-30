@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { HorizontalRail } from './horizontal-rail';
 import { ProductImage } from './product-image';
 import { Category } from '@/features/home/catalog-mock';
+import { categoryHref } from '@/features/browse/browse-params';
 
 export function CategorySection({ title, categories }: { title: string; categories: Category[] }) {
   return (
@@ -11,7 +12,11 @@ export function CategorySection({ title, categories }: { title: string; categori
       </div>
       <HorizontalRail label={title} className="az-category-rail">
         {categories.map((category) => (
-          <Link key={category.id} href="/products" className="az-category">
+          <Link
+            key={category.id}
+            href={category.category ? categoryHref(category.category) : '/products'}
+            className="az-category"
+          >
             <div className="az-category__image">
               <ProductImage image={category.image} glyph={category.glyph} />
             </div>

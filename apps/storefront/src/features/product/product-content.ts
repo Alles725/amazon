@@ -4,6 +4,7 @@ import type { ProductPhoto } from '@/features/home/catalog-mock';
 import contentFixtures from '../../../../../config/demo-product-content.json';
 import brandFixtures from '../../../../../config/demo-brands.json';
 import { productPresentation } from './product-presentation';
+import { brandKey } from '@/features/browse/browse-params';
 
 /** Merchandising content the catalog schema does not store (brand, gallery, specs,
  * variants...). Ratings are not content: they come from the reviews API. Server-only: it never ships in client bundles. Like the card
@@ -89,6 +90,14 @@ export const variantGroupSlugs = (group: string): string[] =>
 /** Catalog slugs of the brand's products, for the "Da marca" section. */
 export const brandSlugs = (brand: string): string[] =>
   fixtures.filter((item) => item.brand === brand).map((item) => item.id);
+
+/** Brand name for a listing URL key ("letra-viva"), or undefined when no product has it. */
+export const brandByKey = (key: string): string | undefined =>
+  fixtures.find((item) => item.brand && brandKey(item.brand) === key)?.brand;
+
+/** Brand of a catalog slug (the same slug-based lookup as brandSlugs). */
+export const brandOfSlug = (slug: string): string | undefined =>
+  fixtures.find((item) => item.id === slug)?.brand;
 
 export const brandStory = (brand: string | undefined): BrandStory | undefined =>
   brand ? (brandFixtures as BrandStory[]).find((item) => item.name === brand) : undefined;

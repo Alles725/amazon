@@ -44,6 +44,7 @@ import {
   productReviews,
   withRatings,
 } from '@/features/product/reviews/product-reviews';
+import { brandHref, categoryHref } from '@/features/browse/browse-params';
 import { CustomerReviews, type ReviewNotice } from '@/features/product/reviews/customer-reviews';
 
 type Params = { params: { productId: string } };
@@ -83,6 +84,8 @@ export default async function ProductDetailPage({ params, searchParams = {} }: P
   const content = productContent(product);
   const cartEnabled = isFeatureEnabled('cart');
   const checkoutEnabled = isFeatureEnabled('checkout');
+  // Breadcrumbs and the brand link open the listing only when it is switched on.
+  const catalogEnabled = isFeatureEnabled('catalog');
 
   // Variants are sibling catalog records (Amazon child ASINs) sharing a group.
   const siblings = content.variant
@@ -154,7 +157,10 @@ export default async function ProductDetailPage({ params, searchParams = {} }: P
         <RecordProductView id={product.id} name={product.name} image={content.images[0]} />
       )}
       {session && <PrimePaymentNotice />}
-      <ProductBreadcrumb path={product.categoryPath} />
+      <ProductBreadcrumb
+        path={product.categoryPath}
+        hrefFor={catalogEnabled ? categoryHref : undefined}
+      />
       {purchase && (
         <PurchaseNotice purchase={purchase} options={purchasedOptions} reviewHref={reviewHref} />
       )}
@@ -166,7 +172,13 @@ export default async function ProductDetailPage({ params, searchParams = {} }: P
           content={content}
           rating={rating}
           dimensions={dimensions}
-          brandHref={story ? '#brand-story' : undefined}
+          brandHref={
+            content.brand && catalogEnabled
+              ? brandHref(content.brand)
+              : story
+                ? '#brand-story'
+                : undefined
+          }
           pixDiscountPercent={pixDiscountPercent}
         />
         <aside className="az-pdp-aside" aria-label="Opções de compra">
@@ -200,6 +212,7 @@ export default async function ProductDetailPage({ params, searchParams = {} }: P
       {story && (
         <BrandStorySection
           story={story}
+          listingHref={catalogEnabled ? brandHref(story.name) : undefined}
           products={brandProducts
             .filter((item): item is CatalogProductDetails => item !== null && item.active)
             .map((item) => ({ product: item, image: productContent(item).images[0] }))}

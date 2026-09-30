@@ -120,7 +120,13 @@ const REVIEWS = ['uuid-p6', 'uuid-p21', 'uuid-p22', 'uuid-p23'].map((productId, 
 }));
 
 beforeEach(() => {
-  Object.assign(flags, { productDetails: true, cart: true, checkout: true, orders: true });
+  Object.assign(flags, {
+    productDetails: true,
+    cart: true,
+    checkout: true,
+    orders: true,
+    catalog: false,
+  });
   session.mockReset().mockResolvedValue(null);
   fetchOrders.mockReset().mockResolvedValue([]);
   pricing
@@ -253,6 +259,25 @@ describe('product detail page', () => {
     // Its own gallery, no related rail padded with unrelated items.
     expect(screen.getByRole('group', { name: 'Escolher imagem do produto' })).toBeTruthy();
     expect(screen.queryByRole('heading', { name: 'Produtos relacionados a este item' })).toBeNull();
+  });
+
+  it('links breadcrumbs and the brand to their listings when the catalog is enabled', async () => {
+    flags.catalog = true;
+    await renderPage('p6');
+    const crumbs = screen.getByRole('navigation', { name: 'Categorias do produto' });
+    expect(
+      within(crumbs)
+        .getAllByRole('link')
+        .map((a) => a.getAttribute('href')),
+    ).toEqual(games.map((c) => `/products?category=${c.slug}`));
+    expect(screen.getByRole('link', { name: 'Marca: 8BitDo' }).getAttribute('href')).toBe(
+      '/products?brand=8bitdo',
+    );
+    expect(
+      screen
+        .getByRole('link', { name: 'Ver todos os produtos da marca 8BitDo' })
+        .getAttribute('href'),
+    ).toBe('/products?brand=8bitdo');
   });
 
   it('shows the purchase banner from real orders, including a sibling variant', async () => {

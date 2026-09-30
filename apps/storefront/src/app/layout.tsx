@@ -20,7 +20,7 @@ export const dynamic = 'force-dynamic';
 // screens (each matches Amazon's own UI): no build-state stamp strip, no
 // generic site navigation. Each brings its own Amazon-style header/footer
 // instead.
-const BARE_ROUTES = ['/login', '/', '/account', '/cart', '/sell', '/help', ...CORPORATE_ROUTES];
+const BARE_ROUTES = ['/login', '/', '/account', '/cart', '/sell', '/help', '/products', ...CORPORATE_ROUTES];
 // "Sua conta" destinations (features/account) bring the same Amazon chrome.
 const ACCOUNT_AREA_ROUTES = [
   '/security',

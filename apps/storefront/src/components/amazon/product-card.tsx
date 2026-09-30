@@ -7,11 +7,15 @@ import { RatingStars } from './rating-stars';
 import type { RatedCatalogItem } from '@/features/product/reviews/ratings';
 import { discountPercent, formatBRL, Product } from '@/features/home/catalog-mock';
 
+/** Same threshold as the product page's buy box ("Apenas N em estoque"). */
+const LOW_STOCK = 5;
+
 export function ProductCard({
   product,
   compact = false,
   action,
   freeDelivery = false,
+  availability = false,
 }: {
   /** Ratings come only from the reviews API (a RatedCatalogItem's `rating`). */
   product: Product | CatalogItem | RatedCatalogItem;
@@ -19,6 +23,8 @@ export function ProductCard({
   action?: ReactNode;
   /** Checkout charges no shipping, so "Entrega GRÁTIS" is always true when shown. */
   freeDelivery?: boolean;
+  /** Listing cards: "Indisponível" / "Apenas N em estoque" from the catalog record. */
+  availability?: boolean;
 }) {
   const catalog = 'priceMinor' in product ? product : null;
   const presentation = catalog ? productPresentation(catalog) : null;
@@ -82,6 +88,14 @@ export function ProductCard({
       {freeDelivery && catalog?.inStock && (
         <span className="az-card__delivery">
           Entrega <strong>GRÁTIS</strong>
+        </span>
+      )}
+      {availability && catalog && !catalog.inStock && (
+        <span className="az-card__stock az-card__stock--out">Indisponível no momento</span>
+      )}
+      {availability && catalog?.inStock && catalog.availableQuantity <= LOW_STOCK && (
+        <span className="az-card__stock az-card__stock--low">
+          Apenas {catalog.availableQuantity} em estoque
         </span>
       )}
       {mock?.badge && <span className="az-card__badge">{mock?.badge}</span>}

@@ -367,3 +367,13 @@ hub is part of the authenticated shell and does not enable account management.
 - Limits: no rate limiting on current-password confirmation (same as login); e-mail change
   sends no confirmation e-mail; a list's sidebar count can include products deleted from
   the catalog.
+
+## Listing, search, category and brand pages (BROWSE-001) — 2026-09-30
+
+- Search, category and brand listings are real; catalog is on and every feature flag is
+  now enabled.
+- Limits: brand filter is single-select; facet counts ignore the price and stock filters;
+  search is a sequential scan (fine for 150 products, pg_trgm noted in docs/browse.md);
+  the legacy base-seed categories show up as departments; curated Home rails still link
+  to /products.
+- Not run: production build (Windows standalone EPERM, see above) and the Kubernetes path.

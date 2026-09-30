@@ -56,11 +56,10 @@ describe('shipped config/features.yaml', () => {
     }
   });
 
-  it('ships unbuilt features disabled', () => {
+  it('enables the product listing (search, category and brand pages)', () => {
     const registry = loadShipped();
-    for (const feature of ['catalog']) {
-      expect(registry.isEnabled(feature)).toBe(false);
-    }
+    expect(registry.isEnabled('catalog')).toBe(true);
+    expect(registry.routeState('products')).toBe('enabled');
   });
 
   it('enables the account area destinations ("Sua conta")', () => {
@@ -104,7 +103,7 @@ describe('shipped config/features.yaml', () => {
   it('resolves the shipped routes to their documented behaviour', () => {
     const registry = loadShipped();
     expect(registry.routeState('login')).toBe('enabled'); // feature enabled
-    expect(registry.routeState('products')).toBe('coming-soon'); // disabled -> visible, marked
+    expect(registry.routeState('account')).toBe('enabled');
     expect(registry.routeState('checkout')).toBe('enabled');
   });
 });
@@ -192,7 +191,10 @@ describe('feature checks are centralised', () => {
         if (!/\.(ts|tsx)$/.test(entry.name)) continue;
         const source = readFileSync(path, 'utf8');
         const isRegistry = path.includes(join('src', 'config'));
-        if (!isRegistry && (source.includes('features.yaml') || /process\.env\.FEATURE_/.test(source))) {
+        if (
+          !isRegistry &&
+          (source.includes('features.yaml') || /process\.env\.FEATURE_/.test(source))
+        ) {
           offenders.push(path);
         }
       }

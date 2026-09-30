@@ -168,6 +168,74 @@ export const CART_ROUTES = {
 } as const;
 export const CATALOG_ROUTES = { products: `${API_PREFIX}/catalog/products` } as const;
 
+// ---------------------------------------------------------------------------
+// Catalog browse & search (BROWSE-001): listing filters, category tree, facets.
+// ---------------------------------------------------------------------------
+
+/** `relevance` ranks text matches first; without `q` it is alphabetical (the old default). */
+export const CATALOG_SORTS = ['relevance', 'price-asc', 'price-desc', 'newest'] as const;
+export type CatalogSort = (typeof CATALOG_SORTS)[number];
+export const CATALOG_MAX_PAGE_SIZE = 48;
+export const CATALOG_SEARCH_MAX_LENGTH = 100;
+/** Upper bounds (integer minor units) of the price facet buckets; the last bucket is open. */
+export const CATALOG_PRICE_BOUNDS_MINOR = [5000, 10000, 20000, 50000, 100000, 200000] as const;
+
+/** Query of GET /catalog/products. Every filter narrows the result (AND). */
+export interface CatalogListQuery {
+  page?: number;
+  pageSize?: number;
+  /** Category slug; includes the whole subtree. */
+  category?: string;
+  slugs?: string[];
+  /** Case- and accent-insensitive text search over name, description and category names. */
+  q?: string;
+  sort?: CatalogSort;
+  /** Inclusive lower bound, integer minor units. */
+  minPriceMinor?: number;
+  /** Exclusive upper bound, integer minor units. */
+  maxPriceMinor?: number;
+  /** Only products with unreserved stock. */
+  inStock?: boolean;
+}
+
+/** One node of the category taxonomy (flat list; the tree is rebuilt from `parentSlug`). */
+export interface CatalogCategoryNode {
+  slug: string;
+  name: string;
+  parentSlug: string | null;
+}
+
+export interface CatalogPriceBucket {
+  minMinor: number;
+  /** Exclusive; null for the open-ended last bucket. */
+  maxMinor: number | null;
+  count: number;
+}
+
+/** Scope of GET /catalog/facets: the listing filters that define "the result". */
+export type CatalogFacetsQuery = Pick<CatalogListQuery, 'q' | 'category' | 'slugs'>;
+
+/** Counts over the search scope (q + category + slugs). Refinements (price, stock) do not
+ * change them, so choosing one never hides the alternatives. */
+export interface CatalogFacets {
+  total: number;
+  inStock: number;
+  priceBuckets: CatalogPriceBucket[];
+  /** Active products per category, counting each category's whole subtree. */
+  categories: Array<{ slug: string; count: number }>;
+  /** Slugs of the matched products, so presentation-only facets (brand) can be derived. */
+  slugs: string[];
+  /** True when `slugs` was capped (more matches than CATALOG_FACET_SLUG_LIMIT). */
+  slugsTruncated: boolean;
+}
+export const CATALOG_FACET_SLUG_LIMIT = 1000;
+
+export const CATALOG_BROWSE_ROUTES = {
+  categories: `${API_PREFIX}/catalog/categories`,
+  facets: `${API_PREFIX}/catalog/facets`,
+} as const;
+// --------------------------- end catalog browse ----------------------------
+
 export interface AddressInput {
   recipient: string;
   postalCode: string;

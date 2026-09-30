@@ -10,8 +10,8 @@ features:
     description: Register, login, logout, account shell
 
   catalog:
-    enabled: false
-    description: Product listing
+    enabled: true
+    description: Product listing, search results, category and brand pages
 
   productDetails:
     enabled: true
