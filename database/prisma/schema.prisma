@@ -218,3 +218,78 @@ model OrderItem {
   @@index([orderId])
   @@map("order_items")
 }
+
+// ---------------------------------------------------------------------------
+// Reviews module (REVIEWS_API). Products and users are referenced by id only,
+// with no foreign key into catalog/users tables (same boundary as order_items):
+// the module checks product existence through CATALOG_API when a review is
+// written, and could move to its own service without touching other tables.
+// ---------------------------------------------------------------------------
+
+enum ReviewSource {
+  CUSTOMER
+  // Fixture texts from config/demo-reviews.json, written by `seed:demo`.
+  DEMO
+
+  @@map("review_source")
+}
+
+model Review {
+  id               String       @id @default(uuid()) @db.Uuid
+  productId        String       @map("product_id") @db.Uuid
+  // Null only for DEMO fixtures, which have no account behind them.
+  userId           String?      @map("user_id") @db.Uuid
+  // Public name snapshot ("Camila S."), refreshed when the author edits.
+  authorName       String       @map("author_name")
+  rating           Int          @db.SmallInt
+  title            String
+  body             String
+  // Set through ORDERS_API when the review is written or edited.
+  verifiedPurchase Boolean      @default(false) @map("verified_purchase")
+  // Denormalised count of review_helpful_votes (plus the fixture count for DEMO rows).
+  helpfulCount     Int          @default(0) @map("helpful_count")
+  source           ReviewSource @default(CUSTOMER)
+  // Stable fixture id that keeps `seed:demo` idempotent. Null for customer reviews.
+  fixtureKey       String?      @unique @map("fixture_key")
+  createdAt        DateTime     @default(now()) @map("created_at")
+  updatedAt        DateTime     @updatedAt @map("updated_at")
+
+  helpfulVotes ReviewHelpfulVote[]
+
+  // One review per customer per product (NULL user ids never collide).
+  @@unique([productId, userId])
+  @@index([productId, helpfulCount])
+  @@index([productId, createdAt])
+  @@index([productId, rating])
+  @@map("reviews")
+}
+
+model ReviewHelpfulVote {
+  reviewId  String   @map("review_id") @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at")
+
+  review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+
+  @@id([reviewId, userId])
+  @@index([userId])
+  @@map("review_helpful_votes")
+}
+
+// Aggregate ratings imported from the demo listings (config/demo-products.json)
+// by `seed:demo`. No written texts exist behind them; summaries add the real
+// reviews on top. Variant records of one demo listing carry the same aggregate
+// (same listing_key), counted once when a whole variant family is summarised.
+model ReviewRatingBaseline {
+  productId    String   @id @map("product_id") @db.Uuid
+  listingKey   String   @map("listing_key")
+  ratingCount  Int      @map("rating_count")
+  // Sum of the stars, so averages merge exactly with real reviews.
+  ratingSum    Int      @map("rating_sum")
+  // Percent per star level, 5 stars first; empty when the listing gave none.
+  distribution Int[]
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@index([listingKey])
+  @@map("review_rating_baselines")
+}

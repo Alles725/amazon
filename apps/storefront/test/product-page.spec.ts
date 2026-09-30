@@ -100,6 +100,25 @@ const CATALOG = [
   record('plain-mug', 'Plain mug', 1990, [{ slug: 'kitchen', name: 'Kitchen' }]),
 ];
 
+const EMPTY = { average: null, count: 0 };
+const RATINGS: Record<string, { average: number; count: number }> = {
+  'uuid-p6': { average: 4.8, count: 5512 },
+  'uuid-p1': { average: 4.7, count: 48213 },
+  'uuid-p18': { average: 4.6, count: 9123 },
+};
+const REVIEWS = ['uuid-p6', 'uuid-p21', 'uuid-p22', 'uuid-p23'].map((productId, index) => ({
+  id: `r${index}`,
+  productId,
+  authorName: `Autor ${index}`,
+  rating: 5,
+  title: `Título ${index}`,
+  body: 'Texto da avaliação.',
+  verifiedPurchase: index < 2,
+  helpfulCount: 4 - index,
+  createdAt: '2026-08-01T12:00:00.000Z',
+  updatedAt: '2026-08-01T12:00:00.000Z',
+}));
+
 beforeEach(() => {
   Object.assign(flags, { productDetails: true, cart: true, checkout: true, orders: true });
   session.mockReset().mockResolvedValue(null);
@@ -122,6 +141,24 @@ beforeEach(() => {
       const path = url.replace('http://api/api/v1', '');
       if (path === '/addresses') return json([]);
       if (path === '/orders/pricing') return pricing();
+      const reviewIds = (path.match(/productIds=([^&]+)/)?.[1] ?? '').split(',');
+      if (path.startsWith('/reviews/summaries'))
+        return json({
+          items: reviewIds.map((id) => ({ productId: id, ...(RATINGS[id] ?? EMPTY) })),
+        });
+      if (path.startsWith('/reviews/summary')) {
+        const rated = reviewIds.map((id) => RATINGS[id]).find(Boolean);
+        return json(
+          rated && reviewIds.includes('uuid-p6')
+            ? { ...rated, distribution: [92, 5, 1, 0, 2].map((percent, i) => ({ stars: 5 - i, percent })) }
+            : { ...(rated ?? EMPTY), distribution: null },
+        );
+      }
+      if (path.startsWith('/reviews/viewer')) return json({ ownReviews: [], helpfulReviewIds: [] });
+      if (path.startsWith('/reviews?')) {
+        const items = REVIEWS.filter((review) => reviewIds.includes(review.productId));
+        return json({ items, total: items.length, page: 1, pageSize: 8 });
+      }
       const list = path.match(/^\/catalog\/products\?.*category=([^&]+)/);
       if (list)
         return json({
@@ -190,8 +227,16 @@ describe('product detail page', () => {
       screen.getByText('Qualidade 8BitDo em controles e gamepads para consoles.'),
     ).toBeTruthy();
     expect(screen.getByRole('heading', { name: 'Da marca' })).toBeTruthy();
+    // Rating and reviews come from the reviews API, pooled across the variant family.
     expect(screen.getByText('92%')).toBeTruthy();
-    expect(screen.getAllByText('Compra verificada')).toHaveLength(4);
+    expect(screen.getByRole('link', { name: '5.512 avaliações de clientes' })).toBeTruthy();
+    expect(screen.getAllByText('Compra verificada')).toHaveLength(2);
+    expect(screen.getByText('Cor: Verde')).toBeTruthy();
+    const reviewsCall = vi
+      .mocked(fetch)
+      .mock.calls.map(([url]) => String(url))
+      .find((url) => url.includes('/reviews?'));
+    expect(reviewsCall).toContain('productIds=uuid-p6,uuid-p21,uuid-p22,uuid-p23');
     // Sibling variants: own links, prices and stock.
     const swatches = screen.getByRole('list', { name: 'Escolher cor' });
     expect(
@@ -259,6 +304,7 @@ describe('product detail page', () => {
       expect(screen.queryByText(absent)).toBeNull();
     expect(screen.queryByRole('list', { name: /Escolher/ })).toBeNull();
     expect(screen.getByText('-20%')).toBeTruthy();
+    expect(screen.getByRole('link', { name: '48.213 avaliações de clientes' })).toBeTruthy();
     expect(screen.getByText('Nenhuma avaliação escrita para exibir.')).toBeTruthy();
     // Related: widened to the "Dispositivos Amazon" level, never itself.
     const rail = screen

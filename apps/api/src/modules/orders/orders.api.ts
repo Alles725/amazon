@@ -14,4 +14,7 @@ export interface OrdersApi {
   placeOrderFromCart(userId: string, input: PlaceOrderRequest): Promise<OrderResponse>;
   listForUser(userId: string): Promise<OrderResponse[]>;
   findForUser(userId: string, orderId: string): Promise<OrderResponse | null>;
+  /** True when the user has a non-cancelled order containing the product
+   * (reviews' "Compra verificada"). */
+  hasPurchased(userId: string, productId: string): Promise<boolean>;
 }

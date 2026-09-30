@@ -147,6 +147,13 @@ export class OrdersService implements OrdersApi {
     });
     return order ? orderView(order) : null;
   }
+  async hasPurchased(userId: string, productId: string) {
+    const line = await this.prisma.orderItem.findFirst({
+      where: { productId, order: { userId, status: { not: 'CANCELLED' } } },
+      select: { id: true },
+    });
+    return line !== null;
+  }
 }
 function orderView(order: StoredOrder): OrderResponse {
   return {

@@ -5,6 +5,7 @@ import { FeatureRoute, isFeatureEnabled } from '@/config/feature-gate';
 import { getConfig } from '@/config/storefront-config';
 import { CartContent } from '@/features/cart/cart-content';
 import { getCheckoutPricing } from '@/features/checkout/pricing-server';
+import { withRatings } from '@/features/product/reviews/product-reviews';
 
 export default async function CartPage() {
   if (!isFeatureEnabled('cart'))
@@ -33,7 +34,7 @@ export default async function CartPage() {
     <div className="amazon-cart-page" id="top">
       <AmazonHeader />
       <CartContent
-        products={catalog.items}
+        products={await withRatings(catalog.items)}
         catalogFailed={catalogFailed}
         checkoutEnabled={checkoutEnabled}
         pixDiscountPercent={pricing?.pixDiscountPercent ?? null}

@@ -352,3 +352,10 @@ hub is part of the authenticated shell and does not enable account management.
   percentage); OpenAPI lists /orders/pricing under the session-protected tag although the
   endpoint is public; per-unit Pix prices can differ by a cent or two from the subtotal
   discount checkout charges.
+
+## Customer reviews (REVIEWS-001) — 2026-09-30
+
+- Reviews and ratings come from the reviews module; productReviews is on.
+- The four 8BitDo demo texts no longer carry "Compra verificada" (no order behind them).
+- Not built: customer photos/videos (no file storage), deleting a review, reporting a
+  review (still links to /help). The badge is recalculated only when a review is saved.

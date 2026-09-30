@@ -4,6 +4,7 @@ import type { CatalogItem } from '@amazon-mvp/api-contract';
 import { formatCartMoney } from '@/features/cart/money';
 import { PixPrice } from '@/features/checkout/pix-price';
 import type { ProductContent } from './product-content';
+import type { CardRating } from './reviews/ratings';
 import { ProductPrice } from './product-price';
 import { ProductStars } from './product-stars';
 import {
@@ -16,12 +17,15 @@ import {
 export function ProductOverview({
   product,
   content,
+  rating,
   dimensions,
   brandHref,
   pixDiscountPercent = null,
 }: {
   product: CatalogItem;
   content: ProductContent;
+  /** From the reviews API; absent when the product has no ratings yet. */
+  rating?: CardRating;
   dimensions: VariantDimension[];
   brandHref?: string;
   /** Rate from the API's checkout config (GET /orders/pricing); null = not advertised. */
@@ -47,15 +51,15 @@ export function ProductOverview({
           <strong>{attribute.label}</strong> : {attribute.value}
         </p>
       ))}
-      {content.rating && (
+      {rating && (
         <p className="az-pdp-rating">
-          <span aria-hidden="true">{formatRating(content.rating.average)}</span>
-          <ProductStars rating={content.rating.average} />
+          <span aria-hidden="true">{formatRating(rating.average)}</span>
+          <ProductStars rating={rating.average} />
           <a
             href="#customer-reviews"
-            aria-label={`${content.rating.count.toLocaleString('pt-BR')} avaliações de clientes`}
+            aria-label={`${rating.count.toLocaleString('pt-BR')} avaliações de clientes`}
           >
-            ({content.rating.count.toLocaleString('pt-BR')})
+            ({rating.count.toLocaleString('pt-BR')})
           </a>
         </p>
       )}

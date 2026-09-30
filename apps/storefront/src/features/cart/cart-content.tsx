@@ -1,12 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import { CatalogItem, MAX_CART_QUANTITY } from '@amazon-mvp/api-contract';
+import { MAX_CART_QUANTITY } from '@amazon-mvp/api-contract';
 import { HorizontalRail } from '@/components/amazon/horizontal-rail';
 import { ProductCard } from '@/components/amazon/product-card';
 import { ProductImage } from '@/components/amazon/product-image';
 import { productPresentation } from '@/features/product/product-presentation';
 import { PixPrice } from '@/features/checkout/pix-price';
+import type { RatedCatalogItem } from '@/features/product/reviews/ratings';
 import { useCart } from './cart-provider';
 import { formatCartMoney } from './money';
 
@@ -16,7 +17,7 @@ export function CartContent({
   checkoutEnabled,
   pixDiscountPercent = null,
 }: {
-  products: CatalogItem[];
+  products: RatedCatalogItem[];
   catalogFailed: boolean;
   checkoutEnabled: boolean;
   /** Rate from the API's checkout config (GET /orders/pricing); null = not advertised. */
