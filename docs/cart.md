@@ -6,12 +6,8 @@ homepage nem são persistidos em localStorage. Não houve alteração de schema.
 
 ## Como experimentar localmente
 
-A flag `cart` permanece `false` em `config/features.yaml`, seguindo a convenção
-de novas funcionalidades desativadas por padrão. Para testar, copie esse arquivo
-para uma configuração local ignorada pelo Git, por exemplo `.env.features.yaml`,
-altere apenas `features.cart.enabled` para `true` e aponte `FEATURES_FILE` no seu
-`.env` para o caminho absoluto dessa cópia. Reinicie o storefront com esse ambiente
-carregado. A sessão de implementação já deixou essa configuração local pronta.
+A flag `cart` está `true` em `config/features.yaml` (FLAGS-001), junto com
+`productDetails` e `checkout`; basta subir a aplicação com o `.env` padrão.
 
 1. Abra `http://localhost:3000/cart` e entre em sua conta se necessário.
 2. Em “Explore nossos produtos”, adicione produtos do banco.

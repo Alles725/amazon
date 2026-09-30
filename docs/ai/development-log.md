@@ -355,3 +355,19 @@ departments with click-through of a recommendation, variants, Home → product �
 cart → checkout → order → Seus pedidos, other routes, 390px; all 147 product pages render
 with a related rail (6-12 cards for every demo product). No console errors. Storefront
 build compiled; standalone step hit the known Windows EPERM.
+
+## 2026-09-29 — FLAGS-001
+
+Turned on every implemented feature in the shared config/features.yaml: productDetails,
+cart, checkout and browsingHistory. Before this, /products/[id] rendered Coming Soon for
+anyone running with the default FEATURES_FILE; the page only worked with an ignored local
+copy of the flags. Unbuilt destinations (catalog, account, productReviews, footer and
+account-hub pages) stay off and keep rendering Coming Soon. features.spec now asserts the
+four flags on and catalog/account off; config-schema specs use inline fixtures, unchanged.
+No application code changed.
+
+Validation: storefront unit tests 150, config-schema 13, typecheck, lint. Browser
+(Playwright, default FEATURES_FILE): four products (UUID and slug, with and without
+images), unknown id, gallery hover, quantity 3 → header count, related product
+navigation, "Comprar agora" → /checkout, 390/768/1024/1280 px without horizontal
+overflow, browsing history flyout with "No carrinho" badges. Build not run (dev server up).

@@ -162,7 +162,7 @@ iterations:
         note: >-
           Existing schema and session reused. Seven cart integration and seven
           frontend provider tests pass, plus full browser lifecycle and responsive
-          checks. Shared flag remains off; locally enabled through FEATURES_FILE.
+          checks. Shared flag enabled by FLAGS-001.
 
   - id: 6
     name: Dynamic product detail
@@ -177,7 +177,7 @@ iterations:
           56 unit tests, 26 database integration tests and browser checks pass.
           Shared demo fixtures seed p1-p20 without overwriting records; all catalog
           products share details/cart. Photo and empty-data fallbacks verified.
-          Shared productDetails flag remains off; local override enables it.
+          Shared productDetails flag enabled by FLAGS-001.
 
   - id: 7
     name: Academic checkout
@@ -276,12 +276,13 @@ iterations:
     stories:
       - id: FLAGS-001
         owner: dev2
-        status: planned
+        status: done
         title: Enable productDetails, cart and checkout in the shared config/features.yaml
         note: >-
-          Implemented and verified with a local FEATURES_FILE copy. Needs a team decision:
-          update apps/storefront/test/features.spec.ts ("ships unbuilt features disabled")
-          and config-schema expectations in the same change.
+          productDetails, cart, checkout and browsingHistory (every implemented feature)
+          are on in the shared config; features.spec asserts it. Unbuilt destinations
+          (catalog, account, footer and account-hub pages, productReviews) stay off and
+          keep rendering Coming Soon. config-schema specs use inline fixtures, unchanged.
       - id: REVIEWS-001
         owner: dev1
         status: planned

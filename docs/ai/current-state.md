@@ -46,7 +46,7 @@ This records observed local results, not an assertion that CI or deployment pass
   tested separately; they are expected failure-path checks.
 - Existing homepage geometry, content sections and footer destinations still pass
   their visual regression checks. The header markup intentionally gains a live count.
-- Cart defaults off in shared config and on in the ignored local FEATURES_FILE.
+- Cart is enabled in the shared config since FLAGS-001.
   See `docs/cart.md` for setup, endpoints and remaining limitations.
 - Real catalog products have no photos in the existing schema; cart uses an honest
   image-unavailable state. No fake ratings or recommendations; browsing history
@@ -130,8 +130,8 @@ This records observed local results, not an assertion that CI or deployment pass
 
 ## Enabled features
 
-Shared config/features.yaml enables home, authentication, sell, help and orders; the
-local ignored configuration also enables cart, productDetails and checkout.
+Shared config/features.yaml enables home, authentication, sell, help, orders,
+productDetails, cart, checkout and browsingHistory (FLAGS-001).
 Unimplemented destinations render Coming Soon. The account
 hub is part of the authenticated shell and does not enable account management.
 
@@ -166,8 +166,8 @@ hub is part of the authenticated shell and does not enable account management.
   Histórico de navegação, Ideias de Presente. "Livros" and "Eletrônicos" removed.
 - "Todos" opens an Amazon-style left panel (5 sections, fixed external links).
   "Sair" is a no-op `javascript:void(0)` link by request; React logs a dev warning.
-- Browsing history flyout behind the new `browsingHistory` flag (false in shared
-  config). Product detail pages record real visits in the browser's localStorage;
+- Browsing history flyout behind the new `browsingHistory` flag (enabled in shared
+  config since FLAGS-001). Product detail pages record real visits in the browser's localStorage;
   nothing is fabricated and there is no backend. History is per browser, not per
   account: people sharing a browser share it, like Amazon's signed-out history.
 - Validation: storefront lint/typecheck and 46 unit tests pass. Chromium verified
@@ -314,3 +314,14 @@ hub is part of the authenticated shell and does not enable account management.
   (schema unchanged); storefront standalone output (Windows EPERM on symlinks); Kustomize
   (not installed); Docker images. The API on :3001 still runs the old code and must be
   restarted for the Home's ?slugs= call.
+
+## Shared feature flags (FLAGS-001) — 2026-09-29
+
+- productDetails, cart, checkout and browsingHistory are on in config/features.yaml; the
+  default `.env` (FEATURES_FILE=../../../config/features.yaml) serves the product page,
+  cart, checkout and history flyout without a local copy.
+- Verified in the browser with the default file: four products, unknown id, cart
+  quantity/header count, related navigation, buy now → checkout, responsive widths and
+  the history flyout ("No carrinho" badge now observed in a browser, not only unit tests).
+- Still off: catalog (/products placeholder), account, productReviews and the
+  footer/account-hub pages (Coming Soon).
