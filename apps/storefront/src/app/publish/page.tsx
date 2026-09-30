@@ -1,13 +1,14 @@
-import { EmptyState } from '@/components/states';
-import { PageContainer } from '@/components/page-container';
 import { FeatureRoute } from '@/config/feature-gate';
+import { CorporatePageShell, corporateMetadata } from '@/features/corporate/corporate-shell';
+
+export function generateMetadata() {
+  return corporateMetadata('publish');
+}
 
 export default function PublishPage() {
   return (
     <FeatureRoute routeKey="publish" title="Publique seus livros">
-      <PageContainer eyebrow="Ganhe dinheiro conosco" title="Publique seus livros">
-        <EmptyState title="Conteúdo em construção" body="Esta página ainda não foi implementada." />
-      </PageContainer>
+      <CorporatePageShell pageKey="publish" />
     </FeatureRoute>
   );
 }

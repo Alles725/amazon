@@ -367,6 +367,17 @@ iterations:
         note: >-
           CatalogService.getProduct runs one recursive query per category of the product.
 
+  - id: 14
+    name: Storefront completion
+    stories:
+      - id: FOOTER-001
+        owner: dev2
+        status: done
+        title: Footer institutional pages ("Conheça-nos" and "Ganhe dinheiro conosco")
+        note: >-
+          12 content pages from one typed template (features/corporate); no fabricated
+          facts (test-enforced); honest notices where Amazon lists real records.
+
 next_up:
   - id: FIRSTRUN-001
     title: First cluster run

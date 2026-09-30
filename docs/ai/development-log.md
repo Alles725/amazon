@@ -371,3 +371,19 @@ Validation: storefront unit tests 150, config-schema 13, typecheck, lint. Browse
 images), unknown id, gallery hover, quantity 3 → header count, related product
 navigation, "Comprar agora" → /checkout, 390/768/1024/1280 px without horizontal
 overflow, browsing history flyout with "No carrinho" badges. Build not run (dev server up).
+
+## 2026-09-30 — FOOTER-001
+
+Replaced the Coming Soon placeholders of the 12 institutional footer destinations (about,
+corporate-information, careers, press, community, accessibility, amazon-science,
+brand-protection, supply, publish, associates, advertise) with finished pages and turned
+their flags on. One data-driven template in features/corporate: typed content (hero plus
+split/cards/steps/compare/notice/faq/cta blocks) in know-us-content.ts and earn-content.ts,
+rendered by corporate-body.tsx; own SVG icons; CSS isolated in corporate.css; the routes join
+BARE_ROUTES in app/layout.tsx. Academic rule enforced by test: no statistics, dates, names,
+openings, press releases or external URLs — honest `notice` blocks instead ("Nenhum
+comunicado publicado…", "Não há vagas abertas…") and a disclaimer on every page.
+
+Validation: lint, typecheck, storefront unit tests (corporate-pages.spec, 33 tests).
+Browser (Playwright): 12 pages at 390/768/1024/1440 px without overflow or console errors,
+FAQ by keyboard, footer and section-nav links. See docs/corporate-footer-pages.md.

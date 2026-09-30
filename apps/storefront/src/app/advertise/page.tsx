@@ -1,13 +1,14 @@
-import { EmptyState } from '@/components/states';
-import { PageContainer } from '@/components/page-container';
 import { FeatureRoute } from '@/config/feature-gate';
+import { CorporatePageShell, corporateMetadata } from '@/features/corporate/corporate-shell';
+
+export function generateMetadata() {
+  return corporateMetadata('advertise');
+}
 
 export default function AdvertisePage() {
   return (
     <FeatureRoute routeKey="advertise" title="Anuncie seus produtos">
-      <PageContainer eyebrow="Ganhe dinheiro conosco" title="Anuncie seus produtos">
-        <EmptyState title="Conteúdo em construção" body="Esta página ainda não foi implementada." />
-      </PageContainer>
+      <CorporatePageShell pageKey="advertise" />
     </FeatureRoute>
   );
 }

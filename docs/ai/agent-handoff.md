@@ -2,10 +2,10 @@
 
 ## Current objective
 
-FLAGS-001 — productDetails, cart, checkout and browsingHistory enabled in the shared
-config/features.yaml (see current-state.md "Shared feature flags"). PR preparation is on
-feat/habilitar-pagina-de-produto, created from origin/main at 1c73f40 (CATALOG-002 PR #19
-merged). Commit, push and PR await the final explicit approval.
+FOOTER-001 — see the development log entry of 2026-09-30 and current-state.md. PR preparation is on
+feat/paginas-institucionais, part of a stacked chain of six branches to merge in order: institutional
+footer pages, help/payment pages, Pix discount, reviews, account hub, listing and search.
+Commit, push and PR await the final explicit approval.
 
 ## Implementation
 
