@@ -1,6 +1,6 @@
 # Current state
 
-Last updated: 2026-09-29
+Last updated: 2026-09-30
 
 This records observed local results, not an assertion that CI or deployment passed.
 
@@ -325,3 +325,12 @@ hub is part of the authenticated shell and does not enable account management.
   the history flyout ("No carrinho" badge now observed in a browser, not only unit tests).
 - Still off: catalog (/products placeholder), account, productReviews and the
   footer/account-hub pages (Coming Soon).
+
+## Footer institutional pages ("Conheça-nos" and "Ganhe dinheiro conosco") (FOOTER-001) — 2026-09-30
+
+- The 12 "Conheça-nos" / "Ganhe dinheiro conosco" footer pages (except /sell, already
+  done) are real content pages; flags about … advertise are on.
+- Deliberately honest placeholders: press releases, job openings, financial reports,
+  named projects/partners, papers and any enrolment form do not exist in this store.
+- Known limitation: on phones the section nav scrolls sideways and the current page's
+  link can start off-screen.

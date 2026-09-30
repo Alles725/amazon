@@ -5,6 +5,7 @@ import { FeatureStampStrip, Navigation } from '@/components/navigation';
 import { CartProvider } from '@/features/cart/cart-provider';
 import { getServerSession } from '@/features/auth/server-session';
 import { isFeatureEnabled } from '@/config/feature-gate';
+import { CORPORATE_ROUTES } from '@/features/corporate/corporate-routes';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -19,7 +20,7 @@ export const dynamic = 'force-dynamic';
 // screens (each matches Amazon's own UI): no build-state stamp strip, no
 // generic site navigation. Each brings its own Amazon-style header/footer
 // instead.
-const BARE_ROUTES = ['/login', '/', '/account', '/cart', '/sell', '/help'];
+const BARE_ROUTES = ['/login', '/', '/account', '/cart', '/sell', '/help', ...CORPORATE_ROUTES];
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const pathname = headers().get('x-pathname') ?? '';

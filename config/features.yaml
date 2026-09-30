@@ -45,43 +45,43 @@ features:
   # not part of a vertical slice — so one team member can build any one of
   # them without touching the others.
   about:
-    enabled: false
+    enabled: true
     description: About Amazon
   corporateInformation:
-    enabled: false
+    enabled: true
     description: Corporate information
   careers:
-    enabled: false
+    enabled: true
     description: Careers
   press:
-    enabled: false
+    enabled: true
     description: Press releases
   community:
-    enabled: false
+    enabled: true
     description: Community
   accessibility:
-    enabled: false
+    enabled: true
     description: Accessibility
   amazonScience:
-    enabled: false
+    enabled: true
     description: Amazon Science
   sell:
     enabled: true
     description: Sell on Amazon
   brandProtection:
-    enabled: false
+    enabled: true
     description: Brand protection and building
   supply:
-    enabled: false
+    enabled: true
     description: Supply to Amazon
   publish:
-    enabled: false
+    enabled: true
     description: Self-publish books
   associates:
-    enabled: false
+    enabled: true
     description: Become an associate
   advertise:
-    enabled: false
+    enabled: true
     description: Advertise products
   paymentMethods:
     enabled: false
