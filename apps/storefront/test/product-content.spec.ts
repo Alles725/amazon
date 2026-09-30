@@ -11,7 +11,6 @@ import {
   productContent,
   variantGroupSlugs,
 } from '../src/features/product/product-content';
-import { productReviews } from '../src/features/product/reviews/product-reviews';
 import demos from '../../../config/demo-products.json';
 import contents from '../../../config/demo-product-content.json';
 import categories from '../../../config/demo-categories.json';
@@ -66,7 +65,8 @@ describe('productContent', () => {
       { name: 'Estilo', value: 'Ultimate 2C' },
       { name: 'Cor', value: 'Hortelã' },
     ]);
-    expect(content.rating).toEqual({ average: 4.8, count: 5508, distribution: [92, 5, 1, 0, 2] });
+    // Ratings are not presentation content: they come from the reviews API.
+    expect(content).not.toHaveProperty('rating');
     expect(content.details.find((d) => d.label === 'ASIN')?.value).toBe('B0D736BCNM');
   });
 
@@ -77,7 +77,6 @@ describe('productContent', () => {
     expect(echo.variant).toBeUndefined();
     expect(echo.badges).toEqual({ amazonChoice: false, boughtLastMonth: undefined });
     expect(echo.bullets).toEqual([]);
-    expect(echo.rating).toEqual({ average: 4.7, count: 48213 });
 
     const peach = productContent(catalogItem('p21', 'DEMO-p21'));
     expect(peach.images[0].src).toContain('/pessego-1');
@@ -92,7 +91,6 @@ describe('productContent', () => {
         brand: undefined,
         attributes: [],
         details: [],
-        rating: undefined,
         variant: undefined,
         demo: false,
       });
@@ -105,29 +103,6 @@ describe('productContent', () => {
     expect(brandStory('8BitDo')?.story).toHaveLength(3);
     expect(brandStory('Amazon')).toBeUndefined();
     expect(brandStory(undefined)).toBeUndefined();
-  });
-});
-
-describe('productReviews', () => {
-  it('shares one review pool across variants, most helpful first', () => {
-    const mint = catalogItem('p6', 'DEMO-p6');
-    const purple = catalogItem('p22', 'DEMO-p22');
-    const a = productReviews(mint, productContent(mint));
-    const b = productReviews(purple, productContent(purple));
-    expect(a.reviews.map((r) => r.id)).toEqual(b.reviews.map((r) => r.id));
-    expect(a.reviews[0].helpfulCount).toBeGreaterThanOrEqual(a.reviews[1].helpfulCount);
-    expect(a.media).toEqual([]);
-  });
-
-  it('keeps the aggregate rating but invents no written reviews for other products', () => {
-    const echo = catalogItem('p1', 'DEMO-p1');
-    expect(productReviews(echo, productContent(echo))).toEqual({
-      summary: { average: 4.7, count: 48213 },
-      media: [],
-      reviews: [],
-    });
-    const plain = catalogItem('usb-c-charger-65w', 'ELEC-0001');
-    expect(productReviews(plain, productContent(plain)).summary).toBeNull();
   });
 });
 

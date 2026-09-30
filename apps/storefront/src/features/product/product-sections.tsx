@@ -5,11 +5,19 @@ import { HorizontalRail } from '@/components/amazon/horizontal-rail';
 import type { ProductPhoto } from '@/features/home/catalog-mock';
 import type { BrandStory, ProductContent } from './product-content';
 import { ProductStars } from './product-stars';
+import type { CardRating } from './reviews/ratings';
 import { formatRating } from './product-rules';
 
 /** Only fields this product actually has; the section is omitted when none exist. */
-export function ProductDetailsSection({ content }: { content: ProductContent }) {
-  const { details, bestSellerRanks, rating } = content;
+export function ProductDetailsSection({
+  content,
+  rating,
+}: {
+  content: ProductContent;
+  /** From the reviews API; absent when the product has no ratings yet. */
+  rating?: CardRating;
+}) {
+  const { details, bestSellerRanks } = content;
   if (!details.length && !bestSellerRanks.length && !rating) return null;
   return (
     <section

@@ -12,9 +12,10 @@ sem cache. Não existe página, `if` ou rota específica por produto: o 8BitDo U
 | Nome, preço, estoque, ativo, descrição, categorias | Banco, via API do catálogo (autoritativo) |
 | Breadcrumb | `categoryPath` da API: cadeia raiz → folha da categoria mais específica (`categories.parent_id`) |
 | Marca, galeria, atributos ("Plataforma"), "Sobre este item", detalhes, ranking, selos, parcelas, variações, envio/vendedor/devolução | `config/demo-product-content.json` (servidor apenas), casado por **slug + SKU** |
-| Imagem principal de cards, preço anterior, nota/quantidade de avaliações | `config/demo-products.json` (o mesmo usado pela Home e pelo seed) |
+| Imagem principal de cards, preço anterior | `config/demo-products.json` (o mesmo usado pela Home e pelo seed) |
+| Nota média, quantidade e distribuição de avaliações (página e cards) | API de reviews (`GET /reviews/summary`, `/reviews/summaries`) — ver [reviews](reviews.md) |
 | "Da marca" | `config/demo-brands.json`; só aparece para marcas cadastradas |
-| Avaliações individuais e mídia de clientes | `features/product/reviews/product-reviews.ts` ← `config/demo-reviews.json` |
+| Avaliações individuais, votos "Útil" e "Compra verificada" | `features/product/reviews/product-reviews.ts` ← API de reviews (`GET /reviews`) |
 | "Você comprou este produto…" | Pedidos reais do usuário (`fetchOrders()`, mesma fonte de "Seus pedidos") |
 | "Enviar para …" | Primeiro endereço salvo do usuário (`GET /addresses`, mesma ordem do checkout) |
 | Relacionados | `relatedProducts` + `rankRelated` (ver "Produtos relacionados" abaixo) |
@@ -78,12 +79,14 @@ um card por família (`variantOf` fica fora das vitrines).
   Parcelas "sem juros" são exibidas porque não alteram o total.
 - **Data de entrega**: não há estimativa de prazo; mostramos só "Entrega GRÁTIS" (o checkout
   não cobra frete).
-- **Avaliações**: não há backend. Os textos do 8BitDo são de demonstração, com autores
-  fictícios, compartilhados entre as variações. Demais produtos mostram só a nota agregada
-  que já existia na Home, sem avaliações escritas. "Útil" apenas agradece localmente;
-  "Escreva uma avaliação"/"Incluir avaliação" levam a `/products/<slug>/review`, atrás da
-  flag `productReviews` (Coming Soon). Nenhuma foto/vídeo de cliente foi copiada; a seção
-  "Fotos e vídeos de clientes" só aparece quando houver mídia.
+- **Avaliações**: vêm do módulo `reviews` da API (REVIEWS-001, detalhes em
+  [reviews](reviews.md)). As notas agregadas das listagens demo e os 4 textos do 8BitDo
+  foram movidos para o banco pelo `seed:demo`, marcados como demonstração (autores
+  fictícios, nunca "Compra verificada"). Produtos sem avaliações mostram "Ainda não há
+  avaliações" e o botão "Escreva uma avaliação" — nenhum número é inventado.
+  `/products/<slug>/review` (flag `productReviews` ligada) cria ou edita a avaliação do
+  cliente; "Útil" grava um voto por cliente. Não há armazenamento de arquivos: a seção
+  "Fotos e vídeos de clientes" continua oculta enquanto não houver mídia real.
 - **Breadcrumb e marca**: não existe página de listagem por categoria ou marca (a rota
   `/products` ainda é placeholder), então os níveis são texto; `ProductBreadcrumb` aceita
   `hrefFor` para quando existir. "Marca" leva à seção "Da marca" quando há conteúdo.

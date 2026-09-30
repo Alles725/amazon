@@ -952,6 +952,299 @@
           "orders"
         ]
       }
+    },
+    "/api/v1/reviews": {
+      "get": {
+        "operationId": "ReviewsController_list",
+        "parameters": [
+          {
+            "name": "productIds",
+            "required": true,
+            "in": "query",
+            "description": "Comma-separated product UUIDs (at most 24), e.g. a variant family",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "helpful",
+              "enum": [
+                "helpful",
+                "recent"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "stars",
+            "required": false,
+            "in": "query",
+            "description": "Only reviews with this rating",
+            "schema": {
+              "minimum": 1,
+              "maximum": 5,
+              "type": "number"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 1000,
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 20,
+              "default": 10,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewPageDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "reviews"
+        ]
+      }
+    },
+    "/api/v1/reviews/summary": {
+      "get": {
+        "operationId": "ReviewsController_summary",
+        "parameters": [
+          {
+            "name": "productIds",
+            "required": true,
+            "in": "query",
+            "description": "Comma-separated product UUIDs (at most 24), e.g. a variant family",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RatingSummaryDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "reviews"
+        ]
+      }
+    },
+    "/api/v1/reviews/summaries": {
+      "get": {
+        "operationId": "ReviewsController_summaries",
+        "parameters": [
+          {
+            "name": "productIds",
+            "required": true,
+            "in": "query",
+            "description": "Comma-separated product UUIDs (at most 48)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductRatingSummariesDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "reviews"
+        ]
+      }
+    },
+    "/api/v1/reviews/viewer": {
+      "get": {
+        "operationId": "ReviewsController_viewer",
+        "parameters": [
+          {
+            "name": "productIds",
+            "required": true,
+            "in": "query",
+            "description": "Comma-separated product UUIDs (at most 24), e.g. a variant family",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewViewerStateDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "reviews"
+        ]
+      }
+    },
+    "/api/v1/reviews/mine": {
+      "get": {
+        "operationId": "ReviewsController_mine",
+        "parameters": [
+          {
+            "name": "productId",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OwnReviewDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Product not found"
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "reviews"
+        ]
+      },
+      "put": {
+        "operationId": "ReviewsController_save",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveReviewDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Product not found"
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "reviews"
+        ]
+      }
+    },
+    "/api/v1/reviews/{reviewId}/helpful": {
+      "put": {
+        "operationId": "ReviewsController_helpful",
+        "parameters": [
+          {
+            "name": "reviewId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HelpfulVoteDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "REVIEW_SELF_VOTE: own review"
+          },
+          "404": {
+            "description": "Review not found"
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "reviews"
+        ]
+      }
     }
   },
   "info": {
@@ -1675,6 +1968,275 @@
           "deliveredAt",
           "deliveryNote",
           "lines"
+        ]
+      },
+      "ReviewDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "productId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "authorName": {
+            "type": "string"
+          },
+          "rating": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "title": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "verifiedPurchase": {
+            "type": "boolean"
+          },
+          "helpfulCount": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "productId",
+          "authorName",
+          "rating",
+          "title",
+          "body",
+          "verifiedPurchase",
+          "helpfulCount",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "ReviewPageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReviewDto"
+            }
+          },
+          "total": {
+            "type": "integer"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "pageSize": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "total",
+          "page",
+          "pageSize"
+        ]
+      },
+      "RatingBucketDto": {
+        "type": "object",
+        "properties": {
+          "stars": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "percent": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100
+          }
+        },
+        "required": [
+          "stars",
+          "percent"
+        ]
+      },
+      "RatingSummaryDto": {
+        "type": "object",
+        "properties": {
+          "average": {
+            "type": "number",
+            "nullable": true,
+            "example": 4.6
+          },
+          "count": {
+            "type": "integer"
+          },
+          "distribution": {
+            "nullable": true,
+            "description": "5 stars first; null when part of the aggregate has no known distribution",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RatingBucketDto"
+            }
+          }
+        },
+        "required": [
+          "average",
+          "count",
+          "distribution"
+        ]
+      },
+      "ProductRatingSummaryDto": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "average": {
+            "type": "number",
+            "nullable": true
+          },
+          "count": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "productId",
+          "average",
+          "count"
+        ]
+      },
+      "ProductRatingSummariesDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductRatingSummaryDto"
+            }
+          }
+        },
+        "required": [
+          "items"
+        ]
+      },
+      "OwnReviewRefDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "productId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "id",
+          "productId"
+        ]
+      },
+      "ReviewViewerStateDto": {
+        "type": "object",
+        "properties": {
+          "ownReviews": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OwnReviewRefDto"
+            }
+          },
+          "helpfulReviewIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "ownReviews",
+          "helpfulReviewIds"
+        ]
+      },
+      "OwnReviewDto": {
+        "type": "object",
+        "properties": {
+          "review": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ReviewDto"
+              }
+            ]
+          },
+          "verifiedPurchase": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "review",
+          "verifiedPurchase"
+        ]
+      },
+      "SaveReviewDto": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "rating": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "title": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 120
+          },
+          "body": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 5000
+          }
+        },
+        "required": [
+          "productId",
+          "rating",
+          "title",
+          "body"
+        ]
+      },
+      "HelpfulVoteDto": {
+        "type": "object",
+        "properties": {
+          "reviewId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "helpfulCount": {
+            "type": "integer"
+          },
+          "voted": {
+            "type": "number",
+            "enum": [
+              true
+            ]
+          }
+        },
+        "required": [
+          "reviewId",
+          "helpfulCount",
+          "voted"
         ]
       }
     }

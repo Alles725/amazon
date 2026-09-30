@@ -2,7 +2,9 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { isApiErrorBody, REVIEW_ROUTES, type HelpfulVoteResponse } from '@amazon-mvp/api-contract';
 import { HorizontalRail } from '@/components/amazon/horizontal-rail';
 import type { ReviewMedia } from './product-reviews';
 
@@ -73,22 +75,93 @@ export function CustomerMedia({ media }: { media: ReviewMedia[] }) {
   );
 }
 
-/** There is no reviews backend to store votes, so "Útil" only acknowledges the
- * click in this browser; the persisted helpful count is never changed. */
-export function ReviewFeedback() {
-  const [thanked, setThanked] = useState(false);
+function helpfulText(count: number) {
+  if (count <= 0) return null;
+  return count === 1 ? 'Uma pessoa achou isso útil' : `${count} pessoas acharam isso útil`;
+}
+
+/** "Útil" persists one vote per customer (PUT /reviews/:id/helpful). The count
+ * updates optimistically and is replaced by the server's count, or rolled back
+ * when the vote fails. Guests are sent to sign in; authors cannot vote their own
+ * review. */
+export function ReviewFeedback({
+  reviewId,
+  helpfulCount,
+  votedHelpful,
+  own,
+  signedIn,
+  loginHref,
+}: {
+  reviewId: string;
+  helpfulCount: number;
+  votedHelpful: boolean;
+  own: boolean;
+  signedIn: boolean;
+  loginHref: string;
+}) {
+  const router = useRouter();
+  const [count, setCount] = useState(helpfulCount);
+  const [voted, setVoted] = useState(votedHelpful);
+  const [error, setError] = useState('');
+  const text = helpfulText(count);
+
+  const vote = async () => {
+    if (!signedIn) {
+      router.push(loginHref);
+      return;
+    }
+    setError('');
+    setVoted(true);
+    setCount((current) => current + 1);
+    try {
+      const response = await fetch(REVIEW_ROUTES.helpful(reviewId), {
+        method: 'PUT',
+        credentials: 'same-origin',
+        cache: 'no-store',
+      });
+      const payload: unknown = await response.json().catch(() => null);
+      if (response.ok) {
+        setCount((payload as HelpfulVoteResponse).helpfulCount);
+        return;
+      }
+      setVoted(false);
+      setCount(helpfulCount);
+      if (response.status === 401) {
+        router.push(loginHref);
+        return;
+      }
+      setError(
+        isApiErrorBody(payload) && response.status === 403
+          ? payload.error.message
+          : 'Não foi possível registrar seu voto. Tente novamente.',
+      );
+    } catch {
+      setVoted(false);
+      setCount(helpfulCount);
+      setError('Não foi possível registrar seu voto. Tente novamente.');
+    }
+  };
+
   return (
-    <p className="az-pdp-review__actions">
-      {thanked ? (
-        <span className="az-pdp-review__thanks" role="status">
-          Obrigado pelo seu feedback.
-        </span>
-      ) : (
-        <button type="button" className="az-pdp-pill" onClick={() => setThanked(true)}>
-          Útil
-        </button>
+    <>
+      {text && <p className="az-pdp-muted">{text}</p>}
+      <p className="az-pdp-review__actions">
+        {own ? null : voted ? (
+          <span className="az-pdp-review__thanks" role="status">
+            Obrigado pelo seu feedback.
+          </span>
+        ) : (
+          <button type="button" className="az-pdp-pill" onClick={() => void vote()}>
+            Útil
+          </button>
+        )}
+        <Link href="/help">Relatório</Link>
+      </p>
+      {error && (
+        <p className="az-review-error" role="alert">
+          {error}
+        </p>
       )}
-      <Link href="/help">Relatório</Link>
-    </p>
+    </>
   );
 }

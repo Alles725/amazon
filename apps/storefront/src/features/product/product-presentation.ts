@@ -13,9 +13,6 @@ export function productPresentation(product: CatalogItem) {
       demo?.oldPriceMinor && demo.oldPriceMinor > product.priceMinor
         ? demo.oldPriceMinor
         : undefined,
-    // Aggregate rating of the demo listing (the same numbers the homepage shows).
-    rating:
-      demo && demo.reviewCount > 0 ? { average: demo.rating, count: demo.reviewCount } : undefined,
     // Illustration used by cards when the listing has no photo.
     glyph: demo?.glyph as GlyphKind | undefined,
   };

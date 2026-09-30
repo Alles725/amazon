@@ -1,0 +1,62 @@
+/* Customer reviews (REVIEWS-001): list controls, notices and the write-review page.
+   The base review styles (.az-pdp-review*, .az-pdp-histogram) live in globals.css. */
+
+.az-pdp-histogram th a { color: #2162a1; }
+.az-pdp-histogram th a:hover { color: #c7511f; text-decoration: underline; }
+.az-review-bucket--active th a { font-weight: 700; color: #c7511f; }
+
+.az-review-notice { margin: 0 0 12px; padding: 10px 12px; border: 1px solid #067d62; border-radius: 8px; background: #f0faf7; color: #0f1111; font-size: 14px; }
+.az-review-error { margin: 6px 0 0; color: #b12704; font-size: 13px; }
+.az-review-own { margin-left: 8px; padding: 1px 6px; border-radius: 4px; background: #e3e6e6; color: #0f1111; font-size: 11px; font-weight: 700; }
+.az-review-body { white-space: pre-line; }
+/* The author's own review has no "Útil" button, so "Relatório" needs no divider. */
+.az-pdp .az-pdp-review__actions > a:first-child { border-left: 0; padding-left: 0; }
+
+.az-review-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; margin: 0 0 18px; font-size: 13px; }
+.az-review-controls > span { color: #565959; }
+.az-review-controls a { color: #2162a1; }
+.az-review-controls a[aria-current='true'] { color: #0f1111; font-weight: 700; text-decoration: none; }
+.az-review-controls__clear { margin-left: auto; }
+
+.az-review-pagination { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-top: 24px; font-size: 14px; }
+.az-review-pagination a { padding: 6px 12px; border: 1px solid #d5d9d9; border-radius: 8px; background: #fff; color: #0f1111; box-shadow: 0 2px 5px rgba(213, 217, 217, .5); }
+.az-review-pagination a:hover { background: #f7fafa; text-decoration: none; }
+
+/* Write-review page */
+.az-review-page { max-width: 760px; margin: 0 auto; padding: 24px 16px 48px; color: #0f1111; font-family: Arial, Helvetica, sans-serif; }
+.az-review-page h1 { font-size: 28px; font-weight: 400; line-height: 1.2; margin: 0 0 16px; }
+.az-review-page__product { display: flex; align-items: center; gap: 14px; padding-bottom: 18px; margin-bottom: 18px; border-bottom: 1px solid #ddd; }
+.az-review-page__product img { width: 64px; height: 64px; object-fit: contain; flex: none; }
+.az-review-page__product a { color: #0f1111; font-size: 14px; line-height: 1.4; }
+.az-review-page__product a:hover { color: #c7511f; }
+.az-review-page__verified { margin: 0 0 16px; font-size: 13px; color: #565959; }
+.az-review-page__verified strong { color: #c45500; }
+.az-review-page__note { margin-top: 18px; font-size: 12px; color: #565959; line-height: 1.5; }
+
+.az-review-form { display: grid; gap: 0; }
+.az-review-form__group { margin: 0; padding: 0 0 18px; margin-bottom: 18px; border: 0; border-bottom: 1px solid #ddd; min-width: 0; }
+.az-review-form__group legend, .az-review-form__label { display: block; padding: 0; margin: 0 0 10px; font-size: 18px; font-weight: 700; }
+.az-review-form__input { display: block; width: 100%; box-sizing: border-box; padding: 8px 10px; border: 1px solid #888c8c; border-radius: 4px; font: 14px/1.4 Arial, Helvetica, sans-serif; color: #0f1111; background: #fff; box-shadow: 0 1px 2px rgba(15, 17, 17, .15) inset; }
+textarea.az-review-form__input { resize: vertical; min-height: 140px; }
+.az-review-form__input:focus { outline: none; border-color: #007185; box-shadow: 0 0 0 3px #c8f3fa, 0 1px 2px rgba(15, 17, 17, .15) inset; }
+.az-review-form__input[aria-invalid='true'] { border-color: #b12704; }
+.az-review-form__hint { margin: 6px 0 0; font-size: 12px; color: #565959; }
+.az-review-form__actions { display: flex; justify-content: flex-end; }
+.az-review-form__submit { min-width: 120px; min-height: 36px; padding: 0 18px; border: 1px solid #fcd200; border-radius: 100px; background: #ffd814; color: #0f1111; font: 14px Arial, Helvetica, sans-serif; cursor: pointer; box-shadow: 0 2px 5px rgba(213, 217, 217, .5); }
+.az-review-form__submit:hover { background: #f7ca00; }
+.az-review-form__submit:focus-visible { outline: 2px solid #007185; outline-offset: 2px; }
+.az-review-form__submit:disabled { opacity: .6; cursor: default; }
+
+.az-review-stars { display: flex; flex-wrap: wrap; align-items: center; gap: 2px; }
+.az-review-stars__option { position: relative; display: inline-flex; }
+.az-review-stars__input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; }
+.az-review-stars__option label { display: inline-flex; padding: 4px; border-radius: 6px; cursor: pointer; }
+.az-review-stars__input:focus-visible + label { outline: 2px solid #007185; outline-offset: 1px; }
+.az-review-stars__word { margin-left: 10px; font-size: 14px; color: #565959; min-width: 80px; }
+
+@media (max-width: 600px) {
+  .az-review-page h1 { font-size: 22px; }
+  .az-review-form__actions { justify-content: stretch; }
+  .az-review-form__submit { width: 100%; }
+  .az-review-controls__clear { margin-left: 0; }
+}

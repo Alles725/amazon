@@ -285,13 +285,12 @@ iterations:
           keep rendering Coming Soon. config-schema specs use inline fixtures, unchanged.
       - id: REVIEWS-001
         owner: dev1
-        status: planned
+        status: done
         title: Customer reviews backend (write, list, rating summary, helpful votes, media)
         note: >-
-          Storefront reads reviews only through features/product/reviews/product-reviews.ts
-          (ProductReviews shape); replace its demo source with the API. Enable the
-          productReviews flag for /products/[id]/review. Aggregate ratings still come
-          from config/demo-products.json and must move to the backend too.
+          Reviews module with own tables and migration; verified purchase through
+          ORDERS_API.hasPurchased; aggregates from a reviews summary endpoint; demo ratings
+          seeded as DEMO fixtures. No media upload (no file storage).
       - id: BROWSE-001
         owner: dev2
         status: planned

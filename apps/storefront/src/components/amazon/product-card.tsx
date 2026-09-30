@@ -4,6 +4,7 @@ import { CatalogItem } from '@amazon-mvp/api-contract';
 import { ProductImage } from './product-image';
 import { productPresentation } from '@/features/product/product-presentation';
 import { RatingStars } from './rating-stars';
+import type { RatedCatalogItem } from '@/features/product/reviews/ratings';
 import { discountPercent, formatBRL, Product } from '@/features/home/catalog-mock';
 
 export function ProductCard({
@@ -12,7 +13,8 @@ export function ProductCard({
   action,
   freeDelivery = false,
 }: {
-  product: Product | CatalogItem;
+  /** Ratings come only from the reviews API (a RatedCatalogItem's `rating`). */
+  product: Product | CatalogItem | RatedCatalogItem;
   compact?: boolean;
   action?: ReactNode;
   /** Checkout charges no shipping, so "Entrega GRÁTIS" is always true when shown. */
@@ -29,7 +31,7 @@ export function ProductCard({
     : oldPrice
       ? Math.round((1 - price / oldPrice) * 100)
       : undefined;
-  const rating = mock ? { average: mock.rating, count: mock.reviewCount } : presentation?.rating;
+  const rating = catalog ? (catalog as RatedCatalogItem).rating : undefined;
   const parts = new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: catalog?.currency ?? 'BRL',

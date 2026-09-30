@@ -18,8 +18,8 @@ features:
     description: Dynamic product details with catalog data and cart integration
 
   productReviews:
-    enabled: false
-    description: Writing customer reviews (the product page reads demo reviews until a backend exists)
+    enabled: true
+    description: Write/edit customer reviews at /products/[id]/review (reviews API)
 
   cart:
     enabled: true

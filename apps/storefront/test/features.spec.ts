@@ -25,10 +25,10 @@ describe('shipped config/features.yaml', () => {
     expect(registry.routeState('orderDetails')).toBe('enabled');
   });
 
-  it('keeps writing reviews behind a Coming Soon flag until a reviews backend exists', () => {
+  it('enables writing reviews now that the reviews API exists', () => {
     const registry = loadShipped();
-    expect(registry.isEnabled('productReviews')).toBe(false);
-    expect(registry.routeState('productReviews')).toBe('coming-soon');
+    expect(registry.isEnabled('productReviews')).toBe(true);
+    expect(registry.routeState('productReviews')).toBe('enabled');
   });
 
   it('enables the product page, cart, checkout and browsing history', () => {

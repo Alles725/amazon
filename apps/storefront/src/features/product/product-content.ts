@@ -6,7 +6,7 @@ import brandFixtures from '../../../../../config/demo-brands.json';
 import { productPresentation } from './product-presentation';
 
 /** Merchandising content the catalog schema does not store (brand, gallery, specs,
- * variants...). Server-only: it never ships in client bundles. Like the card
+ * variants...). Ratings are not content: they come from the reviews API. Server-only: it never ships in client bundles. Like the card
  * presentation, an entry applies only when slug AND SKU match, and it never
  * overrides the catalog's identity, price, stock, description or categories. */
 
@@ -30,7 +30,6 @@ export interface ProductContent {
   installments?: { count: number };
   variant?: { group: string; options: VariantOption[] };
   fulfillment?: { shippedBy?: string; soldBy?: string; returns?: string };
-  rating?: { average: number; count: number; distribution?: number[] };
   demo: boolean;
 }
 
@@ -54,7 +53,6 @@ interface ContentFixture {
   installments?: { count: number };
   variant?: { group: string; options: VariantOption[] };
   fulfillment?: { shippedBy?: string; soldBy?: string; returns?: string };
-  ratingDistribution?: number[];
 }
 
 const fixtures = contentFixtures as ContentFixture[];
@@ -65,7 +63,6 @@ const fixtureFor = (product: Pick<CatalogItem, 'slug' | 'sku'>) =>
 export function productContent(product: CatalogItem): ProductContent {
   const presentation = productPresentation(product);
   const fixture = fixtureFor(product);
-  const distribution = fixture?.ratingDistribution;
   return {
     images: fixture?.gallery?.length ? fixture.gallery : presentation.images,
     oldPriceMinor: presentation.oldPriceMinor,
@@ -81,11 +78,6 @@ export function productContent(product: CatalogItem): ProductContent {
     installments: fixture?.installments,
     variant: fixture?.variant,
     fulfillment: fixture?.fulfillment,
-    rating: presentation.rating && {
-      ...presentation.rating,
-      // A distribution must describe all five star levels to be shown.
-      ...(distribution?.length === 5 ? { distribution } : {}),
-    },
     demo: presentation.demo || Boolean(fixture),
   };
 }

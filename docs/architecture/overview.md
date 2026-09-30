@@ -42,6 +42,7 @@ Modules communicate only through injection tokens backed by interfaces:
 | `CATALOG_API` | `CatalogApi` | `products`, `categories`, `product_categories`, `inventory` |
 | `CART_API` | `CartApi` | `carts`, `cart_items` |
 | `ORDERS_API` | `OrdersApi` | `orders`, `order_items` |
+| `REVIEWS_API` | `ReviewsApi` | `reviews`, `review_helpful_votes`, `review_rating_baselines` |
 
 `PrismaService` is the only holder of a database connection. A module's
 repository may only touch the tables that module owns. Extracting a module into a

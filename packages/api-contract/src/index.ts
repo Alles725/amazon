@@ -282,3 +282,111 @@ export function paymentDiscountPercent(
 export function pixPriceMinor(amountMinor: number, pricing: CheckoutPricing): number {
   return amountMinor - percentDiscountMinor(amountMinor, pricing.pixDiscountPercent);
 }
+
+// ---------------------------------------------------------------------------
+// Customer reviews (REVIEWS-001). Owned by the Reviews module (REVIEWS_API).
+// ---------------------------------------------------------------------------
+
+/** Error codes specific to reviews; same wire format as ErrorCode. */
+export const ReviewErrorCode = {
+  /** A customer cannot vote their own review as helpful. */
+  REVIEW_SELF_VOTE: 'REVIEW_SELF_VOTE',
+} as const;
+export type ReviewErrorCode = (typeof ReviewErrorCode)[keyof typeof ReviewErrorCode];
+
+/** Validation limits shared by the API DTOs and the write-review form. Lengths
+ * are counted after trimming. */
+export const REVIEW_LIMITS = {
+  titleMin: 3,
+  titleMax: 120,
+  bodyMin: 10,
+  bodyMax: 5000,
+  /** Products per list/summary request (a variant family fits comfortably). */
+  productIdsMax: 24,
+  /** Products per batched card summary request (one catalog page). */
+  summariesMax: 48,
+  pageSizeMax: 20,
+} as const;
+
+export type ReviewSort = 'helpful' | 'recent';
+
+export interface ReviewResponse {
+  id: string;
+  productId: string;
+  /** Public name ("Camila S."), never the e-mail. */
+  authorName: string;
+  rating: number;
+  title: string;
+  body: string;
+  /** The author had a non-cancelled order with this product when writing/editing. */
+  verifiedPurchase: boolean;
+  helpfulCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ReviewPage {
+  items: ReviewResponse[];
+  total: number;
+  page: number;
+  pageSize: number;
+}
+
+export interface RatingBucket {
+  stars: number;
+  /** Rounded share of all ratings with this many stars. */
+  percent: number;
+}
+
+/** Aggregate over the requested products. Empty = { average: null, count: 0 }. */
+export interface RatingSummary {
+  average: number | null;
+  count: number;
+  /** 5 stars first. null when part of the aggregate has no known distribution. */
+  distribution: RatingBucket[] | null;
+}
+
+export interface ProductRatingSummary {
+  productId: string;
+  average: number | null;
+  count: number;
+}
+
+export interface ProductRatingSummaries {
+  items: ProductRatingSummary[];
+}
+
+/** Creates the caller's review of the product, or updates it (one per product). */
+export interface SaveReviewRequest {
+  productId: string;
+  rating: number;
+  title: string;
+  body: string;
+}
+
+export interface OwnReviewResponse {
+  review: ReviewResponse | null;
+  /** Whether a review saved now would carry "Compra verificada". */
+  verifiedPurchase: boolean;
+}
+
+/** What the signed-in viewer has done on the given products' reviews. */
+export interface ReviewViewerState {
+  ownReviews: Array<{ id: string; productId: string }>;
+  helpfulReviewIds: string[];
+}
+
+export interface HelpfulVoteResponse {
+  reviewId: string;
+  helpfulCount: number;
+  voted: true;
+}
+
+export const REVIEW_ROUTES = {
+  reviews: `${API_PREFIX}/reviews`,
+  summary: `${API_PREFIX}/reviews/summary`,
+  summaries: `${API_PREFIX}/reviews/summaries`,
+  viewer: `${API_PREFIX}/reviews/viewer`,
+  mine: `${API_PREFIX}/reviews/mine`,
+  helpful: (reviewId: string) => `${API_PREFIX}/reviews/${encodeURIComponent(reviewId)}/helpful`,
+} as const;

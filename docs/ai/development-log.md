@@ -423,3 +423,21 @@ the storefront's only source for the rate: product page "R$ X no Pix (5% de desc
 Validation: lint, typecheck, unit tests (rounding at 1/19/20/99999 cents), checkout
 integration suite with 6 new Pix cases on a disposable database, openapi regenerated.
 Browser: product page, cart, checkout switching methods, a Pix order and its details.
+
+## 2026-09-30 — REVIEWS-001
+
+New reviews module (REVIEWS_API) with tables reviews, review_helpful_votes and
+review_rating_baselines (migration 20261001000000_reviews), no foreign keys into other
+modules' tables: product existence through CATALOG_API, author names through USERS_API and
+the "Compra verificada" badge through the new ORDERS_API.hasPurchased. Public endpoints list
+(sort, star filter, pagination) and summarise (per variant family and per product for
+cards); authenticated endpoints create/update the user's own review, return viewer state and
+record idempotent helpful votes (REVIEW_SELF_VOTE on one's own review). The storefront reads
+every rating and review from the API through product-reviews.ts and withRatings; nothing
+reads ratings from JSON any more. seed:demo moves the demo aggregates and the four 8BitDo
+texts into the database as DEMO fixtures, never verified. /products/[id]/review is a real
+form (keyboard star picker, edit, login redirect) and productReviews is on.
+
+Validation: lint, typecheck, unit tests, reviews integration suite on a disposable database,
+drift check clean, openapi regenerated. Browser: write, edit, verified badge after a real
+order, helpful vote, empty state and distribution. See docs/reviews.md.

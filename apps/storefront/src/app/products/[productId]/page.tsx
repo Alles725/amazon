@@ -39,10 +39,15 @@ import {
   ProductDescription,
   ProductDetailsSection,
 } from '@/features/product/product-sections';
-import { productReviews } from '@/features/product/reviews/product-reviews';
-import { CustomerReviews } from '@/features/product/reviews/customer-reviews';
+import {
+  parseReviewQuery,
+  productReviews,
+  withRatings,
+} from '@/features/product/reviews/product-reviews';
+import { CustomerReviews, type ReviewNotice } from '@/features/product/reviews/customer-reviews';
 
 type Params = { params: { productId: string } };
+type PageProps = Params & { searchParams?: Record<string, string | string[] | undefined> };
 
 const SITE = 'Amazon.com.br';
 
@@ -64,9 +69,9 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 }
 
 /** One template for every catalog product (UUID or slug). All product facts come
- * from the catalog API; merchandising content, reviews and purchase history are
- * layered on only when they exist for THIS product. */
-export default async function ProductDetailPage({ params }: Params) {
+ * from the catalog API; ratings and reviews from the reviews API; merchandising
+ * content and purchase history are layered on only when they exist for THIS product. */
+export default async function ProductDetailPage({ params, searchParams = {} }: PageProps) {
   if (!isFeatureEnabled('productDetails'))
     return (
       <FeatureRoute routeKey="productDetails" title="Produto">
@@ -107,12 +112,12 @@ export default async function ProductDetailPage({ params }: Params) {
   const familyIds = new Set(members.map((item) => item.product.id));
 
   const session = await getServerSession();
-  const [orders, address, pricing, related, brandProducts] = await Promise.all([
+  const [orders, address, pricing, related, brandProducts, reviews] = await Promise.all([
     session && isFeatureEnabled('orders') ? fetchOrders() : Promise.resolve(null),
     session && checkoutEnabled ? getDeliveryAddress() : Promise.resolve(null),
     // The Pix price is only advertised when checkout (which grants it) is available.
     checkoutEnabled ? getCheckoutPricing() : Promise.resolve(null),
-    relatedProducts(product, familyIds),
+    relatedProducts(product, familyIds).then(withRatings),
     content.brand
       ? Promise.all(
           brandSlugs(content.brand)
@@ -120,6 +125,15 @@ export default async function ProductDetailPage({ params }: Params) {
             .map(findCatalogProduct),
         )
       : Promise.resolve([]),
+    // Variants share one review pool and one rating, like Amazon's parent listing.
+    productReviews({
+      productId: product.id,
+      familyIds: [...familyIds],
+      variantOptions: new Map(members.map((item) => [item.product.id, item.options])),
+      productSlugs: new Map(members.map((item) => [item.product.id, item.product.slug])),
+      query: parseReviewQuery(searchParams),
+      signedIn: Boolean(session),
+    }),
   ]);
   const purchase = orders ? lastPurchase(orders, [...familyIds]) : null;
   const purchasedOptions = purchase
@@ -127,7 +141,12 @@ export default async function ProductDetailPage({ params }: Params) {
     : [];
   const story = brandStory(content.brand);
   const pixDiscountPercent = pricing?.pixDiscountPercent ?? null;
-  const reviewHref = `/products/${encodeURIComponent(product.slug)}/review`;
+  const productPath = `/products/${encodeURIComponent(product.slug)}`;
+  const reviewHref = `${productPath}/review`;
+  const rating = reviews.summary ?? undefined;
+  const notice = searchParams.review;
+  const reviewNotice: ReviewNotice | undefined =
+    notice === 'published' || notice === 'updated' ? notice : undefined;
 
   return (
     <main className="az-pdp">
@@ -145,6 +164,7 @@ export default async function ProductDetailPage({ params }: Params) {
         <ProductOverview
           product={product}
           content={content}
+          rating={rating}
           dimensions={dimensions}
           brandHref={story ? '#brand-story' : undefined}
           pixDiscountPercent={pixDiscountPercent}
@@ -174,7 +194,7 @@ export default async function ProductDetailPage({ params }: Params) {
           </HorizontalRail>
         </section>
       )}
-      <ProductDetailsSection content={content} />
+      <ProductDetailsSection content={content} rating={rating} />
       <ProductDescription description={product.description} />
       {story && (
         <BrandStorySection
@@ -184,7 +204,13 @@ export default async function ProductDetailPage({ params }: Params) {
             .map((item) => ({ product: item, image: productContent(item).images[0] }))}
         />
       )}
-      <CustomerReviews reviews={productReviews(product, content)} writeReviewHref={reviewHref} />
+      <CustomerReviews
+        reviews={reviews}
+        writeReviewHref={reviewHref}
+        productPath={productPath}
+        loginHref={`/login?next=${encodeURIComponent(`${productPath}#customer-reviews`)}`}
+        notice={reviewNotice}
+      />
     </main>
   );
 }
