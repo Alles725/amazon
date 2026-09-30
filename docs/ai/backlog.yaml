@@ -377,6 +377,13 @@ iterations:
         note: >-
           12 content pages from one typed template (features/corporate); no fabricated
           facts (test-enforced); honest notices where Amazon lists real records.
+      - id: FOOTER-002
+        owner: dev2
+        status: done
+        title: Footer help and payment pages
+        note: >-
+          7 help-article pages from typed content (features/customer-pages) describing the
+          store's real behaviour; unavailable programmes are stated as such.
 
 next_up:
   - id: FIRSTRUN-001

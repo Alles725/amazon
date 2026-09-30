@@ -210,6 +210,11 @@ export const HELP_CATEGORIES: HelpCategory[] = [
         body: 'Use pontos de programas parceiros para pagar suas compras.',
         href: '/points',
       },
+      {
+        title: 'Cartão de crédito Amazon',
+        body: 'Saiba como funciona um cartão de crédito com a marca da loja.',
+        href: '/credit-card',
+      },
     ],
   },
   {

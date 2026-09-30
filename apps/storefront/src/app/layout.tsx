@@ -21,11 +21,22 @@ export const dynamic = 'force-dynamic';
 // generic site navigation. Each brings its own Amazon-style header/footer
 // instead.
 const BARE_ROUTES = ['/login', '/', '/account', '/cart', '/sell', '/help', ...CORPORATE_ROUTES];
+// Help and payment articles (features/customer-pages) do the same.
+const CUSTOMER_PAGE_ROUTES = [
+  '/payment-methods',
+  '/points',
+  '/credit-card',
+  '/shipping',
+  '/returns',
+  '/content-and-devices',
+  '/recalls',
+];
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const pathname = headers().get('x-pathname') ?? '';
   const bare =
     BARE_ROUTES.includes(pathname) ||
+    CUSTOMER_PAGE_ROUTES.includes(pathname) ||
     pathname === '/checkout' ||
     pathname.startsWith('/checkout/') ||
     pathname === '/orders' ||

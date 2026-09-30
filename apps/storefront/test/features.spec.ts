@@ -40,6 +40,22 @@ describe('shipped config/features.yaml', () => {
     expect(registry.routeState('cart')).toBe('enabled');
   });
 
+  it('enables the footer help and payment pages', () => {
+    const registry = loadShipped();
+    for (const key of [
+      'paymentMethods',
+      'points',
+      'creditCard',
+      'shipping',
+      'returns',
+      'contentAndDevices',
+      'recalls',
+    ]) {
+      expect(registry.isEnabled(key)).toBe(true);
+      expect(registry.routeState(key)).toBe('enabled');
+    }
+  });
+
   it('ships unbuilt features disabled', () => {
     const registry = loadShipped();
     for (const feature of ['catalog', 'account']) {

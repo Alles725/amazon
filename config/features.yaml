@@ -84,25 +84,25 @@ features:
     enabled: true
     description: Advertise products
   paymentMethods:
-    enabled: false
+    enabled: true
     description: Accepted payment methods
   points:
-    enabled: false
+    enabled: true
     description: Buy with points
   creditCard:
-    enabled: false
+    enabled: true
     description: Amazon credit card
   shipping:
-    enabled: false
+    enabled: true
     description: Shipping and delivery times
   returns:
-    enabled: false
+    enabled: true
     description: Returns and refunds
   contentAndDevices:
-    enabled: false
+    enabled: true
     description: Manage content and devices
   recalls:
-    enabled: false
+    enabled: true
     description: Product recalls and safety alerts
   help:
     enabled: true

@@ -334,3 +334,12 @@ hub is part of the authenticated shell and does not enable account management.
   named projects/partners, papers and any enrolment form do not exist in this store.
 - Known limitation: on phones the section nav scrolls sideways and the current page's
   link can start off-screen.
+
+## Footer help and payment pages (FOOTER-002) — 2026-09-30
+
+- Seven help/payment footer pages are real; flags paymentMethods, points, creditCard,
+  shipping, returns, contentAndDevices and recalls are on.
+- /payment-methods shows the signed-in user's recent orders (method and total).
+- Not available in this store and said so on the page: loyalty points, the credit card,
+  content/devices management, online returns/cancellations, delivery dates and tracking;
+  the recall list is empty because no recall records exist.
