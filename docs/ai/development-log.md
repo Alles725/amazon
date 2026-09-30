@@ -387,3 +387,22 @@ comunicado publicado…", "Não há vagas abertas…") and a disclaimer on every
 Validation: lint, typecheck, storefront unit tests (corporate-pages.spec, 33 tests).
 Browser (Playwright): 12 pages at 390/768/1024/1440 px without overflow or console errors,
 FAQ by keyboard, footer and section-nav links. See docs/corporate-footer-pages.md.
+
+## 2026-09-30 — FOOTER-002
+
+Replaced the Coming Soon placeholders of payment-methods, points, credit-card, shipping,
+returns, content-and-devices and recalls with help-article pages (teal customer-service bar,
+breadcrumb, notice, numbered sections, FAQ, "Mais tópicos de ajuda" sidebar) and turned
+their flags on. Built once in features/customer-pages from typed content blocks; server
+components only; CSS in customer-pages.css. Copy mirrors the code: simulated card/Pix only,
+R$ 0,00 shipping with no delivery date, the real order statuses, return window of one month
+after delivery, installment example computed by installmentPlan; /payment-methods lists the
+signed-in user's recent orders through orders-server. Points, credit card,
+content/devices, online returns and recalls are marked unavailable/empty.
+
+Integration fix: the seven routes were missing from the bare-layout list, so the skeleton
+"BUILD STATE" strip and generic navigation rendered above the Amazon header; added
+CUSTOMER_PAGE_ROUTES to app/layout.tsx.
+
+Validation: lint, typecheck, storefront unit tests (customer-pages.spec, 19 tests). Browser:
+7 pages at 390-1440 px, no overflow, footer and product-page links. See docs/help-pages.md.

@@ -1,13 +1,16 @@
-import { EmptyState } from '@/components/states';
-import { PageContainer } from '@/components/page-container';
 import { FeatureRoute } from '@/config/feature-gate';
+import {
+  CUSTOMER_PAGES,
+  customerPageMetadata,
+} from '@/features/customer-pages/customer-page-content';
+import { CustomerPageLayout } from '@/features/customer-pages/customer-page';
+
+export const metadata = customerPageMetadata('recalls');
 
 export default function RecallsPage() {
   return (
     <FeatureRoute routeKey="recalls" title="Recalls e alertas de segurança do produto">
-      <PageContainer eyebrow="Ajuda" title="Recalls e alertas de segurança do produto">
-        <EmptyState title="Conteúdo em construção" body="Esta página ainda não foi implementada." />
-      </PageContainer>
+      <CustomerPageLayout page={CUSTOMER_PAGES.recalls} />
     </FeatureRoute>
   );
 }
