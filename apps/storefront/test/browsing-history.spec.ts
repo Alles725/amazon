@@ -42,6 +42,21 @@ it('formats timeline days like Amazon', () => {
   expect(formatHistoryDay(daysAgo(36).toISOString(), now)).toBe('Seg, Ago 24');
 });
 
+it('refreshes retired illustrations without changing the saved visit', () => {
+  const entry = {
+    id: 'existing-product-uuid',
+    name: 'Tênis salvo',
+    viewedAt: now.toISOString(),
+    image: { src: '/images/products/catalog/stride-aero-3-preto.svg', alt: 'Ilustração' },
+  };
+  window.localStorage.setItem('az-browsing-history', JSON.stringify([entry]));
+  render(createElement(BrowsingHistoryStrip, { now }));
+  const photo = screen.getByRole('img');
+  expect(photo.getAttribute('src')).toContain('stride-aero-3-preto.jpg');
+  expect(screen.getByRole('link').getAttribute('href')).toBe('/products/existing-product-uuid');
+  expect(JSON.parse(window.localStorage.getItem('az-browsing-history')!)).toEqual([entry]);
+});
+
 it('records the most recent view first without duplicates and ignores corrupt storage', () => {
   window.localStorage.setItem('az-browsing-history', '{not json');
   recordProductView({ id: 'a', name: 'A' }, daysAgo(2));

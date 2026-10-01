@@ -2,6 +2,7 @@
 
 import { useSyncExternalStore } from 'react';
 import type { ProductPhoto } from '@/features/home/catalog-mock';
+import legacyImages from '../../../../../config/legacy-product-images.json';
 
 /**
  * Real, device-local browsing history: product detail pages record each visit
@@ -45,7 +46,15 @@ function getSnapshot(): BrowsingHistoryEntry[] {
   let entries = EMPTY;
   try {
     const parsed: unknown = raw ? JSON.parse(raw) : [];
-    if (Array.isArray(parsed)) entries = parsed.filter(isEntry);
+    if (Array.isArray(parsed)) {
+      entries = parsed.filter(isEntry).map((entry) => {
+        const replacement =
+          entry.image?.src && Object.hasOwn(legacyImages, entry.image.src)
+            ? (legacyImages as Record<string, ProductPhoto>)[entry.image.src]
+            : undefined;
+        return replacement ? { ...entry, image: replacement } : entry;
+      });
+    }
   } catch {
     entries = EMPTY;
   }

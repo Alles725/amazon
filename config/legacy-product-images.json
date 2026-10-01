@@ -1,0 +1,390 @@
+{
+  "/images/products/catalog/stride-aero-3-preto.svg": {
+    "src": "/images/products/catalog/stride-aero-3-preto.jpg",
+    "alt": "Foto representativa: Tênis de Corrida Stride Aero 3 Masculino, Preto"
+  },
+  "/images/products/catalog/stride-aero-3-branco.svg": {
+    "src": "/images/products/catalog/stride-aero-3-branco.jpg",
+    "alt": "Foto representativa: Tênis de Corrida Stride Aero 3 Masculino, Branco"
+  },
+  "/images/products/catalog/stride-aero-3-azul.svg": {
+    "src": "/images/products/catalog/stride-aero-3-azul.jpg",
+    "alt": "Foto representativa: Tênis de Corrida Stride Aero 3 Masculino, Azul"
+  },
+  "/images/products/catalog/stride-aero-3-vermelho.svg": {
+    "src": "/images/products/catalog/stride-aero-3-vermelho.jpg",
+    "alt": "Foto representativa: Tênis de Corrida Stride Aero 3 Masculino, Vermelho"
+  },
+  "/images/products/catalog/veloce-pulse-cinza.svg": {
+    "src": "/images/products/catalog/veloce-pulse-cinza.jpg",
+    "alt": "Foto representativa: Tênis de Corrida Veloce Pulse Unissex, Cinza"
+  },
+  "/images/products/catalog/veloce-pulse-verde.svg": {
+    "src": "/images/products/catalog/veloce-pulse-verde.jpg",
+    "alt": "Foto representativa: Tênis de Corrida Veloce Pulse Unissex, Verde"
+  },
+  "/images/products/catalog/veloce-pulse-azul.svg": {
+    "src": "/images/products/catalog/veloce-pulse-azul.jpg",
+    "alt": "Foto representativa: Tênis de Corrida Veloce Pulse Unissex, Azul"
+  },
+  "/images/products/catalog/kinetik-marathon-carbon.svg": {
+    "src": "/images/products/catalog/kinetik-marathon-carbon.jpg",
+    "alt": "Foto representativa: Tênis de Corrida Kinetik Marathon Carbon com Placa de Carbono"
+  },
+  "/images/products/catalog/urbano-classic-branco.svg": {
+    "src": "/images/products/catalog/urbano-classic-branco.jpg",
+    "alt": "Foto representativa: Tênis Casual Urbano Classic em Couro, Branco"
+  },
+  "/images/products/catalog/urbano-classic-preto.svg": {
+    "src": "/images/products/catalog/urbano-classic-preto.jpg",
+    "alt": "Foto representativa: Tênis Casual Urbano Classic em Couro, Preto"
+  },
+  "/images/products/catalog/urbano-classic-vermelho.svg": {
+    "src": "/images/products/catalog/urbano-classic-vermelho.jpg",
+    "alt": "Foto representativa: Tênis Casual Urbano Classic em Couro, Vermelho"
+  },
+  "/images/products/catalog/kairo-canvas-low-preto.svg": {
+    "src": "/images/products/catalog/kairo-canvas-low-preto.jpg",
+    "alt": "Foto representativa: Tênis Kairo Canvas Low Unissex, Preto"
+  },
+  "/images/products/catalog/kairo-canvas-low-branco.svg": {
+    "src": "/images/products/catalog/kairo-canvas-low-branco.jpg",
+    "alt": "Foto representativa: Tênis Kairo Canvas Low Unissex, Branco"
+  },
+  "/images/products/catalog/kairo-canvas-low-azul-marinho.svg": {
+    "src": "/images/products/catalog/kairo-canvas-low-azul-marinho.jpg",
+    "alt": "Foto representativa: Tênis Kairo Canvas Low Unissex, Azul-marinho"
+  },
+  "/images/products/catalog/kinetik-force-cross-preto.svg": {
+    "src": "/images/products/catalog/kinetik-force-cross-preto.jpg",
+    "alt": "Foto representativa: Tênis de Treino Kinetik Force Cross para Academia, Preto"
+  },
+  "/images/products/catalog/kinetik-force-cross-cinza.svg": {
+    "src": "/images/products/catalog/kinetik-force-cross-cinza.jpg",
+    "alt": "Foto representativa: Tênis de Treino Kinetik Force Cross para Academia, Cinza"
+  },
+  "/images/products/catalog/terrah-comfort-slide-preto.svg": {
+    "src": "/images/products/catalog/terrah-comfort-slide-preto.jpg",
+    "alt": "Foto representativa: Chinelo Slide Terrah Comfort Unissex, Preto"
+  },
+  "/images/products/catalog/terrah-comfort-slide-branco.svg": {
+    "src": "/images/products/catalog/terrah-comfort-slide-branco.jpg",
+    "alt": "Foto representativa: Chinelo Slide Terrah Comfort Unissex, Branco"
+  },
+  "/images/products/catalog/terrah-comfort-slide-azul.svg": {
+    "src": "/images/products/catalog/terrah-comfort-slide-azul.jpg",
+    "alt": "Foto representativa: Chinelo Slide Terrah Comfort Unissex, Azul"
+  },
+  "/images/products/catalog/kairo-brasil.svg": {
+    "src": "/images/products/catalog/kairo-brasil.jpg",
+    "alt": "Foto representativa: Chinelo de Dedo Kairo Brasil"
+  },
+  "/images/products/catalog/urbano-coturno.svg": {
+    "src": "/images/products/catalog/urbano-coturno.jpg",
+    "alt": "Foto representativa: Bota Coturno Urbano Adventure em Couro"
+  },
+  "/images/products/catalog/nimbus-wave-700-preto.svg": {
+    "src": "/images/products/catalog/nimbus-wave-700-preto.jpg",
+    "alt": "Foto representativa: Fone de Ouvido Bluetooth Nimbus Wave 700 com Cancelamento de Ruído, Preto"
+  },
+  "/images/products/catalog/nimbus-wave-700-branco.svg": {
+    "src": "/images/products/catalog/nimbus-wave-700-branco.jpg",
+    "alt": "Foto representativa: Fone de Ouvido Bluetooth Nimbus Wave 700 com Cancelamento de Ruído, Branco"
+  },
+  "/images/products/catalog/nimbus-wave-700-azul.svg": {
+    "src": "/images/products/catalog/nimbus-wave-700-azul.jpg",
+    "alt": "Foto representativa: Fone de Ouvido Bluetooth Nimbus Wave 700 com Cancelamento de Ruído, Azul"
+  },
+  "/images/products/catalog/nimbus-buds-2-preto.svg": {
+    "src": "/images/products/catalog/nimbus-buds-2-preto.png",
+    "alt": "Foto representativa: Fone de Ouvido TWS Nimbus Buds 2 Bluetooth 5.3, Preto"
+  },
+  "/images/products/catalog/nimbus-buds-2-branco.svg": {
+    "src": "/images/products/catalog/nimbus-buds-2-branco.jpg",
+    "alt": "Foto representativa: Fone de Ouvido TWS Nimbus Buds 2 Bluetooth 5.3, Branco"
+  },
+  "/images/products/catalog/nimbus-buds-2-verde.svg": {
+    "src": "/images/products/catalog/nimbus-buds-2-verde.webp",
+    "alt": "Foto representativa: Fone de Ouvido TWS Nimbus Buds 2 Bluetooth 5.3, Verde"
+  },
+  "/images/products/catalog/vortex-h5-preto.svg": {
+    "src": "/images/products/catalog/vortex-h5-preto.jpg",
+    "alt": "Foto representativa: Headset Gamer Vortex H5 RGB Som Surround 7.1 USB, Preto"
+  },
+  "/images/products/catalog/vortex-h5-branco.svg": {
+    "src": "/images/products/catalog/vortex-h5-branco.jpg",
+    "alt": "Foto representativa: Headset Gamer Vortex H5 RGB Som Surround 7.1 USB, Branco"
+  },
+  "/images/products/catalog/vortex-h9.svg": {
+    "src": "/images/products/catalog/vortex-h9.jpg",
+    "alt": "Foto representativa: Headset Gamer Sem Fio Vortex H9 Wireless 2.4 GHz"
+  },
+  "/images/products/catalog/sonora-boom-mini-preto.svg": {
+    "src": "/images/products/catalog/sonora-boom-mini-preto.jpg",
+    "alt": "Foto representativa: Caixa de Som Bluetooth Sonora Boom Mini à Prova d'Água IP67, Preto"
+  },
+  "/images/products/catalog/sonora-boom-mini-azul.svg": {
+    "src": "/images/products/catalog/sonora-boom-mini-azul.jpg",
+    "alt": "Foto representativa: Caixa de Som Bluetooth Sonora Boom Mini à Prova d'Água IP67, Azul"
+  },
+  "/images/products/catalog/sonora-boom-mini-vermelho.svg": {
+    "src": "/images/products/catalog/sonora-boom-mini-vermelho.jpg",
+    "alt": "Foto representativa: Caixa de Som Bluetooth Sonora Boom Mini à Prova d'Água IP67, Vermelho"
+  },
+  "/images/products/catalog/echo-pop-preto.svg": {
+    "src": "/images/products/catalog/echo-pop-preto.jpg",
+    "alt": "Foto representativa: Echo Pop | Smart speaker compacto com Alexa, Preto"
+  },
+  "/images/products/catalog/echo-pop-branco.svg": {
+    "src": "/images/products/catalog/echo-pop-branco.jpg",
+    "alt": "Foto representativa: Echo Pop | Smart speaker compacto com Alexa, Branco"
+  },
+  "/images/products/catalog/echo-show-8.svg": {
+    "src": "/images/products/catalog/echo-show-8.jpg",
+    "alt": "Foto representativa: Echo Show 8 (3ª geração) | Tela inteligente HD de 8\" com Alexa"
+  },
+  "/images/products/catalog/kindle-paperwhite.svg": {
+    "src": "/images/products/catalog/kindle-paperwhite.jpg",
+    "alt": "Foto representativa: Kindle Paperwhite 16 GB | Tela de 7\" e bateria de até 12 semanas"
+  },
+  "/images/products/catalog/fire-tv-stick-4k.svg": {
+    "src": "/images/products/catalog/fire-tv-stick-4k.jpg",
+    "alt": "Foto representativa: Fire TV Stick 4K | Streaming em 4K com Wi-Fi 6 e controle remoto por voz"
+  },
+  "/images/products/catalog/kairo-fit-3-preto.svg": {
+    "src": "/images/products/catalog/kairo-fit-3-preto.jpg",
+    "alt": "Foto representativa: Smartwatch Kairo Fit 3 com GPS e Monitor de Oxigenação, Preto"
+  },
+  "/images/products/catalog/kairo-fit-3-cinza.svg": {
+    "src": "/images/products/catalog/kairo-fit-3-cinza.jpg",
+    "alt": "Foto representativa: Smartwatch Kairo Fit 3 com GPS e Monitor de Oxigenação, Cinza"
+  },
+  "/images/products/catalog/kairo-fit-3-azul.svg": {
+    "src": "/images/products/catalog/kairo-fit-3-azul.jpg",
+    "alt": "Foto representativa: Smartwatch Kairo Fit 3 com GPS e Monitor de Oxigenação, Azul"
+  },
+  "/images/products/catalog/voltra-gan-30w-branco.svg": {
+    "src": "/images/products/catalog/voltra-gan-30w-branco.jpg",
+    "alt": "Foto representativa: Carregador Turbo USB-C Voltra 30W GaN, Branco"
+  },
+  "/images/products/catalog/voltra-gan-30w-preto.svg": {
+    "src": "/images/products/catalog/voltra-gan-30w-preto.jpg",
+    "alt": "Foto representativa: Carregador Turbo USB-C Voltra 30W GaN, Preto"
+  },
+  "/images/products/catalog/voltra-cabo-usbc-preto.svg": {
+    "src": "/images/products/catalog/voltra-cabo-usbc-preto.jpg",
+    "alt": "Foto representativa: Cabo USB-C para USB-C Voltra em Nylon Trançado 2 m 100W, Preto"
+  },
+  "/images/products/catalog/voltra-cabo-usbc-vermelho.svg": {
+    "src": "/images/products/catalog/voltra-cabo-usbc-vermelho.jpg",
+    "alt": "Foto representativa: Cabo USB-C para USB-C Voltra em Nylon Trançado 2 m 100W, Vermelho"
+  },
+  "/images/products/catalog/voltra-10000.svg": {
+    "src": "/images/products/catalog/voltra-10000.jpg",
+    "alt": "Foto representativa: Carregador Portátil Voltra 10000 mAh com USB-C PD 20W"
+  },
+  "/images/products/catalog/vortex-pro-pad.svg": {
+    "src": "/images/products/catalog/vortex-pro-pad.jpg",
+    "alt": "Foto representativa: Controle Sem Fio Vortex Pro para PC e Android com Gatilhos Hall"
+  },
+  "/images/products/catalog/arcadia-retro-pad.svg": {
+    "src": "/images/products/catalog/arcadia-retro-pad.png",
+    "alt": "Foto representativa: Controle Bluetooth Arcadia Retro Pad para PC, Android e Switch"
+  },
+  "/images/products/catalog/vortex-k60-preto.svg": {
+    "src": "/images/products/catalog/vortex-k60-preto.png",
+    "alt": "Foto representativa: Teclado Mecânico Gamer Vortex K60 TKL RGB Switch Red ABNT2, Preto"
+  },
+  "/images/products/catalog/vortex-k60-branco.svg": {
+    "src": "/images/products/catalog/vortex-k60-branco.webp",
+    "alt": "Foto representativa: Teclado Mecânico Gamer Vortex K60 TKL RGB Switch Red ABNT2, Branco"
+  },
+  "/images/products/catalog/orion-slim-keys.svg": {
+    "src": "/images/products/catalog/orion-slim-keys.jpg",
+    "alt": "Foto representativa: Teclado Sem Fio Orion Slim Multi-dispositivo Bluetooth ABNT2"
+  },
+  "/images/products/catalog/vortex-m7-preto.svg": {
+    "src": "/images/products/catalog/vortex-m7-preto.jpg",
+    "alt": "Foto representativa: Mouse Gamer Vortex M7 RGB 16.000 DPI 7 Botões, Preto"
+  },
+  "/images/products/catalog/vortex-m7-branco.svg": {
+    "src": "/images/products/catalog/vortex-m7-branco.jpg",
+    "alt": "Foto representativa: Mouse Gamer Vortex M7 RGB 16.000 DPI 7 Botões, Branco"
+  },
+  "/images/products/catalog/orion-silent-cinza.svg": {
+    "src": "/images/products/catalog/orion-silent-cinza.png",
+    "alt": "Foto representativa: Mouse Sem Fio Orion Silent Click 1600 DPI, Cinza"
+  },
+  "/images/products/catalog/orion-silent-azul.svg": {
+    "src": "/images/products/catalog/orion-silent-azul.jpg",
+    "alt": "Foto representativa: Mouse Sem Fio Orion Silent Click 1600 DPI, Azul"
+  },
+  "/images/products/catalog/lumio-view-1080.svg": {
+    "src": "/images/products/catalog/lumio-view-1080.jpg",
+    "alt": "Foto representativa: Webcam Lumio View Full HD 1080p com Microfone Duplo"
+  },
+  "/images/products/catalog/orion-24-ips.svg": {
+    "src": "/images/products/catalog/orion-24-ips.jpg",
+    "alt": "Foto representativa: Monitor Orion 24\" IPS Full HD 75 Hz com HDMI"
+  },
+  "/images/products/catalog/vortex-27-qhd.svg": {
+    "src": "/images/products/catalog/vortex-27-qhd.png",
+    "alt": "Foto representativa: Monitor Gamer Vortex 27\" QHD 165 Hz 1 ms"
+  },
+  "/images/products/catalog/vortex-speed-xl.svg": {
+    "src": "/images/products/catalog/vortex-speed-xl.jpg",
+    "alt": "Foto representativa: Mousepad Gamer Vortex Speed XL 90 x 40 cm com Borda Costurada"
+  },
+  "/images/products/catalog/nexa-nvme-1tb.svg": {
+    "src": "/images/products/catalog/nexa-nvme-1tb.jpg",
+    "alt": "Foto representativa: SSD Nexa 1TB M.2 NVMe PCIe 4.0 Leitura de até 7.000 MB/s"
+  },
+  "/images/products/catalog/nexa-ddr4-16.svg": {
+    "src": "/images/products/catalog/nexa-ddr4-16.png",
+    "alt": "Foto representativa: Memória RAM Nexa 16GB DDR4 3200 MHz para Desktop"
+  },
+  "/images/products/catalog/voltra-hub-7em1.svg": {
+    "src": "/images/products/catalog/voltra-hub-7em1.jpg",
+    "alt": "Foto representativa: Hub USB-C Voltra 7 em 1 com HDMI 4K, USB 3.0 e Leitor SD"
+  },
+  "/images/products/catalog/orion-stand-alu.svg": {
+    "src": "/images/products/catalog/orion-stand-alu.jpg",
+    "alt": "Foto representativa: Suporte para Notebook Orion em Alumínio com Ajuste de Altura"
+  },
+  "/images/products/catalog/orion-urban-pack-preto.svg": {
+    "src": "/images/products/catalog/orion-urban-pack-preto.jpg",
+    "alt": "Foto representativa: Mochila Executiva Orion Urban para Notebook 15,6\" com Porta USB, Preto"
+  },
+  "/images/products/catalog/orion-urban-pack-cinza.svg": {
+    "src": "/images/products/catalog/orion-urban-pack-cinza.jpg",
+    "alt": "Foto representativa: Mochila Executiva Orion Urban para Notebook 15,6\" com Porta USB, Cinza"
+  },
+  "/images/products/catalog/orion-urban-pack-azul.svg": {
+    "src": "/images/products/catalog/orion-urban-pack-azul.webp",
+    "alt": "Foto representativa: Mochila Executiva Orion Urban para Notebook 15,6\" com Porta USB, Azul"
+  },
+  "/images/products/catalog/brava-aroma-30-preto.svg": {
+    "src": "/images/products/catalog/brava-aroma-30-preto.jpg",
+    "alt": "Foto representativa: Cafeteira Elétrica Brava Aroma 30 Xícaras com Jarra de Vidro, Preto"
+  },
+  "/images/products/catalog/brava-aroma-30-vermelho.svg": {
+    "src": "/images/products/catalog/brava-aroma-30-vermelho.jpg",
+    "alt": "Foto representativa: Cafeteira Elétrica Brava Aroma 30 Xícaras com Jarra de Vidro, Vermelho"
+  },
+  "/images/products/catalog/brava-barista.svg": {
+    "src": "/images/products/catalog/brava-barista.jpg",
+    "alt": "Foto representativa: Cafeteira Expresso Brava Barista 15 Bar com Vaporizador"
+  },
+  "/images/products/catalog/brava-power-900.svg": {
+    "src": "/images/products/catalog/brava-power-900.jpg",
+    "alt": "Foto representativa: Liquidificador Brava Power 900W Copo de Vidro 2L 12 Velocidades"
+  },
+  "/images/products/catalog/brava-crisp-55-preto.svg": {
+    "src": "/images/products/catalog/brava-crisp-55-preto.jpg",
+    "alt": "Foto representativa: Fritadeira Air Fryer Brava Crisp 5,5 L Digital 1500W, Preto"
+  },
+  "/images/products/catalog/brava-crisp-55-branco.svg": {
+    "src": "/images/products/catalog/brava-crisp-55-branco.webp",
+    "alt": "Foto representativa: Fritadeira Air Fryer Brava Crisp 5,5 L Digital 1500W, Branco"
+  },
+  "/images/products/catalog/lumio-desk-led.svg": {
+    "src": "/images/products/catalog/lumio-desk-led.jpg",
+    "alt": "Foto representativa: Luminária de Mesa LED Lumio Desk Articulada com 3 Temperaturas de Cor"
+  },
+  "/images/products/catalog/limpax-turbo-2em1.svg": {
+    "src": "/images/products/catalog/limpax-turbo-2em1.jpg",
+    "alt": "Foto representativa: Aspirador de Pó Vertical Limpax Turbo 2 em 1 1250W"
+  },
+  "/images/products/catalog/limpax-smart-s.svg": {
+    "src": "/images/products/catalog/limpax-smart-s.jpg",
+    "alt": "Foto representativa: Robô Aspirador Limpax Smart S Wi-Fi com Mapeamento"
+  },
+  "/images/products/catalog/belfiore-ion-2100-preto.svg": {
+    "src": "/images/products/catalog/belfiore-ion-2100-preto.jpg",
+    "alt": "Foto representativa: Secador de Cabelo Belfiore Ion 2100W com Tecnologia Íon, Preto"
+  },
+  "/images/products/catalog/belfiore-ion-2100-rosa.svg": {
+    "src": "/images/products/catalog/belfiore-ion-2100-rosa.jpg",
+    "alt": "Foto representativa: Secador de Cabelo Belfiore Ion 2100W com Tecnologia Íon, Rosa"
+  },
+  "/images/products/catalog/belfiore-volume.svg": {
+    "src": "/images/products/catalog/belfiore-volume.jpg",
+    "alt": "Foto representativa: Escova Secadora Belfiore Volume 1200W 3 Temperaturas"
+  },
+  "/images/products/catalog/belfiore-titanium.svg": {
+    "src": "/images/products/catalog/belfiore-titanium.jpg",
+    "alt": "Foto representativa: Prancha Alisadora Belfiore Titanium 230 °C Bivolt"
+  },
+  "/images/products/catalog/axion-rotary-3.svg": {
+    "src": "/images/products/catalog/axion-rotary-3.jpg",
+    "alt": "Foto representativa: Barbeador Elétrico Axion Rotary 3 Lâminas à Prova d'Água"
+  },
+  "/images/products/catalog/axion-trim-10.svg": {
+    "src": "/images/products/catalog/axion-trim-10.jpg",
+    "alt": "Foto representativa: Aparador de Pelos Axion Trim 10 em 1 Recarregável"
+  },
+  "/images/products/catalog/dom-casmurro.svg": {
+    "src": "/images/products/catalog/dom-casmurro.jpg",
+    "alt": "Foto representativa: Dom Casmurro - Machado de Assis (Edição de Bolso)"
+  },
+  "/images/products/catalog/memorias-postumas.svg": {
+    "src": "/images/products/catalog/memorias-postumas.jpg",
+    "alt": "Foto representativa: Memórias Póstumas de Brás Cubas - Machado de Assis"
+  },
+  "/images/products/catalog/o-cortico.svg": {
+    "src": "/images/products/catalog/o-cortico.jpg",
+    "alt": "Foto representativa: O Cortiço - Aluísio Azevedo"
+  },
+  "/images/products/catalog/iracema.svg": {
+    "src": "/images/products/catalog/iracema.jpg",
+    "alt": "Foto representativa: Iracema - José de Alencar"
+  },
+  "/images/products/catalog/a-moreninha.svg": {
+    "src": "/images/products/catalog/a-moreninha.jpg",
+    "alt": "Foto representativa: A Moreninha - Joaquim Manuel de Macedo"
+  },
+  "/images/products/catalog/kinetik-dryfit-preto.svg": {
+    "src": "/images/products/catalog/kinetik-dryfit-preto.jpg",
+    "alt": "Foto representativa: Camiseta Esportiva Kinetik Dry Fit Masculina com Proteção UV, Preto"
+  },
+  "/images/products/catalog/kinetik-dryfit-branco.svg": {
+    "src": "/images/products/catalog/kinetik-dryfit-branco.png",
+    "alt": "Foto representativa: Camiseta Esportiva Kinetik Dry Fit Masculina com Proteção UV, Branco"
+  },
+  "/images/products/catalog/kinetik-legging-preto.svg": {
+    "src": "/images/products/catalog/kinetik-legging-preto.jpg",
+    "alt": "Foto representativa: Legging Fitness Kinetik Cintura Alta Anti-transparência, Preto"
+  },
+  "/images/products/catalog/kinetik-legging-cinza.svg": {
+    "src": "/images/products/catalog/kinetik-legging-cinza.jpg",
+    "alt": "Foto representativa: Legging Fitness Kinetik Cintura Alta Anti-transparência, Cinza"
+  },
+  "/images/products/catalog/kinetik-legging-verde.svg": {
+    "src": "/images/products/catalog/kinetik-legging-verde.jpg",
+    "alt": "Foto representativa: Legging Fitness Kinetik Cintura Alta Anti-transparência, Verde"
+  },
+  "/images/products/catalog/atlas-halter-5kg.svg": {
+    "src": "/images/products/catalog/atlas-halter-5kg.jpg",
+    "alt": "Foto representativa: Par de Halteres Emborrachados Atlas 5 kg"
+  },
+  "/images/products/catalog/atlas-yoga-6mm-azul.svg": {
+    "src": "/images/products/catalog/atlas-yoga-6mm-azul.jpg",
+    "alt": "Foto representativa: Tapete de Yoga Atlas TPE 6 mm Antiderrapante com Alça, Azul"
+  },
+  "/images/products/catalog/atlas-yoga-6mm-verde.svg": {
+    "src": "/images/products/catalog/atlas-yoga-6mm-verde.jpg",
+    "alt": "Foto representativa: Tapete de Yoga Atlas TPE 6 mm Antiderrapante com Alça, Verde"
+  },
+  "/images/products/catalog/hydra-750-preto.svg": {
+    "src": "/images/products/catalog/hydra-750-preto.jpg",
+    "alt": "Foto representativa: Garrafa Térmica Esportiva Hydra 750 ml em Aço Inox, Preto"
+  },
+  "/images/products/catalog/hydra-750-branco.svg": {
+    "src": "/images/products/catalog/hydra-750-branco.jpg",
+    "alt": "Foto representativa: Garrafa Térmica Esportiva Hydra 750 ml em Aço Inox, Branco"
+  },
+  "/images/products/catalog/hydra-750-azul.svg": {
+    "src": "/images/products/catalog/hydra-750-azul.jpg",
+    "alt": "Foto representativa: Garrafa Térmica Esportiva Hydra 750 ml em Aço Inox, Azul"
+  }
+}

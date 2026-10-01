@@ -336,6 +336,17 @@ iterations:
           public/images/products/catalog/SOURCES.md), mixed stock. relatedProducts ranks
           by category distance, shared categories, stock, brand/attributes/price and
           collapses families (related-products.ts). Seed run on the local DB (27 -> 150).
+      - id: CATALOG-PHOTOS-001
+        owner: dev2
+        status: done
+        title: Complete local product photography for the current catalog
+        note: >-
+          All 150 current products have distinct local photographs. Replaced 97 SVG
+          illustrations, filled eight missing photos and separated p19's reused shoe
+          photo. Cards, galleries and saved-history media agree. Commercial fields
+          are unchanged. Browser verified all details, listing/search, cart/checkout
+          with all 146 in-stock products and responsive layouts. See
+          docs/product-photography.md for the audit and source attribution.
       - id: CATALOG-LEGACY-001
         owner: dev1
         status: planned
