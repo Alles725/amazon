@@ -1,4 +1,8 @@
 import { describe, expect, it } from 'vitest';
+import { existsSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import seedImages from '../../../config/product-images.json';
+import productContent from '../../../config/demo-product-content.json';
 import { CatalogItem } from '@amazon-mvp/api-contract';
 import {
   normalizeProductDetails,
@@ -64,5 +68,36 @@ describe('generic product presentation', () => {
         priceMinor: demo.oldPriceMinor!,
       }).oldPriceMinor,
     ).toBeUndefined();
+  });
+});
+
+// These are permanent catalog fixtures; new records retain a safe fallback until curated.
+describe('catalog photo coverage', () => {
+  it('ships distinct local photos for every current demo and seed product', () => {
+    const photos = [...demos.map((p) => p.image), ...seedImages.map((p) => p.image)];
+    expect(photos).toHaveLength(demos.length + seedImages.length);
+    expect(new Set(photos.map((p) => p.src)).size).toBe(photos.length);
+    const galleries = productContent.flatMap((p) => p.gallery ?? []);
+    for (const photo of [...photos, ...galleries]) {
+      expect(photo.src.startsWith('/images/')).toBe(true);
+      expect(photo.src).toMatch(/\.(jpg|jpeg|png|webp)$/);
+      expect(photo.alt.trim().length).toBeGreaterThan(0);
+      expect(existsSync(fileURLToPath(new URL(`../public${photo.src}`, import.meta.url)))).toBe(
+        true,
+      );
+    }
+  });
+  it('resolves seed media by SKU and slug while preserving live data', () => {
+    for (const entry of seedImages) {
+      const data = { ...product, sku: entry.sku, slug: entry.slug };
+      expect(productPresentation(data)).toEqual({
+        images: [entry.image],
+        demo: false,
+        oldPriceMinor: undefined,
+      });
+      expect(productPresentation({ ...data, sku: 'UNRELATED' }).images).toEqual([]);
+      expect(productPresentation({ ...data, slug: 'unrelated' }).images).toEqual([]);
+      expect(data.priceMinor).toBe(product.priceMinor);
+    }
   });
 });

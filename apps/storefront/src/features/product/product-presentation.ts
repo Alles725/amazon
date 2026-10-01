@@ -1,13 +1,17 @@
 import { CatalogItem, CatalogProductDetails } from '@amazon-mvp/api-contract';
 import type { GlyphKind } from '@/components/amazon/product-glyph';
 import demoProducts from '../../../../../config/demo-products.json';
+import productImages from '../../../../../config/product-images.json';
 
-/** Optional demo presentation never overrides identity, price, stock or availability.
+/** Local product photography never overrides identity, price, stock or availability.
  * SKU AND slug must match so an unrelated product cannot inherit another's media. */
 export function productPresentation(product: CatalogItem) {
   const demo = demoProducts.find((item) => item.id === product.slug && item.sku === product.sku);
+  const image =
+    demo?.image ??
+    productImages.find((item) => item.slug === product.slug && item.sku === product.sku)?.image;
   return {
-    images: demo?.image ? [demo.image] : [],
+    images: image ? [image] : [],
     demo: Boolean(demo),
     oldPriceMinor:
       demo?.oldPriceMinor && demo.oldPriceMinor > product.priceMinor

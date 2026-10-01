@@ -485,3 +485,43 @@ clean, openapi regenerated. Browser journey: search → product (Pix price, rati
 breadcrumb/brand links) → list → cart → checkout with Pix → confirmation → order listed on
 /payment-methods → verified review; account and footer pages; 390/1440 px without overflow.
 See docs/browse.md.
+
+## 2026-10-01 — Complete catalog photography
+
+Integrated the earlier photo work onto current main, retaining search, listings,
+reviews, account features and the expanded 146-record demo catalog. Eight records
+previously had no photo; 97 additional records used SVG illustrations. All 150
+current products (including the four original seeds) now have distinct local
+photographs. Replaced p19's reused shoe photo with a separate casual slip-on.
+Updated primary images and detail galleries together; all non-media JSON fields
+were compared with HEAD and are unchanged.
+
+Added error recovery to shared ProductImage and migrated only exact retired image
+URLs when reading browsing history. Product IDs, names, visit dates and persisted
+history remain intact. New arbitrary products still require curated photo metadata;
+the generic fallback is retained for absent or failed images.
+
+Validation: lint, typecheck and all 271 storefront tests passed. On Node 26, run
+Vitest with NODE_OPTIONS=--no-experimental-webstorage so jsdom supplies localStorage;
+without it the existing history tests fail before executing their assertions.
+The test suite retains an existing AllMenu javascript:void(0) React warning.
+No backend, schema, migration or API changes were introduced by this task.
+
+Browser verification: all 150 detail pages and related rails have loaded photos;
+all four listing pages, search and scoped listings were visited. A real add-to-cart
+click was followed by two cart/checkout batches (73 in-stock products each), reload
+persistence and 320/390/768/1440 px checks. Four out-of-stock products remain excluded
+from cart per existing rules. No console/JavaScript errors in the completed cart,
+checkout and responsive runs. Saved-history SVG replacement and deliberate image
+failure fallbacks passed. Two temporary test users and their carts were removed.
+
+Source files were visually reviewed; all 150 primary images have distinct byte
+hashes. No primary or gallery image in the current fixtures uses SVG. Older SVG
+assets are retained for compatibility but current catalog rendering does not use them.
+
+Production storefront build passed. API readiness reports database: ok.
+
+PR validation on fix/fotos-catalogo-completo: workspace lint/typecheck, all 335 unit
+tests, full build, 70 API integration tests on a disposable database, migration/schema
+drift, OpenAPI freshness and all three Kustomize overlays passed. Review found no
+blocking issue. Docker image builds were not rerun (no dependency/Dockerfile changes).

@@ -2,38 +2,41 @@
 
 ## Current objective
 
-BROWSE-001 — see the development log entry of 2026-09-30 and current-state.md. PR preparation is on
-feat/busca-e-listagens, part of a stacked chain of six branches to merge in order: institutional
-footer pages, help/payment pages, Pix discount, reviews, account hub, listing and search.
-Commit, push and PR await the final explicit approval.
+CATALOG-PHOTOS-001 is implemented and validated. PR branch:
+`fix/fotos-catalogo-completo`, based on current origin/main (4c34461).
+The user requested commit, push and PR publication after photo verification.
 
 ## Implementation
 
-- apps/storefront/src/features/product: product-server.ts (catalog/addresses reads,
-  related products), product-content.ts (server-only presentation fixtures),
-  product-rules.ts (pure: variants, last purchase, dates, installments), reviews/
-  (the only review source), gallery, overview, purchase (buy box), notices, sections.
-- features/home/home-catalog.ts: Home cards resolved to catalog records.
-- API: categories.parent_id (migration 20260930000000_category_hierarchy), categoryPath,
-  category filter over the subtree. Seed: demo taxonomy, p21–p23, guarded p6 upgrade.
-- New flag productReviews (false → Coming Soon on /products/[id]/review).
-- CATALOG-002: p24-p146 in the demo fixtures, images in public/images/products/catalog,
-  related-products.ts (ranking), listBySlugs + API ?slugs= for the Home.
-- Previous objective PRODUCT-002 merged (PR #18).
+All 150 current products have distinct local photographs. Primary media is in
+config/demo-products.json; galleries in config/demo-product-content.json; the four
+original seed products resolve by SKU and slug through config/product-images.json.
+config/legacy-product-images.json refreshes exact retired SVG URLs in device-local
+history. ProductImage keeps a neutral fallback for failed loads. No commercial
+fixture fields, backend, API, authentication, schema or migration changed.
 
-## Configuration and limits
-
-Shared config enables productDetails, cart, checkout and browsingHistory (FLAGS-001,
-features.spec asserts it); the default FEATURES_FILE needs no local copy.
-API :3001, storefront :3000, PostgreSQL Docker container mvp-pg (port 5433). Start the
-storefront from PowerShell (Git Bash rewrites API_PUBLIC_BASE_PATH=/api/v1 into a path).
-Prime, reviews text and the brand story are demo presentation; no Pix discount, delivery
-estimate or customer media. Unknown products render the not-found page with status 200 +
-noindex (NOTFOUND-001). The user's demo order (p6, 2026-08-10) keeps its old snapshot name.
+Complete audit and source attribution: docs/product-photography.md and
+apps/storefront/public/images/products/SOURCES.md. Photos of generic/fictitious
+products are representative; future products still need curated media metadata.
 
 ## Validation
 
-See current-state.md and development-log.md for completed checks and browser results.
-Temporary tests use disposable accounts/databases and restore any stock/price they touch.
-Do not remove user-provided reference screenshots. Local env files remain ignored. No
-Docker image builds, Kubernetes deploy or migration Job executed.
+Install, Prisma generation, shared builds, workspace lint/typecheck, 335 unit tests
+(18 config-schema, 46 API, 271 storefront), full build and OpenAPI freshness passed.
+All 70 API integration tests and migration/schema drift checks passed on a temporary
+PostgreSQL database, then removed. All three Kustomize overlays rendered.
+Docker image builds and Kubernetes deployment were not run for this media-only PR.
+
+Browser checked 150 detail pages, all listing pages, search, related products,
+old history, cart/checkout with 146 in-stock products, reload, 320/390/768/1440 px
+and deliberate image failures. Temporary accounts and carts were removed.
+Node 26 requires NODE_OPTIONS=--no-experimental-webstorage for jsdom history tests;
+CI uses Node 20. Existing tool deprecations and an AllMenu javascript:void(0) React
+warning remain outside this task. No blocking review finding.
+
+## Local environment
+
+API :3001, storefront :3000, PostgreSQL in Docker container mvp-pg on :5432.
+The existing ignored .env is preserved. Do not access unrelated Codex auth files.
+A backup stash from the pre-main integration remains available; it is not part of
+this PR. Do not remove user-provided reference images or reset the database.

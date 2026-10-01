@@ -1,0 +1,34 @@
+[
+  {
+    "sku": "ELEC-0001",
+    "slug": "usb-c-charger-65w",
+    "image": {
+      "src": "/images/products/usb-c-charger.png",
+      "alt": "Foto ilustrativa de carregador compacto USB-C de 65W"
+    }
+  },
+  {
+    "sku": "ELEC-0002",
+    "slug": "wireless-mouse-quiet",
+    "image": {
+      "src": "/images/products/silent-mouse.png",
+      "alt": "Foto ilustrativa de mouse sem fio silencioso cinza"
+    }
+  },
+  {
+    "sku": "BOOK-0001",
+    "slug": "designing-data-intensive-systems",
+    "image": {
+      "src": "/images/products/data-intensive-book.png",
+      "alt": "Capa ilustrativa de livro sobre sistemas de dados: Designing Data-Intensive Applications"
+    }
+  },
+  {
+    "sku": "HOME-0001",
+    "slug": "pour-over-coffee-kettle",
+    "image": {
+      "src": "/images/products/gooseneck-kettle.jpg",
+      "alt": "Foto ilustrativa de chaleira de inox com bico de ganso e controle de temperatura"
+    }
+  }
+]

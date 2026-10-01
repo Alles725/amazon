@@ -377,3 +377,29 @@ hub is part of the authenticated shell and does not enable account management.
   the legacy base-seed categories show up as departments; curated Home rails still link
   to /products.
 - Not run: production build (Windows standalone EPERM, see above) and the Kubernetes path.
+
+## Complete local product photography — 2026-10-01
+
+- Current main catalog: 150 active products (146 demo + four original seed records).
+  The eight previously missing photos and 97 SVG illustrations are now covered by
+  local photographs. p19 also uses a distinct casual shoe photo instead of p5/p32's.
+- Cards and galleries use synchronized media in config/demo-products.json and
+  config/demo-product-content.json; original seed media resolves by SKU+slug in
+  config/product-images.json. All non-media fixture fields match main.
+- Existing device-local history resolves retired SVG URLs through
+  config/legacy-product-images.json without discarding visits. Shared ProductImage
+  handles image-load failures; future uncatalogued media retains a neutral fallback.
+- Sources, complete affected-product list and maintenance: docs/product-photography.md
+  and apps/storefront/public/images/products/SOURCES.md.
+- No backend, API, schema or migration changes. Local environment applies main's
+  committed migrations and runs its existing demo seed without resetting the DB.
+- Validation: 271 storefront tests, lint and typecheck passed. Browser checked all
+  150 details and four listing pages, search, related products, saved history,
+  cart/checkout with all 146 in-stock products, reload, four viewport widths and
+  forced-image-failure fallbacks. Temporary test accounts/carts removed.
+- Production storefront build passed; API and database readiness are healthy.
+
+PR validation on fix/fotos-catalogo-completo: workspace lint/typecheck, all 335 unit
+tests, full build, 70 API integration tests on a disposable database, migration/schema
+drift, OpenAPI freshness and all three Kustomize overlays passed. Review found no
+blocking issue. Docker image builds were not rerun (no dependency/Dockerfile changes).
