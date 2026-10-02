@@ -51,6 +51,12 @@ export const checkoutClient = {
   /** Brand + last four digits only; the full number never reaches this call. */
   saveCard: (data: PaymentCardInput) =>
     request<SavedPaymentCard>(CHECKOUT_ROUTES.paymentCards, 'POST', data),
+  /** Returns the remaining cards. */
+  deleteCard: (id: string) =>
+    request<SavedPaymentCard[]>(
+      `${CHECKOUT_ROUTES.paymentCards}/${encodeURIComponent(id)}`,
+      'DELETE',
+    ),
   /** Totals (and the Pix discount) are always computed by the API for this method. */
   quote: (paymentMethod?: SimulatedPayment) =>
     request<CheckoutQuote>(

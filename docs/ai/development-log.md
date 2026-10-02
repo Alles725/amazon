@@ -646,3 +646,27 @@ Validation: workspace lint, typecheck, unit tests (api 50, storefront 314, inclu
 new `test/account-issues.spec.ts`) and `kubectl kustomize` of the three overlays; page
 served by the dev server (200, no build-state strip). Storefront `next build` and
 integration tests were not run (dev server running; no API change).
+
+## 2026-10-02 — Banner Prime: dispensar e atualizar o cartão
+
+Changes:
+The product page's Prime alert ("Sua assinatura Prime está pausada…") is no longer shown
+to every signed-in user. `showPrimeNotice` (`features/product/product-rules.ts`) hides it
+once the user has a non-expired saved card (`GET /payment-cards`, `isCardExpired`) or
+dismissed it; an unreachable API keeps it. New client component
+`features/product/prime-payment-notice.tsx`: the × writes the
+`az_prime_notice_dismissed=<userId>` cookie (1 year, read on the server, so another
+account on the same browser still sees it); "Atualizar meio de pagamento" opens a modal
+listing saved cards (expired ones can be removed, new `checkoutClient.deleteCard`) with
+the checkout's `CardForm` (`POST /payment-cards`). Saving a valid card closes the modal,
+hides the alert and refreshes the route. New `fetchPaymentCards` in `account-server.ts`.
+
+Database impact: none.
+
+API/contract impact: none (existing `/payment-cards` endpoints).
+
+Validation: workspace lint, typecheck, unit tests (config, api 50, storefront 320,
+including the new `test/prime-payment-notice.spec.ts` and banner cases in
+`test/product-page.spec.ts`) and API build. Storefront `next build`, integration tests and
+a browser check were not run (dev server running; no API change); `prisma generate` hit
+EPERM because the running API holds the query engine DLL (schema unchanged).

@@ -68,8 +68,14 @@ um card por família (`variantOf` fica fora das vitrines).
 
 ## O que é demonstrativo (e o que não é mostrado)
 
-- **Prime**: não existe assinatura no projeto. O alerta "Sua assinatura Prime está pausada"
-  é apenas visual e aparece só para usuários logados; o quadro "prime" do buy box também.
+- **Prime**: não existe assinatura no projeto; o quadro "prime" do buy box é só visual. O
+  alerta "Sua assinatura Prime está pausada" aparece para usuários logados **sem cartão
+  salvo válido** (nenhum de `GET /payment-cards` fora do vencimento, `isCardExpired`; se a
+  API falhar, o alerta aparece). "Atualizar meio de pagamento" abre um diálogo com os
+  cartões salvos (os vencidos podem ser removidos, `DELETE /payment-cards/:id`) e o mesmo
+  formulário "Adicionar cartão" do checkout (`POST /payment-cards`); salvo um cartão válido,
+  o alerta some. O × dispensa o alerta gravando o cookie `az_prime_notice_dismissed` com o
+  id do usuário (1 ano), lido no servidor — outra conta no mesmo navegador continua vendo.
 - **Pix à vista (PIX-001)**: "R$ X no Pix (5% de desconto)" abaixo do preço e "ou R$ X no
   Pix" no buy box (este só com estoque). O checkout aplica esse desconto de fato: a taxa vem
   de `GET /api/v1/orders/pricing` (configuração `checkout.pixDiscountPercent` da API) e o
