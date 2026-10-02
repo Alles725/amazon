@@ -602,3 +602,27 @@ a fresh user: no address, one address, three addresses, default changed, default
 deleted (API promotes the oldest), all deleted, guest, and `/addresses?add=1`.
 Storefront `next build` and integration tests were not run (dev server running; no API
 change).
+
+## 2026-10-02 — Páginas legais: Notificação de Privacidade e Condições de Uso
+
+Changes:
+Two legal help articles transcribed from amazon.com.br: `/privacy` (Notificação de
+Privacidade da Amazon) and `/conditions-of-use` (Condições de Uso), behind the new flags
+`privacyNotice` and `conditionsOfUse`. Shared `features/legal/` renders a typed
+`LegalDocument` in the amazon.com.br help-article layout: "Ajuda e Serviço de
+atendimento ao cliente" title, "Políticas legais" sidebar (current page bold; policies
+without a page here are plain text), "Encontrar mais soluções" search over the /help
+library, breadcrumb, title, table of contents and sections. The footer legal links, the
+login/register legal text and footer, and the /help "Notificação de Privacidade" card
+(which pointed to /security) now link to the two pages. Links only go to existing
+routes or same-page anchors; Amazon URLs and pages that do not exist here stay as text.
+
+Database impact: none.
+
+API/contract impact: none.
+
+Validation: workspace lint, typecheck, unit tests (config 18, api 50, storefront 304,
+including the new `test/legal-pages.spec.ts`), API build and `kubectl kustomize` of the
+three overlays. Both pages checked in the browser at 1440 and 390 px (no horizontal
+overflow, no console errors) and the login page links. Storefront `next build` and
+integration tests were not run (dev server running; no API change).

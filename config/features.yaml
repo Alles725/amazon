@@ -107,6 +107,12 @@ features:
   help:
     enabled: true
     description: Customer help center
+  privacyNotice:
+    enabled: true
+    description: Amazon privacy notice (footer and login legal links)
+  conditionsOfUse:
+    enabled: true
+    description: Amazon conditions of use (footer and login legal links)
 
   # Account dropdown / account hub destinations (features/account, see
   # docs/account.md). Security, addresses and lists are backed by the API; the
@@ -268,6 +274,14 @@ routes:
 
   help:
     feature: help
+    disabledBehavior: coming-soon
+
+  privacyNotice:
+    feature: privacyNotice
+    disabledBehavior: coming-soon
+
+  conditionsOfUse:
+    feature: conditionsOfUse
     disabledBehavior: coming-soon
 
   security:

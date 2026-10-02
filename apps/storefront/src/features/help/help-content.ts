@@ -187,7 +187,7 @@ export const HELP_CATEGORIES: HelpCategory[] = [
       {
         title: 'Notificação de Privacidade',
         body: 'Saiba como coletamos e usamos suas informações pessoais.',
-        href: '/security',
+        href: '/privacy',
       },
     ],
   },
