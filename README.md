@@ -48,7 +48,7 @@ The storefront is then at <http://localhost:8080> and the API at
 ## Running outside Kubernetes
 
 ```bash
-cp .env.example .env
+cp .env.example process.env
 docker run -d --name mvp-pg -p 5432:5432 \
   -e POSTGRES_USER=amazon_mvp -e POSTGRES_PASSWORD=local-dev-password \
   -e POSTGRES_DB=amazon_mvp postgres:16-alpine
