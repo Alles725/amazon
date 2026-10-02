@@ -1,4 +1,10 @@
-import type { CatalogItem, OrderLineResponse, OrderResponse } from '@amazon-mvp/api-contract';
+import {
+  isCardExpired,
+  type CatalogItem,
+  type OrderLineResponse,
+  type OrderResponse,
+  type SavedPaymentCard,
+} from '@amazon-mvp/api-contract';
 import type { ProductPhoto } from '@/features/home/catalog-mock';
 
 /** Pure product-page rules. Everything derives from catalog records, persisted
@@ -113,3 +119,19 @@ export const discountPercent = (priceMinor: number, oldPriceMinor?: number): num
 
 export const formatRating = (value: number): string =>
   value.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+
+/** Holds the id of the user who dismissed the Prime banner, so another account on the
+ * same browser still sees it. */
+export const PRIME_NOTICE_COOKIE = 'az_prime_notice_dismissed';
+
+/** The (simulated) Prime banner asks for a valid card: it stays away once one is saved
+ * or this user dismissed it. Unknown cards (API down) keep it, as before. */
+export function showPrimeNotice(
+  cards: SavedPaymentCard[] | null,
+  dismissedBy: string | undefined,
+  userId: string,
+  now = new Date(),
+): boolean {
+  if (dismissedBy === userId) return false;
+  return !cards?.some((card) => !isCardExpired(card, now));
+}

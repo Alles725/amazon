@@ -1,9 +1,11 @@
 import type { Metadata } from 'next';
+import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import type { CatalogProductDetails } from '@amazon-mvp/api-contract';
 import { FeatureRoute, isFeatureEnabled } from '@/config/feature-gate';
 import { getServerSession } from '@/features/auth/server-session';
 import { fetchOrders } from '@/features/orders/orders-server';
+import { fetchPaymentCards } from '@/features/account/account-server';
 import { getCheckoutPricing } from '@/features/checkout/pricing-server';
 import { RecordProductView } from '@/features/browsing-history/record-product-view';
 import { HorizontalRail } from '@/components/amazon/horizontal-rail';
@@ -21,19 +23,17 @@ import {
   relatedProducts,
 } from '@/features/product/product-server';
 import {
+  PRIME_NOTICE_COOKIE,
   lastPurchase,
+  showPrimeNotice,
   variantDimensions,
   type VariantMember,
 } from '@/features/product/product-rules';
 import { ProductGallery } from '@/features/product/product-gallery';
 import { ProductOverview } from '@/features/product/product-overview';
 import { ProductPurchase } from '@/features/product/product-purchase';
-import {
-  PrimePaymentNotice,
-  PrimeUpsell,
-  ProductBreadcrumb,
-  PurchaseNotice,
-} from '@/features/product/product-notices';
+import { PrimePaymentNotice } from '@/features/product/prime-payment-notice';
+import { PrimeUpsell, ProductBreadcrumb, PurchaseNotice } from '@/features/product/product-notices';
 import {
   BrandStorySection,
   ProductDescription,
@@ -115,7 +115,7 @@ export default async function ProductDetailPage({ params, searchParams = {} }: P
   const familyIds = new Set(members.map((item) => item.product.id));
 
   const session = await getServerSession();
-  const [orders, address, pricing, related, brandProducts, reviews] = await Promise.all([
+  const [orders, address, pricing, related, brandProducts, reviews, cards] = await Promise.all([
     session && isFeatureEnabled('orders') ? fetchOrders() : Promise.resolve(null),
     session && checkoutEnabled ? getDeliveryAddress() : Promise.resolve(null),
     // The Pix price is only advertised when checkout (which grants it) is available.
@@ -137,7 +137,10 @@ export default async function ProductDetailPage({ params, searchParams = {} }: P
       query: parseReviewQuery(searchParams),
       signedIn: Boolean(session),
     }),
+    session ? fetchPaymentCards() : Promise.resolve(null),
   ]);
+  const primeNotice =
+    session && showPrimeNotice(cards, cookies().get(PRIME_NOTICE_COOKIE)?.value, session.user.id);
   const purchase = orders ? lastPurchase(orders, [...familyIds]) : null;
   const purchasedOptions = purchase
     ? (members.find((item) => item.product.id === purchase.line.productId)?.options ?? [])
@@ -156,7 +159,9 @@ export default async function ProductDetailPage({ params, searchParams = {} }: P
       {isFeatureEnabled('browsingHistory') && (
         <RecordProductView id={product.id} name={product.name} image={content.images[0]} />
       )}
-      {session && <PrimePaymentNotice />}
+      {session && primeNotice && (
+        <PrimePaymentNotice userId={session.user.id} userName={session.user.displayName} />
+      )}
       <ProductBreadcrumb
         path={product.categoryPath}
         hrefFor={catalogEnabled ? categoryHref : undefined}

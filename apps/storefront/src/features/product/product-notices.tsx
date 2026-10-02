@@ -2,30 +2,6 @@ import Link from 'next/link';
 import type { PreviousPurchase } from './product-rules';
 import { formatPurchaseDate } from './product-rules';
 
-/** Visual demo only: the project has no Prime subscription or payment wallet, so
- * nothing here reads or changes account state. Shown to signed-in users only. */
-export function PrimePaymentNotice() {
-  return (
-    <section className="az-pdp-alert" aria-labelledby="prime-alert-title">
-      <div>
-        <h2 id="prime-alert-title">
-          <span className="az-pdp-alert__icon" aria-hidden="true">
-            !
-          </span>
-          Sua assinatura Prime está pausada devido a um problema no meio de pagamento
-        </h2>
-        <p>
-          Adicione um meio de pagamento válido para assinar o Amazon Prime novamente e recuperar o
-          acesso aos seus benefícios.
-        </p>
-      </div>
-      <Link className="az-pdp-pill" href="/payment-methods">
-        Atualizar meio de pagamento
-      </Link>
-    </section>
-  );
-}
-
 /** Built from the signed-in user's persisted orders; never rendered without one. */
 export function PurchaseNotice({
   purchase,

@@ -9,8 +9,9 @@ vi.mock('react', async (original) => ({
   ...(await original<typeof import('react')>()),
   cache: (fn: unknown) => fn,
 }));
-vi.mock('next/headers', () => ({ cookies: () => ({ toString: () => 'amzmvp_sid=x' }) }));
-const { notFound, flags, session, fetchOrders, pricing } = vi.hoisted(() => ({
+const { notFound, flags, session, fetchOrders, pricing, savedCards, requestCookies } = vi.hoisted(() => ({
+  savedCards: vi.fn(),
+  requestCookies: {} as Record<string, string>,
   pricing: vi.fn(),
   notFound: vi.fn(() => {
     throw new Error('NEXT_NOT_FOUND');
@@ -19,7 +20,17 @@ const { notFound, flags, session, fetchOrders, pricing } = vi.hoisted(() => ({
   session: vi.fn(),
   fetchOrders: vi.fn(),
 }));
-vi.mock('next/navigation', () => ({ notFound, useRouter: () => ({ push: vi.fn() }) }));
+vi.mock('next/headers', () => ({
+  cookies: () => ({
+    toString: () => 'amzmvp_sid=x',
+    get: (name: string) =>
+      name in requestCookies ? { name, value: requestCookies[name] } : undefined,
+  }),
+}));
+vi.mock('next/navigation', () => ({
+  notFound,
+  useRouter: () => ({ push: vi.fn(), refresh: vi.fn() }),
+}));
 vi.mock('next/image', () => ({
   default: ({ priority: _p, sizes: _s, ...props }: Record<string, unknown>) =>
     createElement('img', props),
@@ -129,6 +140,8 @@ beforeEach(() => {
   });
   session.mockReset().mockResolvedValue(null);
   fetchOrders.mockReset().mockResolvedValue([]);
+  savedCards.mockReset().mockReturnValue(null);
+  for (const name of Object.keys(requestCookies)) delete requestCookies[name];
   pricing
     .mockReset()
     .mockImplementation(
@@ -147,6 +160,10 @@ beforeEach(() => {
       const path = url.replace('http://api/api/v1', '');
       if (path === '/addresses') return json([]);
       if (path === '/orders/pricing') return pricing();
+      if (path === '/payment-cards') {
+        const cards: unknown = savedCards();
+        return cards ? json(cards) : json({ error: {} }, 503);
+      }
       const reviewIds = (path.match(/productIds=([^&]+)/)?.[1] ?? '').split(',');
       if (path.startsWith('/reviews/summaries'))
         return json({
@@ -319,6 +336,40 @@ describe('product detail page', () => {
     await renderPage('p1');
     expect(fetchOrders).not.toHaveBeenCalled();
     expect(screen.queryByText(/Sua assinatura Prime está pausada/)).toBeNull();
+  });
+
+  it('shows the Prime banner until the user has a valid card or dismissed it', async () => {
+    session.mockResolvedValue({ user: { id: 'u', displayName: 'Ana' } });
+    const card = (expYear: number) => ({
+      id: `c${expYear}`,
+      brand: 'VISA',
+      last4: '4242',
+      holderName: 'Ana',
+      expMonth: 1,
+      expYear,
+    });
+    const banner = () => screen.queryByText(/Sua assinatura Prime está pausada/);
+    savedCards.mockReturnValue([]);
+    await renderPage('p1');
+    expect(banner()).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Atualizar meio de pagamento' })).toBeTruthy();
+    cleanup();
+    savedCards.mockReturnValue([card(2020)]);
+    await renderPage('p1');
+    expect(banner()).toBeTruthy();
+    cleanup();
+    savedCards.mockReturnValue([card(2020), card(2099)]);
+    await renderPage('p1');
+    expect(banner()).toBeNull();
+    cleanup();
+    savedCards.mockReturnValue([]);
+    requestCookies.az_prime_notice_dismissed = 'u';
+    await renderPage('p1');
+    expect(banner()).toBeNull();
+    cleanup();
+    requestCookies.az_prime_notice_dismissed = 'someone-else';
+    await renderPage('p1');
+    expect(banner()).toBeTruthy();
   });
 
   it('keeps other products free of the reference content', async () => {
