@@ -71,3 +71,16 @@ header, rodapé e `legal.css`. São o destino de “Condições de Uso” e
 “Notificação de Privacidade” no rodapé, no login e no cadastro. Links só para
 rotas existentes ou âncoras da página; URLs e páginas da Amazon que não existem
 aqui ficam como texto (`test/legal-pages.spec.ts`).
+
+## Problemas na conta e de login (`/account-issues`)
+
+| Rota | Flag | Conteúdo |
+| --- | --- | --- |
+| `/account-issues` | `accountIssues` | Problemas na conta e de login |
+
+Destino de “Precisa de ajuda?” no login (`features/account-issues/`). Caixa
+numerada “1 Em que podemos ajudar?” com o seletor “Selecione um problema”; cada
+uma das cinco opções mostra a caixa “2 Você sabia?” com a resposta transcrita da
+amazon.com.br (`account-issues-content.ts`). Só “Criar conta” vira link
+(`/register`); redefinição de senha e recuperação da verificação em duas etapas
+não existem aqui e ficam como texto (`test/account-issues.spec.ts`).

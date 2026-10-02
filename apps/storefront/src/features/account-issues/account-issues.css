@@ -1,0 +1,143 @@
+/* "Problemas na conta e de login" (/account-issues), matching Amazon's
+ * account-issues wizard: orange page title and numbered step boxes with a
+ * grey header strip. Scoped under .amazon-issues-page. */
+
+.amazon-issues-page {
+  background: #fff;
+  color: #0f1111;
+  min-width: 0;
+  overflow-x: clip;
+}
+.amazon-issues-page .az-footer {
+  margin-top: 0;
+}
+.az-issues {
+  max-width: 1380px;
+  padding: 56px 16px 80px 22px;
+  font-family: var(--font-help, Arial), Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+}
+.az-issues :focus-visible {
+  outline: 2px solid #ff9900;
+  outline-offset: 2px;
+}
+.az-issues__title {
+  margin: 0 0 44px 14px;
+  color: #e47911;
+  font-family: inherit;
+  font-size: 26px;
+  font-weight: 400;
+  line-height: 32px;
+}
+
+/* Numbered step box ----------------------------------------------------- */
+.az-issues__step {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+.az-issues__step + .az-issues__step {
+  margin-top: 22px;
+}
+.az-issues__step-header {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  border-bottom: 1px solid #ddd;
+  background: linear-gradient(to bottom, #f7f8fa, #e7e9ec);
+}
+.az-issues__step-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-top-left-radius: 3px;
+  background: #232f3e;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+}
+.az-issues__step-title {
+  margin: 0 0 1px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+}
+.az-issues__step-body {
+  padding: 20px 0 32px;
+}
+
+/* "Selecione um problema" ----------------------------------------------- */
+.az-issues__field {
+  display: grid;
+  grid-template-columns: 318px minmax(0, 516px);
+  align-items: center;
+}
+.az-issues__label {
+  position: relative;
+  padding-left: 18px;
+}
+.az-issues__label::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 50%;
+  border-top: 9px solid transparent;
+  border-bottom: 9px solid transparent;
+  border-left: 9px solid #f0a71a;
+  transform: translateY(-50%);
+}
+.az-issues__select {
+  width: 100%;
+  min-width: 0;
+  height: 23px;
+  padding: 0 4px;
+  border: 1px solid #767676;
+  border-radius: 3px;
+  background: #fff;
+  color: inherit;
+  font: inherit;
+}
+
+/* "Você sabia?" answer -------------------------------------------------- */
+.az-issues__answer {
+  max-width: 900px;
+  padding: 0 18px;
+}
+.az-issues__answer p {
+  margin: 0 0 14px;
+}
+.az-issues__answer p:last-child {
+  margin-bottom: 0;
+}
+.az-issues__steps {
+  margin: 0 0 14px;
+  padding-left: 48px;
+}
+.az-issues__steps li + li {
+  margin-top: 8px;
+}
+.az-issues__link {
+  color: #2162a1;
+  text-decoration: none;
+}
+.az-issues__link:hover {
+  color: #c7511f;
+  text-decoration: underline;
+}
+
+@media (max-width: 720px) {
+  .az-issues {
+    padding: 28px 16px 56px;
+  }
+  .az-issues__title {
+    margin: 0 0 24px;
+  }
+  .az-issues__field {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+    padding: 0 12px;
+  }
+}
