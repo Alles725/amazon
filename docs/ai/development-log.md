@@ -525,3 +525,25 @@ PR validation on fix/fotos-catalogo-completo: workspace lint/typecheck, all 335 
 tests, full build, 70 API integration tests on a disposable database, migration/schema
 drift, OpenAPI freshness and all three Kustomize overlays passed. Review found no
 blocking issue. Docker image builds were not rerun (no dependency/Dockerfile changes).
+
+## 2026-10-01 — Seus endereços (layout Amazon, telefone e instruções de entrega)
+
+Changes:
+/addresses cards now follow the Amazon layout: "Endereço padrão: amazon" badge,
+`Rua Número`, `Complemento Bairro`, `Cidade, UF CEP`, `Brasil`, `Telefone: +55…`, an
+inline "Adicionar/Editar instruções de entrega" editor and `Alterar | Excluir | Definir
+como padrão`. AddressForm (shared with checkout) gained an optional phone field.
+`formatPostalCode` was removed (the page shows the raw CEP like Amazon).
+
+Database impact:
+Migration `20261001000200_address_contact` adds nullable `addresses.phone` and
+`addresses.delivery_instructions`; existing rows stay valid. Drift check clean.
+
+API/contract impact:
+`AddressInput` gains optional `phone` (formatting stripped, 10–11 digits) and
+`deliveryInstructions` (≤ 300). Omitting instructions on PUT keeps them; empty clears.
+Both are copied into the order shipping-address snapshot. `docs/openapi.json` regenerated.
+
+Validation: lint, typecheck, 338 unit tests (config 18, api 46, storefront 274), 71 API
+integration tests on a disposable database. Smoke test against the running app rendered
+the three screenshot addresses as expected; the temporary user was removed.

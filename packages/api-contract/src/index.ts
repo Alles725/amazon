@@ -245,6 +245,10 @@ export interface AddressInput {
   neighborhood: string;
   city: string;
   state: string;
+  /** DDD + número, digits only (10 or 11). Empty clears it. */
+  phone?: string;
+  /** Free text for the courier. Omitted on update keeps the stored value; empty clears it. */
+  deliveryInstructions?: string;
 }
 export interface SavedAddress extends AddressInput {
   id: string;

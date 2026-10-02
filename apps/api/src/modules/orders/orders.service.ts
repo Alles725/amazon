@@ -96,6 +96,8 @@ export class OrdersService implements OrdersApi {
           neighborhood: address.neighborhood,
           city: address.city,
           state: address.state,
+          phone: address.phone,
+          deliveryInstructions: address.deliveryInstructions,
         } satisfies AddressInput;
         const order = await tx.order.create({
           data: {

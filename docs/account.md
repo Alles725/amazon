@@ -25,6 +25,16 @@ Styles live in `features/account/account.css` (scoped to `.az-acct*` / `.az-add-
 - Lists come back default first, so checkout (`data[0]`) and the product page
   ("Enviar para …") keep using the default without changes.
 - The page reuses checkout's `AddressForm`; validation lives in one place.
+- `addresses.phone` and `addresses.delivery_instructions` (migration
+  `20261001000200_address_contact`), both optional so older addresses stay valid.
+  Phone is stored as DDD + número digits (the API strips formatting) and shown as
+  `Telefone: +55…`. Instructions (≤ 300 chars) are edited inline from the card's
+  "Adicionar instruções de entrega" link via the same `PUT`; omitting the field keeps
+  the stored value (so `AddressForm` edits never wipe it), an empty string clears it.
+  Both are copied into the order's `shippingAddress` snapshot.
+- Cards follow Amazon's layout: "Endereço padrão: amazon" badge, `Rua Número`,
+  `Complemento Bairro`, `Cidade, UF CEP`, `Brasil`, actions `Alterar | Excluir |
+  Definir como padrão` (delete still asks for confirmation).
 
 ## Acesso e segurança
 - `PATCH /api/v1/account/profile` `{ displayName }` — same 2–80 rule as registration.

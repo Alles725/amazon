@@ -2240,6 +2240,15 @@
           "state": {
             "type": "string"
           },
+          "phone": {
+            "type": "string",
+            "example": "54996704398",
+            "description": "DDD + número, digits only"
+          },
+          "deliveryInstructions": {
+            "type": "string",
+            "description": "Omit to keep the stored value; empty clears it"
+          },
           "id": {
             "type": "string",
             "format": "uuid"
@@ -2288,6 +2297,15 @@
           },
           "state": {
             "type": "string"
+          },
+          "phone": {
+            "type": "string",
+            "example": "54996704398",
+            "description": "DDD + número, digits only"
+          },
+          "deliveryInstructions": {
+            "type": "string",
+            "description": "Omit to keep the stored value; empty clears it"
           }
         },
         "required": [

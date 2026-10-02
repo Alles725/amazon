@@ -14,7 +14,3 @@ export function stockLabel(product: CatalogItem): { text: string; tone: 'ok' | '
     return { text: `Apenas ${product.availableQuantity} em estoque`, tone: 'low' };
   return { text: 'Em estoque', tone: 'ok' };
 }
-
-export function formatPostalCode(code: string) {
-  return /^\d{8}$/.test(code) ? `${code.slice(0, 5)}-${code.slice(5)}` : code;
-}

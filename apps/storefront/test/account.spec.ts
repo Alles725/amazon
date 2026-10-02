@@ -12,6 +12,7 @@ vi.mock('../src/features/account/account-client', async (original) => ({
     addresses: vi.fn(),
     deleteAddress: vi.fn(),
     setDefaultAddress: vi.fn(),
+    updateAddress: vi.fn(),
     changePassword: vi.fn(),
     changeEmail: vi.fn(),
     updateName: vi.fn(),
@@ -21,11 +22,7 @@ vi.mock('../src/features/account/account-client', async (original) => ({
 }));
 
 import { accountClient, AccountRequestError } from '../src/features/account/account-client';
-import {
-  formatPostalCode,
-  listHref,
-  stockLabel,
-} from '../src/features/account/account-presentation';
+import { listHref, stockLabel } from '../src/features/account/account-presentation';
 import { AddressesManager } from '../src/features/account/addresses-manager';
 import { AddToList } from '../src/features/account/add-to-list';
 import { SecuritySettings } from '../src/features/account/security-settings';
@@ -59,13 +56,16 @@ describe('account presentation', () => {
     expect(stockLabel(product({ active: false })).text).toBe('Indisponível no momento');
   });
 
-  it('formats CEPs and list links', () => {
-    expect(formatPostalCode('90020060')).toBe('90020-060');
+  it('builds list links', () => {
     expect(listHref('a b')).toBe('/lists?list=a%20b');
   });
 });
 
-const address = (id: string, isDefault: boolean): AccountAddress => ({
+const address = (
+  id: string,
+  isDefault: boolean,
+  extra: Partial<AccountAddress> = {},
+): AccountAddress => ({
   id,
   recipient: `Pessoa ${id}`,
   postalCode: '90020060',
@@ -75,6 +75,7 @@ const address = (id: string, isDefault: boolean): AccountAddress => ({
   city: 'Porto Alegre',
   state: 'RS',
   isDefault,
+  ...extra,
 });
 
 describe('AddressesManager', () => {
@@ -85,7 +86,7 @@ describe('AddressesManager', () => {
         name: 'Ada',
       }),
     );
-    expect(screen.getByText('Padrão:')).toBeTruthy();
+    expect(screen.getByText('Endereço padrão:')).toBeTruthy();
     expect(screen.getAllByRole('button', { name: /Definir como padrão/ })).toHaveLength(1);
     expect(screen.getByRole('button', { name: 'Adicionar endereço' })).toBeTruthy();
   });
@@ -98,12 +99,66 @@ describe('AddressesManager', () => {
         name: 'Ada',
       }),
     );
-    fireEvent.click(screen.getByRole('button', { name: /Remover endereço de Pessoa a/ }));
+    fireEvent.click(screen.getByRole('button', { name: /Excluir endereço de Pessoa a/ }));
     expect(accountClient.deleteAddress).not.toHaveBeenCalled();
-    fireEvent.click(screen.getByRole('button', { name: 'Sim, remover' }));
-    await waitFor(() => expect(screen.getByText('Endereço removido.')).toBeTruthy());
+    fireEvent.click(screen.getByRole('button', { name: 'Sim, excluir' }));
+    await waitFor(() => expect(screen.getByText('Endereço excluído.')).toBeTruthy());
     expect(accountClient.deleteAddress).toHaveBeenCalledWith('a');
-    expect(screen.queryByText('Rua a, 1')).toBeNull();
+    expect(screen.queryByText('Pessoa a')).toBeNull();
+  });
+
+  it('prints the address the Amazon way, with phone only when saved', () => {
+    render(
+      createElement(AddressesManager, {
+        initial: [
+          address('a', true, { complement: 'ap 710', phone: '54996704398' }),
+          address('b', false),
+        ],
+        name: 'Ada',
+      }),
+    );
+    const cards = document.querySelectorAll('address');
+    expect(cards[0].textContent).toContain('Rua a 1');
+    expect(cards[0].textContent).toContain('ap 710 Centro');
+    expect(cards[0].textContent).toContain('Porto Alegre, RS 90020060');
+    expect(cards[0].textContent).toContain('Telefone: +5554996704398');
+    expect(cards[1].textContent).not.toContain('Telefone');
+  });
+
+  it('saves delivery instructions with the rest of the address', async () => {
+    const original = address('a', true, { phone: '54996704398' });
+    vi.mocked(accountClient.updateAddress).mockResolvedValue({
+      ...original,
+      deliveryInstructions: 'Deixar com o porteiro',
+    });
+    render(createElement(AddressesManager, { initial: [original], name: 'Ada' }));
+    fireEvent.click(screen.getByRole('button', { name: /Adicionar instruções de entrega/ }));
+    fireEvent.change(screen.getByLabelText('Instruções de entrega'), {
+      target: { value: '  Deixar com o porteiro ' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'Salvar' }));
+    await waitFor(() => expect(screen.getByText('Instruções de entrega salvas.')).toBeTruthy());
+    const { id: _id, isDefault: _isDefault, ...input } = original;
+    expect(accountClient.updateAddress).toHaveBeenCalledWith('a', {
+      ...input,
+      deliveryInstructions: 'Deixar com o porteiro',
+    });
+    expect(screen.getByText('Deixar com o porteiro')).toBeTruthy();
+    expect(screen.getByRole('button', { name: /Editar instruções de entrega/ })).toBeTruthy();
+  });
+
+  it('keeps the instructions draft open when saving fails', async () => {
+    vi.mocked(accountClient.updateAddress).mockRejectedValue(new Error('Falhou.'));
+    render(createElement(AddressesManager, { initial: [address('a', true)], name: 'Ada' }));
+    fireEvent.click(screen.getByRole('button', { name: /Adicionar instruções de entrega/ }));
+    fireEvent.change(screen.getByLabelText('Instruções de entrega'), {
+      target: { value: 'Portão azul' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'Salvar' }));
+    await waitFor(() => expect(screen.getByRole('alert').textContent).toBe('Falhou.'));
+    expect((screen.getByLabelText('Instruções de entrega') as HTMLTextAreaElement).value).toBe(
+      'Portão azul',
+    );
   });
 });
 
