@@ -72,9 +72,6 @@ export function HeroBanner() {
         <Link href="/products?q=alimentos" className="az-promo az-promo--pantry">
           <span className="az-promo__eyebrow">Seu mercado</span>
           <h2>O essencial da sua despensa, em um só lugar</h2>
-          <span className="az-promo__pill">
-            Explore alimentos e bebidas <span aria-hidden="true">›</span>
-          </span>
           <div className="az-pantry-photos" aria-hidden="true">
             <Image
               className="az-pantry-photos__oil"

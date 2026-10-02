@@ -1397,16 +1397,6 @@ button.az-history-menu__trigger {
   line-height: 1.08;
   margin: 10px 0 18px;
 }
-.az-promo__pill {
-  align-self: flex-start;
-  background: #18242c;
-  color: #fff;
-  border-radius: 5px;
-  padding: 10px;
-  font-size: 13px;
-  line-height: 1.3;
-  font-weight: 700;
-}
 .az-pantry-photos {
   position: relative;
   flex: 1;
@@ -1651,11 +1641,6 @@ button.az-history-menu__trigger {
     width: 58%;
     font-size: 25px;
     margin: 0 0 12px;
-  }
-  .az-promo__pill {
-    max-width: 58%;
-    font-size: 11px;
-    padding: 7px;
   }
   .az-pantry-photos {
     position: absolute;
