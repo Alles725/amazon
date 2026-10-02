@@ -626,3 +626,23 @@ including the new `test/legal-pages.spec.ts`), API build and `kubectl kustomize`
 three overlays. Both pages checked in the browser at 1440 and 390 px (no horizontal
 overflow, no console errors) and the login page links. Storefront `next build` and
 integration tests were not run (dev server running; no API change).
+
+## 2026-10-02 — Problemas na conta e de login ("Precisa de ajuda?")
+
+Changes:
+New `/account-issues` page behind the flag `accountIssues`, linked from "Precisa de
+ajuda?" on the login identifier step. `features/account-issues/` renders Amazon's
+wizard: orange title, step box "1 Em que podemos ajudar?" with the "Selecione um
+problema" select, and a "2 Você sabia?" box with the answer for the chosen problem
+(five answers transcribed from amazon.com.br). Only "Criar conta" links (`/register`);
+password reset and two-step recovery have no page here and stay as text. Added to the
+bare-layout routes in `app/layout.tsx`.
+
+Database impact: none.
+
+API/contract impact: none.
+
+Validation: workspace lint, typecheck, unit tests (api 50, storefront 314, including the
+new `test/account-issues.spec.ts`) and `kubectl kustomize` of the three overlays; page
+served by the dev server (200, no build-state strip). Storefront `next build` and
+integration tests were not run (dev server running; no API change).

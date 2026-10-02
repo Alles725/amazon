@@ -42,6 +42,7 @@ const CUSTOMER_PAGE_ROUTES = [
   '/returns',
   '/content-and-devices',
   '/recalls',
+  '/account-issues',
 ];
 
 export default async function RootLayout({ children }: { children: ReactNode }) {

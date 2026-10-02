@@ -344,6 +344,11 @@ hub is part of the authenticated shell and does not enable account management.
   content/devices management, online returns/cancellations, delivery dates and tracking;
   the recall list is empty because no recall records exist.
 
+## Account issues — 2026-10-02
+
+- /account-issues is real (flag accountIssues on) and is the target of "Precisa de
+  ajuda?" on /login; password reset and two-step recovery are text only (no such flows).
+
 ## Legal pages — 2026-10-02
 
 - /privacy and /conditions-of-use are real (flags privacyNotice and conditionsOfUse on),

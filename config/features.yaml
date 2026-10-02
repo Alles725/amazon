@@ -113,6 +113,9 @@ features:
   conditionsOfUse:
     enabled: true
     description: Amazon conditions of use (footer and login legal links)
+  accountIssues:
+    enabled: true
+    description: Account and login problems ("Precisa de ajuda?" on /login)
 
   # Account dropdown / account hub destinations (features/account, see
   # docs/account.md). Security, addresses and lists are backed by the API; the
@@ -282,6 +285,10 @@ routes:
 
   conditionsOfUse:
     feature: conditionsOfUse
+    disabledBehavior: coming-soon
+
+  accountIssues:
+    feature: accountIssues
     disabledBehavior: coming-soon
 
   security:

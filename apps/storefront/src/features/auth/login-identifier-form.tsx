@@ -155,9 +155,9 @@ export function LoginIdentifierForm() {
               <Link href="/privacy">Notificação de privacidade da Amazon</Link>.
             </p>
 
-            <a className="amazon-card__help" href="#">
+            <Link className="amazon-card__help" href="/account-issues">
               Precisa de ajuda?
-            </a>
+            </Link>
           </>
         )}
 
