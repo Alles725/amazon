@@ -6,6 +6,7 @@ import {
   CheckoutQuote,
   ErrorCode,
   SimulatedPayment,
+  installmentOptions,
   paymentDiscountPercent,
   percentDiscountMinor,
 } from '@amazon-mvp/api-contract';
@@ -59,15 +60,19 @@ export function quoteCart(
     .digest('hex');
   const shippingMinor = 0;
   const discountMinor = percentDiscountMinor(cart.subtotalMinor, discountPercent);
+  const totalMinor = cart.subtotalMinor + shippingMinor - discountMinor;
   return {
     cart,
     revision,
     subtotalMinor: cart.subtotalMinor,
     shippingMinor,
     discountMinor,
-    totalMinor: cart.subtotalMinor + shippingMinor - discountMinor,
+    totalMinor,
     currency: cart.currency,
     paymentMethod,
     discountPercent,
+    // Interest-free, so the plan never changes the total and stays out of the revision.
+    installmentOptions:
+      paymentMethod === 'SIMULATED_CARD' ? installmentOptions(totalMinor, pricing) : [],
   };
 }

@@ -1,12 +1,16 @@
 import { randomUUID } from 'node:crypto';
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import {
   AddressInput,
   CheckoutPricing,
   CheckoutQuote,
+  DEMO_CARD,
+  ErrorCode,
+  OrderPaymentCard,
   OrderResponse,
   PlaceOrderRequest,
   SimulatedPayment,
+  isCardExpired,
 } from '@amazon-mvp/api-contract';
 import { ApiConfig } from '@amazon-mvp/config-schema';
 import { Prisma } from '@amazon-mvp/database';
@@ -15,7 +19,12 @@ import { PrismaService } from '../../common/prisma.service';
 import { ApiError } from '../../common/api-error';
 import { CART_API, CartApi } from '../cart/cart.api';
 import { CATALOG_API, CatalogApi } from '../catalog/catalog.api';
-import { USER_ADDRESSES_API, UserAddressesApi } from '../users/users.api';
+import {
+  USER_ADDRESSES_API,
+  USER_PAYMENT_CARDS_API,
+  UserAddressesApi,
+  UserPaymentCardsApi,
+} from '../users/users.api';
 import { conflict, quoteCart } from './checkout-quote';
 import { OrdersApi } from './orders.api';
 
@@ -29,9 +38,11 @@ export class OrdersService implements OrdersApi {
     @Inject(CART_API) private readonly cart: CartApi,
     @Inject(CATALOG_API) private readonly catalog: CatalogApi,
     @Inject(USER_ADDRESSES_API) private readonly users: UserAddressesApi,
+    @Inject(USER_PAYMENT_CARDS_API) private readonly cards: UserPaymentCardsApi,
     @Inject(API_CONFIG) config: ApiConfig,
   ) {
-    this.checkoutPricing = { pixDiscountPercent: config.checkout.pixDiscountPercent };
+    const { pixDiscountPercent, maxInstallments, minInstallmentMinor } = config.checkout;
+    this.checkoutPricing = { pixDiscountPercent, maxInstallments, minInstallmentMinor };
   }
 
   pricing(): CheckoutPricing {
@@ -55,6 +66,7 @@ export class OrdersService implements OrdersApi {
           include: { items: true },
         });
         if (existing) return orderView(existing);
+        const paymentCard = await this.paymentCard(userId, input, tx);
         const address = await this.users.findAddress(userId, input.addressId, tx);
         if (!address) throw ApiError.notFound('Address');
         const items = await this.cart.checkoutItems(userId, input.cartId, tx);
@@ -87,6 +99,12 @@ export class OrdersService implements OrdersApi {
           throw conflict(
             'Seu carrinho, os preços ou a forma de pagamento mudaram. Revise o resumo e confirme novamente.',
           );
+        const installments = paymentCard ? (input.installments ?? 1) : null;
+        if (
+          installments !== null &&
+          !quote.installmentOptions.some((o) => o.count === installments)
+        )
+          throw invalidPayment('Número de parcelas indisponível para este total.');
         const snapshot = {
           recipient: address.recipient,
           postalCode: address.postalCode,
@@ -112,6 +130,10 @@ export class OrdersService implements OrdersApi {
             currency: quote.currency,
             shippingAddress: snapshot,
             paymentMethod: input.paymentMethod,
+            paymentCard: paymentCard
+              ? { brand: paymentCard.brand, last4: paymentCard.last4 }
+              : undefined,
+            installments,
             items: {
               create: lines.map((line) => ({
                 productId: line.productId,
@@ -131,6 +153,23 @@ export class OrdersService implements OrdersApi {
       },
       { maxWait: 10000, timeout: 20000 },
     );
+  }
+  /** Card snapshot for SIMULATED_CARD (a saved card or the demo Visa); null for Pix. */
+  private async paymentCard(
+    userId: string,
+    input: PlaceOrderRequest,
+    tx: Prisma.TransactionClient,
+  ): Promise<OrderPaymentCard | null> {
+    if (input.paymentMethod !== 'SIMULATED_CARD') {
+      if (input.cardId !== undefined || input.installments !== undefined)
+        throw invalidPayment('Pix não aceita cartão nem parcelamento.');
+      return null;
+    }
+    if (input.cardId === undefined) return { ...DEMO_CARD };
+    const card = await this.cards.findCard(userId, input.cardId, tx);
+    if (!card) throw ApiError.notFound('Payment card');
+    if (isCardExpired(card)) throw invalidPayment('O cartão selecionado está vencido.');
+    return { brand: card.brand, last4: card.last4 };
   }
   async listForUser(userId: string) {
     return (
@@ -157,6 +196,9 @@ export class OrdersService implements OrdersApi {
     return line !== null;
   }
 }
+const invalidPayment = (message: string) =>
+  new ApiError(ErrorCode.PAYMENT_INVALID, message, HttpStatus.BAD_REQUEST);
+
 function orderView(order: StoredOrder): OrderResponse {
   return {
     id: order.id,
@@ -169,6 +211,8 @@ function orderView(order: StoredOrder): OrderResponse {
     currency: order.currency,
     shippingAddress: order.shippingAddress as unknown as AddressInput | null,
     paymentMethod: order.paymentMethod as SimulatedPayment | null,
+    paymentCard: order.paymentCard as unknown as OrderPaymentCard | null,
+    installments: order.installments,
     placedAt: order.placedAt.toISOString(),
     deliveredAt: order.deliveredAt?.toISOString() ?? null,
     deliveryNote: order.deliveryNote,

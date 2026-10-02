@@ -196,6 +196,8 @@ const order = (placedAt: string, productId: string): OrderResponse => ({
   currency: 'BRL',
   shippingAddress: null,
   paymentMethod: null,
+  paymentCard: null,
+  installments: null,
   placedAt,
   deliveredAt: null,
   deliveryNote: null,

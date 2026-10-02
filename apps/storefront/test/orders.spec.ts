@@ -34,6 +34,8 @@ const order = (
   currency: 'BRL',
   shippingAddress: null,
   paymentMethod: 'SIMULATED_CARD',
+  paymentCard: null,
+  installments: null,
   placedAt,
   deliveredAt: null,
   deliveryNote: null,

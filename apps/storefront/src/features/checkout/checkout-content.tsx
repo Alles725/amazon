@@ -4,21 +4,40 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import {
   CheckoutQuote,
+  DEMO_CARD,
+  InstallmentOption,
   MAX_CART_QUANTITY,
+  MAX_SAVED_CARDS,
   PlaceOrderRequest,
   SavedAddress,
+  SavedPaymentCard,
   SimulatedPayment,
+  cardLabel,
+  isCardExpired,
 } from '@amazon-mvp/api-contract';
 import { useCart } from '@/features/cart/cart-provider';
 import { formatCartMoney } from '@/features/cart/money';
 import { ProductImage } from '@/components/amazon/product-image';
 import { productPresentation } from '@/features/product/product-presentation';
 import { AddressForm } from './address-form';
+import { CardForm } from './card-form';
 import { checkoutClient, CheckoutError, cartContentKey } from './checkout-client';
 import './pix-price.css';
+import './payment-card.css';
 
 /** Until a method is chosen the API quotes card, i.e. no discount. */
 const DEFAULT_QUOTE_METHOD: SimulatedPayment = 'SIMULATED_CARD';
+/** Radio value of the fixed demo card (PlaceOrderRequest without cardId). */
+const DEMO_CARD_ID = 'demo';
+
+export function installmentLabel(option: InstallmentOption, currency: string): string {
+  const each = formatCartMoney(option.installmentMinor, currency);
+  if (option.count === 1) return `1x de ${each} sem juros (à vista)`;
+  if (option.firstInstallmentMinor === option.installmentMinor)
+    return `${option.count}x de ${each} sem juros`;
+  const first = formatCartMoney(option.firstInstallmentMinor, currency);
+  return `${option.count}x sem juros (1ª de ${first} + ${option.count - 1}x de ${each})`;
+}
 
 export function CheckoutContent({
   name,
@@ -36,6 +55,11 @@ export function CheckoutContent({
   const [addressError, setAddressError] = useState('');
   const [editor, setEditor] = useState<SavedAddress | 'new' | null>(null);
   const [payment, setPayment] = useState<SimulatedPayment | ''>('');
+  const [cards, setCards] = useState<SavedPaymentCard[]>([]);
+  const [cardsError, setCardsError] = useState('');
+  const [cardId, setCardId] = useState(DEMO_CARD_ID);
+  const [addingCard, setAddingCard] = useState(false);
+  const [installments, setInstallments] = useState(1);
   const [quote, setQuote] = useState<CheckoutQuote | null>(null);
   const [quoteError, setQuoteError] = useState('');
   const [retry, setRetry] = useState(0);
@@ -51,6 +75,12 @@ export function CheckoutContent({
   // revision binds both, so switching card <-> Pix waits for a fresh API quote.
   const validQuote =
     quote && cartContentKey(quote.cart) === currentKey && quote.paymentMethod === quoteMethod;
+  // The chosen plan if the current total still offers it, else 1x.
+  const plan =
+    payment === 'SIMULATED_CARD' && validQuote
+      ? (quote.installmentOptions.find((o) => o.count === installments) ??
+        quote.installmentOptions[0])
+      : undefined;
   useEffect(() => {
     let active = true;
     setAddressLoading(true);
@@ -73,6 +103,23 @@ export function CheckoutContent({
       })
       .finally(() => {
         if (active) setAddressLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [retry]);
+  useEffect(() => {
+    let active = true;
+    checkoutClient
+      .cards()
+      .then((data) => {
+        if (active) {
+          setCards(data);
+          setCardsError('');
+        }
+      })
+      .catch(() => {
+        if (active) setCardsError('Não foi possível carregar seus cartões salvos.');
       });
     return () => {
       active = false;
@@ -119,12 +166,19 @@ export function CheckoutContent({
         setError('Atualize e revise o resumo antes de confirmar.');
         return;
       }
+      if (payment === 'SIMULATED_CARD' && (addingCard || !plan)) {
+        setError('Selecione um cartão e o número de parcelas.');
+        return;
+      }
     }
-    const request = uncertain ?? {
+    const request: PlaceOrderRequest = uncertain ?? {
       cartId: cart!.id!,
       revision: quote!.revision,
       addressId,
       paymentMethod: payment as SimulatedPayment,
+      ...(payment === 'SIMULATED_CARD'
+        ? { ...(cardId === DEMO_CARD_ID ? {} : { cardId }), installments: plan!.count }
+        : {}),
     };
     busy.current = true;
     setSubmitting(true);
@@ -309,17 +363,48 @@ export function CheckoutContent({
             <p className="az-checkout-muted">
               Simulação acadêmica. Nenhuma cobrança será realizada.
             </p>
-            <fieldset disabled={locked} className="az-checkout-payment">
+            <fieldset disabled={locked || addingCard} className="az-checkout-payment">
               <legend className="visually-hidden">Pagamento simulado</legend>
+              {cards.map((card) => {
+                const expired = isCardExpired(card);
+                return (
+                  <label key={card.id} className={expired ? 'az-checkout-card-expired' : undefined}>
+                    <input
+                      type="radio"
+                      name="payment"
+                      value={card.id}
+                      disabled={expired}
+                      checked={payment === 'SIMULATED_CARD' && cardId === card.id}
+                      onChange={() => {
+                        setPayment('SIMULATED_CARD');
+                        setCardId(card.id);
+                      }}
+                    />{' '}
+                    <span>
+                      {cardLabel(card)}
+                      <span className="az-checkout-muted">
+                        {' '}
+                        · {card.holderName} ·{' '}
+                        {expired
+                          ? 'Vencido'
+                          : `Validade ${String(card.expMonth).padStart(2, '0')}/${card.expYear}`}
+                      </span>
+                    </span>
+                  </label>
+                );
+              })}
               <label>
                 <input
                   type="radio"
                   name="payment"
                   value="SIMULATED_CARD"
-                  checked={payment === 'SIMULATED_CARD'}
-                  onChange={() => setPayment('SIMULATED_CARD')}
+                  checked={payment === 'SIMULATED_CARD' && cardId === DEMO_CARD_ID}
+                  onChange={() => {
+                    setPayment('SIMULATED_CARD');
+                    setCardId(DEMO_CARD_ID);
+                  }}
                 />{' '}
-                Cartão fictício · Visa final 4242
+                Cartão fictício · {cardLabel(DEMO_CARD)}
               </label>
               <label>
                 <input
@@ -338,6 +423,50 @@ export function CheckoutContent({
                 </span>
               ) : null}
             </fieldset>
+            {cardsError && <p className="az-checkout-error">{cardsError}</p>}
+            {addingCard ? (
+              <CardForm
+                name={name}
+                onCancel={() => setAddingCard(false)}
+                onSave={(card) => {
+                  setCards((old) => [...old, card]);
+                  setPayment('SIMULATED_CARD');
+                  setCardId(card.id);
+                  setAddingCard(false);
+                  setError('');
+                }}
+              />
+            ) : (
+              cards.length < MAX_SAVED_CARDS && (
+                <button
+                  className="az-checkout-link az-checkout-add-card"
+                  disabled={locked}
+                  onClick={() => setAddingCard(true)}
+                >
+                  + Adicionar cartão de crédito
+                </button>
+              )
+            )}
+            {payment === 'SIMULATED_CARD' && !addingCard && (
+              <label className="az-checkout-installments">
+                Parcelamento
+                <select
+                  disabled={locked || !validQuote}
+                  value={plan?.count ?? installments}
+                  onChange={(event) => setInstallments(Number(event.target.value))}
+                >
+                  {validQuote ? (
+                    quote.installmentOptions.map((option) => (
+                      <option key={option.count} value={option.count}>
+                        {installmentLabel(option, quote.currency)}
+                      </option>
+                    ))
+                  ) : (
+                    <option value={installments}>Calculando parcelas…</option>
+                  )}
+                </select>
+              </label>
+            )}
           </section>
           <section className="az-checkout-panel">
             <h2>Revise os produtos</h2>
@@ -465,6 +594,11 @@ export function CheckoutContent({
               <dd>{total}</dd>
             </div>
           </dl>
+          {plan && validQuote && plan.count > 1 && (
+            <p className="az-checkout-muted az-checkout-plan">
+              No cartão: {installmentLabel(plan, quote.currency)}
+            </p>
+          )}
         </aside>
       </div>
     </main>

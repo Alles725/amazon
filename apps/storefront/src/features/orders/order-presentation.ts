@@ -1,3 +1,4 @@
+import { DEMO_CARD, cardLabel } from '@amazon-mvp/api-contract';
 import type { OrderLineResponse, OrderResponse } from '@amazon-mvp/api-contract';
 import type { ProductPhoto } from '@/features/home/catalog-mock';
 import demoProducts from '../../../../../config/demo-products.json';
@@ -148,3 +149,15 @@ export function distinctOrderedProducts(orders: OrderResponse[]): OrderedProduct
  * Pix one (PIX-001); the rate itself is not stored, so no percentage is shown. */
 export const discountLabel = (order: Pick<OrderResponse, 'paymentMethod'>): string =>
   order.paymentMethod === 'SIMULATED_PIX' ? 'Desconto Pix' : 'Desconto';
+
+/** "Cartão fictício · Mastercard final 5100 · 3x sem juros" / "Pix simulado". Orders
+ * placed before CARD-001 have no card snapshot and were all paid with the demo Visa. */
+export function paymentLabel(
+  order: Pick<OrderResponse, 'paymentMethod' | 'paymentCard' | 'installments'>,
+): string {
+  if (order.paymentMethod === 'SIMULATED_PIX') return 'Pix simulado';
+  if (order.paymentMethod !== 'SIMULATED_CARD') return 'Não informado';
+  const card = `Cartão fictício · ${cardLabel(order.paymentCard ?? DEMO_CARD)}`;
+  if (!order.installments) return card;
+  return `${card} · ${order.installments === 1 ? 'à vista' : `${order.installments}x sem juros`}`;
+}

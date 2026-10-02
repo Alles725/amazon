@@ -301,6 +301,22 @@ describe('PaymentTransactions', () => {
     );
     expect(screen.getByText('Cartão fictício · Visa final 4242')).toBeTruthy();
   });
+
+  it('shows the saved card and the installment plan of newer orders', () => {
+    render(
+      createElement(PaymentTransactions, {
+        signedIn: true,
+        orders: [
+          order(1, '2026-01-01T12:00:00Z', {
+            paymentMethod: 'SIMULATED_CARD',
+            paymentCard: { brand: 'MASTERCARD', last4: '5100' },
+            installments: 3,
+          }),
+        ],
+      }),
+    );
+    expect(screen.getByText('Cartão fictício · Mastercard final 5100 · 3x sem juros')).toBeTruthy();
+  });
 });
 
 describe('page files', () => {

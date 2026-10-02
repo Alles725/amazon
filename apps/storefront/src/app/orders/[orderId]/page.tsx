@@ -6,15 +6,11 @@ import { FeatureRoute } from '@/config/feature-gate';
 import { getServerSession } from '@/features/auth/server-session';
 import { formatCartMoney } from '@/features/cart/money';
 import { OrderShipment } from '@/features/orders/order-card';
-import { discountLabel, formatLongDate } from '@/features/orders/order-presentation';
+import { discountLabel, formatLongDate, paymentLabel } from '@/features/orders/order-presentation';
 import { ordersFont } from '@/features/orders/orders-font';
 import { fetchOrder } from '@/features/orders/orders-server';
 
 const UUID = /^[a-f\d]{8}(-[a-f\d]{4}){3}-[a-f\d]{12}$/i;
-const PAYMENT = {
-  SIMULATED_CARD: 'Cartão fictício · Visa final 4242',
-  SIMULATED_PIX: 'Pix simulado',
-} as const;
 
 export default function OrderDetailPage({ params }: { params: { orderId: string } }) {
   return (
@@ -74,7 +70,7 @@ async function OrderDetailContent({ orderId }: { orderId: string }) {
           </div>
           <div>
             <h2>Forma de pagamento</h2>
-            <p>{order.paymentMethod ? PAYMENT[order.paymentMethod] : 'Não informado'}</p>
+            <p>{paymentLabel(order)}</p>
           </div>
           <div id="resumo">
             <h2>Resumo do pedido</h2>

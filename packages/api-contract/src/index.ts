@@ -21,6 +21,9 @@ export const ErrorCode = {
   // Account area: lists
   LIST_LIMIT_EXCEEDED: 'LIST_LIMIT_EXCEEDED',
   LIST_DEFAULT_PROTECTED: 'LIST_DEFAULT_PROTECTED',
+  // Simulated cards and installments (CARD-001)
+  CARD_LIMIT_EXCEEDED: 'CARD_LIMIT_EXCEEDED',
+  PAYMENT_INVALID: 'PAYMENT_INVALID',
   INTERNAL_ERROR: 'INTERNAL_ERROR',
 } as const;
 export type ErrorCode = (typeof ErrorCode)[keyof typeof ErrorCode];
@@ -267,12 +270,23 @@ export interface CheckoutQuote {
   paymentMethod: SimulatedPayment;
   /** Whole percent applied to the subtotal (the Pix rate for SIMULATED_PIX, else 0). */
   discountPercent: number;
+  /** Interest-free card plans for this total (installmentOptions); empty for Pix. */
+  installmentOptions: InstallmentOption[];
 }
 export interface PlaceOrderRequest {
   cartId: string;
   revision: string;
   addressId: string;
   paymentMethod: SimulatedPayment;
+  /** SIMULATED_CARD only: a saved card of this user. Omitted = demo Visa final 4242. */
+  cardId?: string;
+  /** SIMULATED_CARD only: one of the quote's installmentOptions. Omitted = 1 (à vista). */
+  installments?: number;
+}
+/** Card snapshot frozen on the order: never more than brand and last four digits. */
+export interface OrderPaymentCard {
+  brand: CardBrand;
+  last4: string;
 }
 export interface OrderLineResponse {
   productId: string;
@@ -294,6 +308,10 @@ export interface OrderResponse {
   currency: string;
   shippingAddress: AddressInput | null;
   paymentMethod: SimulatedPayment | null;
+  /** Card the order was placed with; null for Pix and orders older than CARD-001. */
+  paymentCard: OrderPaymentCard | null;
+  /** Number of interest-free installments; null for Pix and older orders. */
+  installments: number | null;
   placedAt: string;
   /** ISO timestamp; null until the package is delivered. */
   deliveredAt: string | null;
@@ -302,10 +320,88 @@ export interface OrderResponse {
 }
 export const CHECKOUT_ROUTES = {
   addresses: `${API_PREFIX}/addresses`,
+  paymentCards: `${API_PREFIX}/payment-cards`,
   quote: `${API_PREFIX}/orders/quote`,
   orders: `${API_PREFIX}/orders`,
   pricing: `${API_PREFIX}/orders/pricing`,
 } as const;
+
+// ---------------------------------------------------------------------------
+// Simulated cards and installments (CARD-001). Academic simulation: the card
+// number is checked (Luhn, brand) in the browser and never leaves it; the API
+// only ever receives and stores brand, last four digits, holder and expiry.
+// ---------------------------------------------------------------------------
+
+export const CARD_BRANDS = ['VISA', 'MASTERCARD', 'ELO', 'AMEX', 'HIPERCARD'] as const;
+export type CardBrand = (typeof CARD_BRANDS)[number];
+export const CARD_BRAND_LABELS: Record<CardBrand, string> = {
+  VISA: 'Visa',
+  MASTERCARD: 'Mastercard',
+  ELO: 'Elo',
+  AMEX: 'American Express',
+  HIPERCARD: 'Hipercard',
+};
+/** Paid with when SIMULATED_CARD omits cardId (the original fixed demo card). */
+export const DEMO_CARD: OrderPaymentCard = { brand: 'VISA', last4: '4242' };
+export const MAX_SAVED_CARDS = 10;
+export const CARD_HOLDER_MAX_LENGTH = 60;
+
+/** POST /payment-cards. */
+export interface PaymentCardInput {
+  brand: CardBrand;
+  last4: string;
+  holderName: string;
+  /** 1-12. */
+  expMonth: number;
+  /** Four digits; month/year must not be in the past. */
+  expYear: number;
+}
+export interface SavedPaymentCard extends PaymentCardInput {
+  id: string;
+}
+
+/** True once the last day of the expiry month has passed. */
+export function isCardExpired(
+  card: Pick<PaymentCardInput, 'expMonth' | 'expYear'>,
+  now = new Date(),
+): boolean {
+  const year = now.getFullYear();
+  return card.expYear < year || (card.expYear === year && card.expMonth < now.getMonth() + 1);
+}
+
+export function cardLabel(card: Pick<OrderPaymentCard, 'brand' | 'last4'>): string {
+  return `${CARD_BRAND_LABELS[card.brand]} final ${card.last4}`;
+}
+
+export interface InstallmentOption {
+  count: number;
+  /** Every installment but the first; floor(total / count). */
+  installmentMinor: number;
+  /** Carries the remainder so the installments add up to the total exactly. */
+  firstInstallmentMinor: number;
+}
+
+/**
+ * Interest-free plans for a card total: 1x always, then up to maxInstallments while
+ * each installment is at least minInstallmentMinor. Shared by the API (quote and
+ * order validation) so the storefront only renders what the server will accept.
+ */
+export function installmentOptions(
+  totalMinor: number,
+  pricing: Pick<CheckoutPricing, 'maxInstallments' | 'minInstallmentMinor'>,
+): InstallmentOption[] {
+  const options: InstallmentOption[] = [];
+  for (let count = 1; count <= Math.max(1, pricing.maxInstallments); count++) {
+    const installmentMinor = Math.floor(totalMinor / count);
+    if (count > 1 && installmentMinor < pricing.minInstallmentMinor) break;
+    options.push({
+      count,
+      installmentMinor,
+      firstInstallmentMinor: totalMinor - installmentMinor * (count - 1),
+    });
+  }
+  return options;
+}
 
 // ---------------------------------------------------------------------------
 // Checkout pricing: "X% de desconto à vista no Pix" (PIX-001)
@@ -323,6 +419,10 @@ export interface CheckoutQuoteQuery {
 export interface CheckoutPricing {
   /** Whole percent, 0-100. 0 means Pix has no discount. */
   pixDiscountPercent: number;
+  /** Most interest-free card installments offered (1 disables installments). */
+  maxInstallments: number;
+  /** Smallest installment, integer minor units; caps the count on small totals. */
+  minInstallmentMinor: number;
 }
 
 /**
@@ -354,7 +454,10 @@ export function paymentDiscountPercent(
 }
 
 /** Amount charged when paying `amountMinor` with Pix (amount minus the rounded discount). */
-export function pixPriceMinor(amountMinor: number, pricing: CheckoutPricing): number {
+export function pixPriceMinor(
+  amountMinor: number,
+  pricing: Pick<CheckoutPricing, 'pixDiscountPercent'>,
+): number {
   return amountMinor - percentDiscountMinor(amountMinor, pricing.pixDiscountPercent);
 }
 

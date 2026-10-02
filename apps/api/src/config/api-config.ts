@@ -15,6 +15,8 @@ const ENV_MAP = {
   'session.sameSite': 'SESSION_SAME_SITE',
   'openapi.enabled': 'OPENAPI_ENABLED',
   'checkout.pixDiscountPercent': 'PIX_DISCOUNT_PERCENT',
+  'checkout.maxInstallments': 'MAX_INSTALLMENTS',
+  'checkout.minInstallmentMinor': 'MIN_INSTALLMENT_MINOR',
 };
 
 /** Throws ConfigValidationError -> process exits before serving traffic. */

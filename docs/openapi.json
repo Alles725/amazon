@@ -238,6 +238,130 @@
         ]
       }
     },
+    "/api/v1/payment-cards": {
+      "get": {
+        "operationId": "PaymentCardsController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SavedPaymentCardDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "payment-cards"
+        ]
+      },
+      "post": {
+        "operationId": "PaymentCardsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentCardInputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavedPaymentCardDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "summary": "Save a simulated card (brand, last four digits, holder, expiry; never the number)",
+        "tags": [
+          "payment-cards"
+        ]
+      }
+    },
+    "/api/v1/payment-cards/{cardId}": {
+      "delete": {
+        "operationId": "PaymentCardsController_remove",
+        "parameters": [
+          {
+            "name": "cardId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SavedPaymentCardDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "summary": "Remove a saved card; returns the remaining cards",
+        "tags": [
+          "payment-cards"
+        ]
+      }
+    },
     "/api/v1/auth/identify": {
       "post": {
         "operationId": "AuthController_identify",
@@ -2351,6 +2475,91 @@
           "error"
         ]
       },
+      "SavedPaymentCardDto": {
+        "type": "object",
+        "properties": {
+          "brand": {
+            "type": "string",
+            "enum": [
+              "VISA",
+              "MASTERCARD",
+              "ELO",
+              "AMEX",
+              "HIPERCARD"
+            ]
+          },
+          "last4": {
+            "type": "string",
+            "example": "1111"
+          },
+          "holderName": {
+            "type": "string",
+            "maxLength": 60
+          },
+          "expMonth": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 12
+          },
+          "expYear": {
+            "type": "number",
+            "minimum": 2000,
+            "maximum": 2099
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "brand",
+          "last4",
+          "holderName",
+          "expMonth",
+          "expYear",
+          "id"
+        ]
+      },
+      "PaymentCardInputDto": {
+        "type": "object",
+        "properties": {
+          "brand": {
+            "type": "string",
+            "enum": [
+              "VISA",
+              "MASTERCARD",
+              "ELO",
+              "AMEX",
+              "HIPERCARD"
+            ]
+          },
+          "last4": {
+            "type": "string",
+            "example": "1111"
+          },
+          "holderName": {
+            "type": "string",
+            "maxLength": 60
+          },
+          "expMonth": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 12
+          },
+          "expYear": {
+            "type": "number",
+            "minimum": 2000,
+            "maximum": 2099
+          }
+        },
+        "required": [
+          "brand",
+          "last4",
+          "holderName",
+          "expMonth",
+          "expYear"
+        ]
+      },
       "IdentifyDto": {
         "type": "object",
         "properties": {
@@ -2897,10 +3106,42 @@
             "minimum": 0,
             "maximum": 100,
             "example": 5
+          },
+          "maxInstallments": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 24,
+            "example": 10
+          },
+          "minInstallmentMinor": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 500
           }
         },
         "required": [
-          "pixDiscountPercent"
+          "pixDiscountPercent",
+          "maxInstallments",
+          "minInstallmentMinor"
+        ]
+      },
+      "InstallmentOptionDto": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "integer"
+          },
+          "installmentMinor": {
+            "type": "integer"
+          },
+          "firstInstallmentMinor": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "count",
+          "installmentMinor",
+          "firstInstallmentMinor"
         ]
       },
       "CheckoutQuoteDto": {
@@ -2938,6 +3179,12 @@
             "type": "integer",
             "minimum": 0,
             "maximum": 100
+          },
+          "installmentOptions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InstallmentOptionDto"
+            }
           }
         },
         "required": [
@@ -2949,7 +3196,8 @@
           "totalMinor",
           "currency",
           "paymentMethod",
-          "discountPercent"
+          "discountPercent",
+          "installmentOptions"
         ]
       },
       "PlaceOrderDto": {
@@ -2973,6 +3221,18 @@
               "SIMULATED_CARD",
               "SIMULATED_PIX"
             ]
+          },
+          "cardId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "SIMULATED_CARD only: saved card id; omitted pays with the demo Visa 4242"
+          },
+          "installments": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 24,
+            "default": 1,
+            "description": "SIMULATED_CARD only: one of the quote's installmentOptions"
           }
         },
         "required": [
@@ -2980,6 +3240,28 @@
           "revision",
           "addressId",
           "paymentMethod"
+        ]
+      },
+      "OrderPaymentCardDto": {
+        "type": "object",
+        "properties": {
+          "brand": {
+            "type": "string",
+            "enum": [
+              "VISA",
+              "MASTERCARD",
+              "ELO",
+              "AMEX",
+              "HIPERCARD"
+            ]
+          },
+          "last4": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "brand",
+          "last4"
         ]
       },
       "OrderLineDto": {
@@ -3062,6 +3344,18 @@
             "type": "string",
             "nullable": true
           },
+          "paymentCard": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OrderPaymentCardDto"
+              }
+            ]
+          },
+          "installments": {
+            "type": "integer",
+            "nullable": true
+          },
           "placedAt": {
             "type": "string"
           },
@@ -3091,6 +3385,8 @@
           "currency",
           "shippingAddress",
           "paymentMethod",
+          "paymentCard",
+          "installments",
           "placedAt",
           "deliveredAt",
           "deliveryNote",

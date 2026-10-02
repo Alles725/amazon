@@ -1,0 +1,12 @@
+/* Saved cards, "Adicionar cartão" and installments (CARD-001). */
+.az-checkout-payment label > span { display: inline; }
+.az-checkout-card-expired { color: #6f7373; }
+.az-checkout-add-card { display: block; margin-top: 12px; }
+.az-checkout-card-form { margin-top: 12px; }
+.az-checkout-card-form > div { display: grid; gap: 10px; max-width: 360px; }
+.az-checkout-card-form #card-brand-hint { margin-top: -6px; font-size: 12px; }
+.az-checkout-card-expiry { border: 0; padding: 0; margin: 0; display: flex; gap: 8px; flex-wrap: wrap; }
+.az-checkout-card-expiry legend { padding: 0; margin-bottom: 4px; font-size: 13px; font-weight: 700; }
+.az-checkout-installments { display: grid; gap: 4px; margin-top: 16px; max-width: 360px; font-weight: 700; font-size: 13px; }
+.az-checkout-installments select { font-weight: 400; padding: 6px; border-radius: 8px; border: 1px solid #888c8c; }
+.az-checkout-plan { margin-top: 8px; }

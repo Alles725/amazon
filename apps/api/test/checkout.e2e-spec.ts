@@ -63,6 +63,7 @@ describe('checkout (integration)', () => {
   afterAll(async () => {
     if (prisma) {
       await prisma.order.deleteMany({ where: { userId: { in: users } } });
+      await prisma.paymentCard.deleteMany({ where: { userId: { in: users } } });
       await prisma.user.deleteMany({ where: { id: { in: users } } });
       await prisma.product.deleteMany({ where: { id: { in: products } } });
     }
@@ -72,6 +73,7 @@ describe('checkout (integration)', () => {
     jest.restoreAllMocks();
     await prisma.order.deleteMany({ where: { userId: { in: users } } });
     await prisma.cart.deleteMany({ where: { userId: { in: users } } });
+    await prisma.paymentCard.deleteMany({ where: { userId: { in: users } } });
     for (const id of products) {
       await prisma.product.update({
         where: { id },
@@ -299,7 +301,11 @@ describe('checkout (integration)', () => {
   });
   it('exposes the configured Pix rate publicly', async () => {
     const response = await request(app.getHttpServer()).get('/api/v1/orders/pricing').expect(200);
-    expect(response.body).toEqual({ pixDiscountPercent: 5 });
+    expect(response.body).toEqual({
+      pixDiscountPercent: 5,
+      maxInstallments: 10,
+      minInstallmentMinor: 500,
+    });
   });
   it('quotes card without discount and Pix with the server-side 5% discount', async () => {
     await add(3).expect(200);
@@ -405,5 +411,120 @@ describe('checkout (integration)', () => {
     const fresh = (await pixQuote().expect(200)).body;
     expect([fresh.subtotalMinor, fresh.discountMinor, fresh.totalMinor]).toEqual([4000, 200, 3800]);
     expect((await place(pixData(fresh)).expect(201)).body.totalMinor).toBe(3800);
+  });
+  const card = { brand: 'MASTERCARD', last4: '5100', holderName: 'Pessoa de Teste' };
+  const nextYear = new Date().getFullYear() + 1;
+  const saveCard = (body: unknown, index = 0) =>
+    request(app.getHttpServer())
+      .post('/api/v1/payment-cards')
+      .set('Cookie', cookies[index])
+      .send(body);
+  it('saves, lists and deletes only the owner simulated cards, never the number', async () => {
+    await request(app.getHttpServer()).get('/api/v1/payment-cards').expect(401);
+    for (const invalid of [
+      { ...card, expMonth: 1, expYear: 2000 },
+      { ...card, expMonth: 13, expYear: nextYear },
+      { ...card, brand: 'DINERS', expMonth: 1, expYear: nextYear },
+      { ...card, last4: '12', expMonth: 1, expYear: nextYear },
+      { ...card, expMonth: 1, expYear: nextYear, number: '5105105105105100' },
+      { ...card, expMonth: 1, expYear: nextYear, cvv: '123' },
+    ])
+      await saveCard(invalid).expect(400);
+    const saved = (await saveCard({ ...card, expMonth: 6, expYear: nextYear }).expect(201)).body;
+    expect(saved).toEqual({ id: expect.any(String), ...card, expMonth: 6, expYear: nextYear });
+    const listed = await request(app.getHttpServer())
+      .get('/api/v1/payment-cards')
+      .set('Cookie', cookies[0])
+      .expect(200);
+    expect(listed.body).toEqual([saved]);
+    expect(
+      (
+        await request(app.getHttpServer())
+          .get('/api/v1/payment-cards')
+          .set('Cookie', cookies[1])
+          .expect(200)
+      ).body,
+    ).toEqual([]);
+    await request(app.getHttpServer())
+      .delete(`/api/v1/payment-cards/${saved.id}`)
+      .set('Cookie', cookies[1])
+      .expect(404);
+    await request(app.getHttpServer())
+      .delete(`/api/v1/payment-cards/${saved.id}`)
+      .set('Cookie', cookies[0])
+      .expect(200, []);
+  });
+  it('limits saved cards per account', async () => {
+    for (let i = 0; i < 10; i++)
+      await saveCard({ ...card, last4: `000${i}`, expMonth: 1, expYear: nextYear }).expect(201);
+    await saveCard({ ...card, expMonth: 1, expYear: nextYear }).expect(409);
+  });
+  it('quotes interest-free installments for card only', async () => {
+    await add(3).expect(200);
+    const cardQuote = (await quote().expect(200)).body;
+    expect(cardQuote.installmentOptions).toHaveLength(7);
+    expect(cardQuote.installmentOptions[2]).toEqual({
+      count: 3,
+      installmentMinor: 1234,
+      firstInstallmentMinor: 1234,
+    });
+    expect((await pixQuote().expect(200)).body.installmentOptions).toEqual([]);
+  });
+  it('places a card order with a saved card and installments, snapshotting brand and last4', async () => {
+    await add(3).expect(200);
+    const saved = (await saveCard({ ...card, expMonth: 12, expYear: nextYear }).expect(201)).body;
+    const q = (await quote()).body;
+    const created = (await place({ ...data(q), cardId: saved.id, installments: 3 }).expect(201))
+      .body;
+    expect(created).toMatchObject({
+      paymentMethod: 'SIMULATED_CARD',
+      paymentCard: { brand: 'MASTERCARD', last4: '5100' },
+      installments: 3,
+      totalMinor: 3702,
+    });
+    // Deleting the card later does not change the order.
+    await request(app.getHttpServer())
+      .delete(`/api/v1/payment-cards/${saved.id}`)
+      .set('Cookie', cookies[0])
+      .expect(200);
+    const read = await request(app.getHttpServer())
+      .get(`/api/v1/orders/${created.id}`)
+      .set('Cookie', cookies[0])
+      .expect(200);
+    expect(read.body).toMatchObject({ paymentCard: { last4: '5100' }, installments: 3 });
+  });
+  it('defaults card orders to the demo Visa 4242 in one installment and Pix to none', async () => {
+    await add(1).expect(200);
+    expect((await place(data((await quote()).body)).expect(201)).body).toMatchObject({
+      paymentCard: { brand: 'VISA', last4: '4242' },
+      installments: 1,
+    });
+    await add(1).expect(200);
+    expect((await place(pixData((await pixQuote()).body)).expect(201)).body).toMatchObject({
+      paymentCard: null,
+      installments: null,
+    });
+  });
+  it('rejects unavailable installments, foreign or expired cards and card data on Pix', async () => {
+    await add(1).expect(200);
+    const foreign = (await saveCard({ ...card, expMonth: 1, expYear: nextYear }, 1).expect(201))
+      .body;
+    const q = (await quote()).body;
+    // 1234 cents only allows 1x and 2x (minimum installment R$ 5,00).
+    await place({ ...data(q), installments: 3 }).expect(400);
+    await place({ ...data(q), installments: 0 }).expect(400);
+    await place({ ...data(q), cardId: foreign.id }).expect(404);
+    const expired = await prisma.paymentCard.create({
+      data: { ...card, userId: users[0], expMonth: 1, expYear: 2020 },
+    });
+    await place({ ...data(q), cardId: expired.id }).expect(400);
+    const pix = (await pixQuote()).body;
+    await place({ ...pixData(pix), installments: 2 }).expect(400);
+    await place({ ...pixData(pix), installments: 1 }).expect(400);
+    expect(await prisma.order.count({ where: { userId: users[0] } })).toBe(0);
+    expect(
+      (await prisma.inventory.findUniqueOrThrow({ where: { productId: products[0] } })).quantity,
+    ).toBe(10);
+    expect((await place({ ...data(q), installments: 2 }).expect(201)).body.installments).toBe(2);
   });
 });

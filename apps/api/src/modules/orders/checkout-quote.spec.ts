@@ -1,4 +1,9 @@
-import { CartResponse, percentDiscountMinor, pixPriceMinor } from '@amazon-mvp/api-contract';
+import {
+  CartResponse,
+  installmentOptions,
+  percentDiscountMinor,
+  pixPriceMinor,
+} from '@amazon-mvp/api-contract';
 import { quoteCart } from './checkout-quote';
 
 const cartOf = (unitPriceMinor: number, quantity = 1): CartResponse => ({
@@ -28,7 +33,7 @@ const cartOf = (unitPriceMinor: number, quantity = 1): CartResponse => ({
     },
   ],
 });
-const pricing = { pixDiscountPercent: 5 };
+const pricing = { pixDiscountPercent: 5, maxInstallments: 10, minInstallmentMinor: 500 };
 
 describe('percentDiscountMinor (floor rule)', () => {
   it.each([
@@ -86,7 +91,9 @@ describe('quoteCart', () => {
       paymentMethod: 'SIMULATED_PIX',
       discountPercent: 5,
     });
-    expect(quoteCart(cartOf(1234, 3), 'SIMULATED_PIX', { pixDiscountPercent: 0 })).toMatchObject({
+    expect(
+      quoteCart(cartOf(1234, 3), 'SIMULATED_PIX', { ...pricing, pixDiscountPercent: 0 }),
+    ).toMatchObject({
       discountMinor: 0,
       totalMinor: 3702,
     });
@@ -95,12 +102,39 @@ describe('quoteCart', () => {
   it('binds payment method and rate into the revision', () => {
     const card = quoteCart(cartOf(1234), 'SIMULATED_CARD', pricing).revision;
     const pix = quoteCart(cartOf(1234), 'SIMULATED_PIX', pricing).revision;
-    const otherRate = quoteCart(cartOf(1234), 'SIMULATED_PIX', { pixDiscountPercent: 10 }).revision;
+    const otherRate = quoteCart(cartOf(1234), 'SIMULATED_PIX', {
+      ...pricing,
+      pixDiscountPercent: 10,
+    }).revision;
     expect(new Set([card, pix, otherRate]).size).toBe(3);
     expect(quoteCart(cartOf(1234), 'SIMULATED_PIX', pricing).revision).toBe(pix);
     // A card quote does not depend on the Pix rate.
-    expect(quoteCart(cartOf(1234), 'SIMULATED_CARD', { pixDiscountPercent: 10 }).revision).toBe(
-      card,
-    );
+    expect(
+      quoteCart(cartOf(1234), 'SIMULATED_CARD', { ...pricing, pixDiscountPercent: 10 }).revision,
+    ).toBe(card);
+  });
+});
+
+describe('installmentOptions (interest-free)', () => {
+  const rules = { maxInstallments: 10, minInstallmentMinor: 500 };
+  it('offers up to the maximum and puts the remainder in the first installment', () => {
+    const options = installmentOptions(10000, rules);
+    expect(options.map((o) => o.count)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+    expect(options[2]).toEqual({ count: 3, installmentMinor: 3333, firstInstallmentMinor: 3334 });
+    for (const o of options)
+      expect(o.firstInstallmentMinor + o.installmentMinor * (o.count - 1)).toBe(10000);
+  });
+  it('stops when an installment would fall below the minimum', () => {
+    expect(installmentOptions(1999, rules).map((o) => o.count)).toEqual([1, 2, 3]);
+    expect(installmentOptions(499, rules)).toEqual([
+      { count: 1, installmentMinor: 499, firstInstallmentMinor: 499 },
+    ]);
+  });
+  it('offers only 1x when installments are disabled', () => {
+    expect(installmentOptions(100000, { ...rules, maxInstallments: 1 })).toHaveLength(1);
+  });
+  it('is part of card quotes only, computed on the discounted total', () => {
+    expect(quoteCart(cartOf(1000), 'SIMULATED_CARD', pricing).installmentOptions).toHaveLength(2);
+    expect(quoteCart(cartOf(1000), 'SIMULATED_PIX', pricing).installmentOptions).toEqual([]);
   });
 });

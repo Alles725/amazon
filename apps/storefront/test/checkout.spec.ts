@@ -2,7 +2,13 @@
 import { createElement } from 'react';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
-import { CartResponse, CheckoutQuote, OrderResponse, SavedAddress } from '@amazon-mvp/api-contract';
+import {
+  CartResponse,
+  CheckoutQuote,
+  OrderResponse,
+  SavedAddress,
+  SavedPaymentCard,
+} from '@amazon-mvp/api-contract';
 import { CheckoutContent } from '../src/features/checkout/checkout-content';
 import { checkoutClient, CheckoutError } from '../src/features/checkout/checkout-client';
 import { useCart } from '../src/features/cart/cart-provider';
@@ -11,7 +17,14 @@ vi.mock('next/navigation', () => ({ useRouter: () => ({ push }) }));
 vi.mock('../src/features/cart/cart-provider', () => ({ useCart: vi.fn() }));
 vi.mock('../src/features/checkout/checkout-client', async (original) => ({
   ...(await original<typeof import('../src/features/checkout/checkout-client')>()),
-  checkoutClient: { addresses: vi.fn(), quote: vi.fn(), place: vi.fn(), saveAddress: vi.fn() },
+  checkoutClient: {
+    addresses: vi.fn(),
+    quote: vi.fn(),
+    place: vi.fn(),
+    saveAddress: vi.fn(),
+    cards: vi.fn(),
+    saveCard: vi.fn(),
+  },
 }));
 const address: SavedAddress = {
   id: 'address',
@@ -60,6 +73,11 @@ const quote: CheckoutQuote = {
   totalMinor: 1099,
   paymentMethod: 'SIMULATED_CARD',
   discountPercent: 0,
+  // 1099 with a R$ 5,00 minimum installment: 1x or 2x (550 + 549).
+  installmentOptions: [
+    { count: 1, installmentMinor: 1099, firstInstallmentMinor: 1099 },
+    { count: 2, installmentMinor: 549, firstInstallmentMinor: 550 },
+  ],
 };
 // What the API answers for Pix: 5% of 1099 = 54.95 -> 54 (rounded down).
 const pixQuote: CheckoutQuote = {
@@ -69,6 +87,7 @@ const pixQuote: CheckoutQuote = {
   totalMinor: 1045,
   paymentMethod: 'SIMULATED_PIX',
   discountPercent: 5,
+  installmentOptions: [],
 };
 const choosePix = async () => {
   fireEvent.click(screen.getByRole('radio', { name: 'Pix simulado' }));
@@ -99,6 +118,7 @@ beforeEach(() => {
   vi.clearAllMocks();
   vi.mocked(useCart).mockReturnValue(state());
   vi.mocked(checkoutClient.addresses).mockResolvedValue([address]);
+  vi.mocked(checkoutClient.cards).mockResolvedValue([]);
   vi.mocked(checkoutClient.quote).mockImplementation(async (method) =>
     method === 'SIMULATED_PIX' ? pixQuote : quote,
   );
@@ -239,4 +259,93 @@ it('keeps confirmation disabled while the quote is for another payment method', 
   expect(screen.queryByText(/de desconto à vista no Pix/)).toBeNull();
   answer(pixQuote);
   await ready();
+});
+
+const nextYear = new Date().getFullYear() + 1;
+const savedCard: SavedPaymentCard = {
+  id: 'card-1',
+  brand: 'MASTERCARD',
+  last4: '5100',
+  holderName: 'Teste',
+  expMonth: 12,
+  expYear: nextYear,
+};
+const confirmOrder = () =>
+  fireEvent.click(screen.getAllByRole('button', { name: 'Confirmar pedido' })[0]);
+it('adds a card sending only brand and last four digits, then pays with it', async () => {
+  vi.mocked(checkoutClient.saveCard).mockResolvedValue(savedCard);
+  render(createElement(CheckoutContent, { name: 'Teste' }));
+  await ready();
+  fireEvent.click(screen.getByRole('button', { name: '+ Adicionar cartão de crédito' }));
+  const form = screen.getByRole('form', { name: 'Adicionar cartão' });
+  const number = screen.getByLabelText('Número do cartão');
+  fireEvent.change(number, { target: { value: '5105 1051 0510 5101' } });
+  fireEvent.change(screen.getByLabelText('Mês de validade'), { target: { value: '12' } });
+  fireEvent.change(screen.getByLabelText('Ano de validade'), { target: { value: String(nextYear) } });
+  fireEvent.submit(form);
+  expect((await screen.findByRole('alert')).textContent).toBe('Número de cartão inválido.');
+  expect(checkoutClient.saveCard).not.toHaveBeenCalled();
+  fireEvent.change(number, { target: { value: '5105105105105100' } });
+  expect((number as HTMLInputElement).value).toBe('5105 1051 0510 5100');
+  expect(screen.getByText('Mastercard')).toBeTruthy();
+  fireEvent.submit(form);
+  await waitFor(() =>
+    expect(checkoutClient.saveCard).toHaveBeenCalledWith({
+      brand: 'MASTERCARD',
+      last4: '5100',
+      holderName: 'Teste',
+      expMonth: 12,
+      expYear: nextYear,
+    }),
+  );
+  const radio = await screen.findByRole('radio', { name: /Mastercard final 5100/ });
+  expect((radio as HTMLInputElement).checked).toBe(true);
+  await ready();
+  confirmOrder();
+  await waitFor(() =>
+    expect(checkoutClient.place).toHaveBeenCalledWith(
+      expect.objectContaining({ paymentMethod: 'SIMULATED_CARD', cardId: 'card-1', installments: 1 }),
+    ),
+  );
+});
+it('lists saved cards and disables expired ones', async () => {
+  vi.mocked(checkoutClient.cards).mockResolvedValue([
+    savedCard,
+    { ...savedCard, id: 'old', last4: '0001', expMonth: 1, expYear: 2020 },
+  ]);
+  render(createElement(CheckoutContent, { name: 'Teste' }));
+  const expired = await screen.findByRole('radio', { name: /final 0001.*Vencido/ });
+  expect((expired as HTMLInputElement).disabled).toBe(true);
+  expect(screen.getByRole('radio', { name: /final 5100.*Validade 12\// })).toBeTruthy();
+});
+it('offers the quoted installments for card and sends the chosen plan', async () => {
+  render(createElement(CheckoutContent, { name: 'Teste' }));
+  await ready();
+  expect(screen.queryByLabelText('Parcelamento')).toBeNull();
+  fireEvent.click(screen.getByRole('radio', { name: 'Cartão fictício · Visa final 4242' }));
+  await ready();
+  const select = screen.getByLabelText('Parcelamento') as HTMLSelectElement;
+  expect(Array.from(select.options).map((o) => o.textContent!.replace(/\s/g, ' '))).toEqual([
+    '1x de R$ 10,99 sem juros (à vista)',
+    '2x sem juros (1ª de R$ 5,50 + 1x de R$ 5,49)',
+  ]);
+  fireEvent.change(select, { target: { value: '2' } });
+  const summary = screen.getByRole('complementary', { name: 'Resumo do pedido' });
+  expect(summary.textContent).toContain('No cartão: 2x sem juros');
+  confirmOrder();
+  await waitFor(() => expect(checkoutClient.place).toHaveBeenCalled());
+  const request = vi.mocked(checkoutClient.place).mock.calls[0][0];
+  expect(request).toMatchObject({ paymentMethod: 'SIMULATED_CARD', installments: 2 });
+  expect(request).not.toHaveProperty('cardId');
+});
+it('sends no card or installments with Pix', async () => {
+  render(createElement(CheckoutContent, { name: 'Teste' }));
+  await ready();
+  await choosePix();
+  expect(screen.queryByLabelText('Parcelamento')).toBeNull();
+  confirmOrder();
+  await waitFor(() => expect(checkoutClient.place).toHaveBeenCalled());
+  const request = vi.mocked(checkoutClient.place).mock.calls[0][0];
+  expect(request).not.toHaveProperty('cardId');
+  expect(request).not.toHaveProperty('installments');
 });

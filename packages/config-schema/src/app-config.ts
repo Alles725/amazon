@@ -30,6 +30,10 @@ export const ApiConfigSchema = z.object({
     .object({
       /** "X% de desconto à vista no Pix". Whole percent so money math stays integer. */
       pixDiscountPercent: z.number().int().min(0).max(100).default(5),
+      /** Interest-free card installments ("em até 10x sem juros"). 1 disables them. */
+      maxInstallments: z.number().int().min(1).max(24).default(10),
+      /** Smallest installment in minor units (R$ 5,00), so small totals get fewer plans. */
+      minInstallmentMinor: z.number().int().min(1).default(500),
     })
     .default({}),
 });
