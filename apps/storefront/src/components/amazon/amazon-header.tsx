@@ -7,8 +7,10 @@ import { AllMenu } from '@/components/amazon/all-menu';
 import { BrowsingHistoryMenu } from '@/features/browsing-history/browsing-history-menu';
 import { getServerSession } from '@/features/auth/server-session';
 import { isFeatureEnabled } from '@/config/feature-gate';
-import { CATALOG_SEARCH_MAX_LENGTH } from '@amazon-mvp/api-contract';
+import { AccountAddress, CATALOG_SEARCH_MAX_LENGTH } from '@amazon-mvp/api-contract';
 import { searchDepartments } from '@/features/browse/browse-server';
+import { fetchAddresses } from '@/features/account/account-server';
+import { ADD_ADDRESS_HREF } from '@/features/account/address-routes';
 
 // "Todos" is rendered separately by AllMenu, always as the first navbar item.
 const NAV_LINKS = [
@@ -30,6 +32,7 @@ export async function AmazonHeader({
 }: { currentHref?: string; search?: { q: string; category: string } } = {}) {
   const session = await getServerSession();
   const firstName = session?.user.displayName.split(' ')[0];
+  const deliver = deliverTo(session && isFeatureEnabled('addresses') ? await fetchAddresses() : []);
   const browsingHistory = isFeatureEnabled('browsingHistory');
   // Departments are the catalog's root categories; they narrow the search to a subtree.
   const departments = isFeatureEnabled('catalog')
@@ -44,10 +47,12 @@ export async function AmazonHeader({
           <span className="az-topbar__tld">.com.br</span>
         </Link>
 
-        <Link href="/account" className="az-topbar__deliver">
-          <span className="az-topbar__deliver-line1">Enviar para {firstName ?? 'Paulo'}</span>
+        <Link href={deliver.href} className="az-topbar__deliver">
+          <span className="az-topbar__deliver-line1">
+            {firstName ? `Enviar para ${firstName}` : 'Olá'}
+          </span>
           <span className="az-topbar__deliver-line2">
-            <PinIcon /> Porto Alegre 90020060
+            <PinIcon /> {deliver.label}
           </span>
         </Link>
 
@@ -120,6 +125,17 @@ export async function AmazonHeader({
       </nav>
     </header>
   );
+}
+
+/** "Enviar para" block: the default address saved in "Seus endereços" (never the
+ * first one listed), or a shortcut to the add-address form when there is none.
+ * Guests land on login and come back to that form. null = API unavailable. */
+function deliverTo(addresses: AccountAddress[] | null): { label: string; href: string } {
+  if (!addresses) return { label: 'Seus endereços', href: '/addresses' };
+  const main = addresses.find((address) => address.isDefault);
+  return main
+    ? { label: `${main.city} ${main.postalCode}`, href: '/addresses' }
+    : { label: 'Cadastrar endereço', href: ADD_ADDRESS_HREF };
 }
 
 function PinIcon() {

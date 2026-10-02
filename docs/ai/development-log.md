@@ -578,3 +578,27 @@ Configuration impact:
 
 Validation: lint, typecheck, unit tests (config 18, api 50, storefront 279) and the
 77 API integration tests (six new for cards and installments) on a disposable database.
+
+## 2026-10-02 — Cabeçalho "Enviar para" com o endereço principal
+
+Changes:
+The header's "Enviar para" block no longer shows a hardcoded name/city/CEP. It reads the
+same `fetchAddresses()` as "Seus endereços" (now wrapped in React `cache`) and shows the
+address with `isDefault` as `Cidade CEP`, linking to `/addresses`. With no default
+address (or a guest) it shows "Cadastrar endereço" linking to `/addresses?add=1`, which
+opens the add form directly (guests go through login and come back). API down shows
+"Seus endereços". Guests see "Olá" instead of a made-up name. Every successful change on
+/addresses calls `router.refresh()` so the server-rendered header follows it.
+Root `<html lang>` changed from `en` to `pt-BR`: Chrome was auto-translating the
+Portuguese pages as English and mangling text ("Seus endereços" → "Seus o").
+
+Database impact: none.
+
+API/contract impact: none (reuses `GET /addresses`).
+
+Validation: workspace lint, typecheck and unit tests (config, api 50, storefront 290,
+including new header and AddressesManager cases). Manual run against the local app with
+a fresh user: no address, one address, three addresses, default changed, default
+deleted (API promotes the oldest), all deleted, guest, and `/addresses?add=1`.
+Storefront `next build` and integration tests were not run (dev server running; no API
+change).

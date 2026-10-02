@@ -60,7 +60,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const session = cartEnabled ? await getServerSession() : null;
 
   return (
-    <html lang="en">
+    <html lang="pt-BR">
       <body>
         <CartProvider
           key={session?.user.id ?? 'guest'}

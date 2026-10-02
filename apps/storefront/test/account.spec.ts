@@ -159,6 +159,45 @@ describe('AddressesManager', () => {
     expect((screen.getByLabelText('Instruções de entrega') as HTMLTextAreaElement).value).toBe(
       'Portão azul',
     );
+    expect(refresh).not.toHaveBeenCalled();
+  });
+
+  it('opens the add form right away when asked (header "Cadastrar endereço")', () => {
+    render(createElement(AddressesManager, { initial: [], name: 'Ada', startAdding: true }));
+    expect(screen.getByRole('heading', { name: 'Adicionar um novo endereço' })).toBeTruthy();
+    cleanup();
+
+    render(createElement(AddressesManager, { initial: [], name: 'Ada' }));
+    expect(screen.queryByRole('heading', { name: 'Adicionar um novo endereço' })).toBeNull();
+  });
+
+  it('refreshes the header after changing the default address', async () => {
+    vi.mocked(accountClient.setDefaultAddress).mockResolvedValue([
+      address('b', true),
+      address('a', false),
+    ]);
+    render(
+      createElement(AddressesManager, {
+        initial: [address('a', true), address('b', false)],
+        name: 'Ada',
+      }),
+    );
+    fireEvent.click(
+      screen.getByRole('button', { name: /Definir como padrão o endereço de Pessoa b/ }),
+    );
+    await waitFor(() => expect(screen.getByText('Endereço padrão atualizado.')).toBeTruthy());
+    expect(accountClient.setDefaultAddress).toHaveBeenCalledWith('b');
+    expect(refresh).toHaveBeenCalledTimes(1);
+  });
+
+  it('refreshes the header after deleting the last address', async () => {
+    vi.mocked(accountClient.deleteAddress).mockResolvedValue([]);
+    render(createElement(AddressesManager, { initial: [address('a', true)], name: 'Ada' }));
+    fireEvent.click(screen.getByRole('button', { name: /Excluir endereço de Pessoa a/ }));
+    fireEvent.click(screen.getByRole('button', { name: 'Sim, excluir' }));
+    await waitFor(() => expect(screen.getByText('Endereço excluído.')).toBeTruthy());
+    expect(refresh).toHaveBeenCalledTimes(1);
+    expect(screen.getByText(/Você ainda não tem endereços salvos/)).toBeTruthy();
   });
 });
 
@@ -211,15 +250,15 @@ describe('SecuritySettings', () => {
     fill('Nova senha', 'new password 12345');
     fill('Digite a nova senha novamente', 'new password 12345');
     fireEvent.submit(screen.getByRole('form', { name: 'Alterar sua senha' }));
-    await waitFor(() =>
-      expect(screen.getByText(/2 outras sessões foram encerradas/)).toBeTruthy(),
-    );
+    await waitFor(() => expect(screen.getByText(/2 outras sessões foram encerradas/)).toBeTruthy());
   });
 });
 
 describe('AddToList', () => {
   it('sends guests to login instead of calling the API', () => {
-    render(createElement(AddToList, { productId: 'p', signedIn: false, loginHref: '/login?next=x' }));
+    render(
+      createElement(AddToList, { productId: 'p', signedIn: false, loginHref: '/login?next=x' }),
+    );
     expect(screen.getByRole('link', { name: 'Adicionar à lista' }).getAttribute('href')).toBe(
       '/login?next=x',
     );

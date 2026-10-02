@@ -17,17 +17,20 @@ function toInput({ id: _id, isDefault: _isDefault, ...input }: AccountAddress): 
 }
 
 /** "Seus endereços": add tile + one card per saved address, Amazon layout. The
- * form is checkout's AddressForm, so validation rules live in one place. */
+ * form is checkout's AddressForm, so validation rules live in one place.
+ * `startAdding` opens the add form right away (header's "Cadastrar endereço"). */
 export function AddressesManager({
   initial,
   name,
+  startAdding = false,
 }: {
   initial: AccountAddress[];
   name: string;
+  startAdding?: boolean;
 }) {
   const router = useRouter();
   const [addresses, setAddresses] = useState(initial);
-  const [editor, setEditor] = useState<Editor>(null);
+  const [editor, setEditor] = useState<Editor>(startAdding ? { mode: 'new' } : null);
   const [confirming, setConfirming] = useState<string | null>(null);
   const [instructing, setInstructing] = useState<{ id: string; text: string } | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
@@ -55,6 +58,8 @@ export function AddressesManager({
     try {
       setAddresses(await work());
       setStatus(done);
+      // The header's "Enviar para" block is server-rendered from the same list.
+      router.refresh();
       return true;
     } catch (reason) {
       fail(reason);
@@ -90,6 +95,7 @@ export function AddressesManager({
       // Reload: the server decides ordering and which address is the default.
       setAddresses(await accountClient.addresses());
       setStatus(wasNew ? 'Endereço adicionado.' : 'Endereço atualizado.');
+      router.refresh();
     } catch (reason) {
       fail(reason);
     }
@@ -195,7 +201,9 @@ export function AddressesManager({
                     autoFocus
                     disabled={busy === address.id}
                     placeholder="Ex.: deixar com o porteiro, tocar o interfone 710"
-                    onChange={(event) => setInstructing({ id: address.id, text: event.target.value })}
+                    onChange={(event) =>
+                      setInstructing({ id: address.id, text: event.target.value })
+                    }
                   />
                   <div className="az-acct-form__actions">
                     <button
@@ -238,7 +246,11 @@ export function AddressesManager({
               )}
             </div>
             {confirming === address.id ? (
-              <div className="az-acct-address__confirm" role="group" aria-label="Confirmar exclusão">
+              <div
+                className="az-acct-address__confirm"
+                role="group"
+                aria-label="Confirmar exclusão"
+              >
                 <p>Excluir este endereço?</p>
                 <div className="az-acct-form__actions">
                   <button

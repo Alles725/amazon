@@ -1,4 +1,5 @@
 import 'server-only';
+import { cache } from 'react';
 import { cookies } from 'next/headers';
 import { AccountAddress, ListDetails, ListSummary } from '@amazon-mvp/api-contract';
 import { getConfig } from '@/config/storefront-config';
@@ -16,11 +17,12 @@ async function get(path: string): Promise<Response | null> {
   }
 }
 
-/** null when the API is unavailable. */
-export async function fetchAddresses(): Promise<AccountAddress[] | null> {
+/** null when the API is unavailable. One read per request: the header and the
+ * "Seus endereços" page share it. */
+export const fetchAddresses = cache(async (): Promise<AccountAddress[] | null> => {
   const response = await get('/addresses');
   return response?.ok ? ((await response.json()) as AccountAddress[]) : null;
-}
+});
 
 /** null when the API is unavailable. Creates the default list on first use. */
 export async function fetchLists(): Promise<ListSummary[] | null> {
