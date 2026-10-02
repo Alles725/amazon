@@ -1,18 +1,24 @@
 // @vitest-environment jsdom
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
-import { afterEach, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { AccountAddress } from '@amazon-mvp/api-contract';
 import { AmazonHeader } from '../src/components/amazon/amazon-header';
 import { ALL_MENU_SECTIONS } from '../src/components/amazon/all-menu';
 
-const { features } = vi.hoisted(() => ({
-  features: { browsingHistory: true, catalog: false } as Record<string, boolean>,
+const { features, auth, fetchAddresses } = vi.hoisted(() => ({
+  features: { browsingHistory: true, catalog: false, addresses: true } as Record<string, boolean>,
+  auth: { session: null as null | { user: { displayName: string } } },
+  fetchAddresses: vi.fn(),
 }));
 
 vi.mock('server-only', () => ({}));
 vi.mock('../src/config/feature-gate', () => ({
   isFeatureEnabled: (feature: string) => features[feature] ?? false,
 }));
-vi.mock('../src/features/auth/server-session', () => ({ getServerSession: async () => null }));
+vi.mock('../src/features/auth/server-session', () => ({
+  getServerSession: async () => auth.session,
+}));
+vi.mock('../src/features/account/account-server', () => ({ fetchAddresses }));
 vi.mock('../src/features/cart/cart-header-link', () => ({ CartHeaderLink: () => null }));
 vi.mock('../src/components/amazon/account-menu', () => ({ AccountMenu: () => null }));
 vi.mock('../src/features/cart/cart-provider', () => ({ useCart: () => ({ cart: null }) }));
@@ -30,6 +36,9 @@ afterEach(() => {
   cleanup();
   features.browsingHistory = true;
   features.catalog = false;
+  features.addresses = true;
+  auth.session = null;
+  fetchAddresses.mockReset();
 });
 
 const renderHeader = async () => render(await AmazonHeader());
@@ -146,4 +155,91 @@ it('offers only "Todos" while the catalog listing is disabled', async () => {
   await renderHeader();
   const select = screen.getByLabelText('Selecionar departamento') as HTMLSelectElement;
   expect(Array.from(select.options).map((option) => option.text)).toEqual(['Todos']);
+});
+
+describe('"Enviar para" block', () => {
+  const address = (id: string, isDefault: boolean, city: string, postalCode: string) =>
+    ({
+      id,
+      recipient: `Pessoa ${id}`,
+      postalCode,
+      street: `Rua ${id}`,
+      number: '1',
+      neighborhood: 'Centro',
+      city,
+      state: 'RS',
+      isDefault,
+    }) satisfies AccountAddress;
+  const deliver = () => screen.getByText(/Enviar para|Olá/).closest('a') as HTMLAnchorElement;
+  const signIn = (addresses: AccountAddress[] | null) => {
+    auth.session = { user: { displayName: 'Ada Lovelace' } };
+    fetchAddresses.mockResolvedValue(addresses);
+  };
+
+  it('shows the default address city and CEP and links to "Seus endereços"', async () => {
+    signIn([address('a', true, 'Porto Alegre', '90020060')]);
+    await renderHeader();
+    expect(deliver().textContent).toBe('Enviar para Ada Porto Alegre 90020060');
+    expect(deliver().getAttribute('href')).toBe('/addresses');
+  });
+
+  it('uses the address marked as default, not the first one listed', async () => {
+    signIn([
+      address('a', false, 'Porto Alegre', '90020060'),
+      address('b', true, 'Caxias do Sul', '95020000'),
+      address('c', false, 'Pelotas', '96010000'),
+    ]);
+    await renderHeader();
+    expect(deliver().textContent).toBe('Enviar para Ada Caxias do Sul 95020000');
+  });
+
+  it('follows the default as it changes between requests', async () => {
+    signIn([
+      address('a', true, 'Porto Alegre', '90020060'),
+      address('b', false, 'Pelotas', '96010000'),
+    ]);
+    await renderHeader();
+    expect(deliver().textContent).toContain('Porto Alegre 90020060');
+    cleanup();
+
+    signIn([
+      address('b', true, 'Pelotas', '96010000'),
+      address('a', false, 'Porto Alegre', '90020060'),
+    ]);
+    await renderHeader();
+    expect(deliver().textContent).toContain('Pelotas 96010000');
+  });
+
+  it.each([
+    ['no saved address', []],
+    ['no address marked as default', [address('a', false, 'Porto Alegre', '90020060')]],
+  ])('asks to add an address when there is %s', async (_case, addresses) => {
+    signIn(addresses);
+    await renderHeader();
+    expect(deliver().textContent).toBe('Enviar para Ada Cadastrar endereço');
+    expect(deliver().getAttribute('href')).toBe('/addresses?add=1');
+    expect(deliver().textContent).not.toMatch(/\d{8}/);
+  });
+
+  it('never invents an address while the API is unavailable', async () => {
+    signIn(null);
+    await renderHeader();
+    expect(deliver().textContent).toBe('Enviar para Ada Seus endereços');
+    expect(deliver().getAttribute('href')).toBe('/addresses');
+  });
+
+  it('greets guests without a name or address and does not read addresses', async () => {
+    await renderHeader();
+    expect(deliver().textContent).toBe('Olá Cadastrar endereço');
+    expect(deliver().getAttribute('href')).toBe('/addresses?add=1');
+    expect(fetchAddresses).not.toHaveBeenCalled();
+  });
+
+  it('does not read addresses while the addresses feature is off', async () => {
+    features.addresses = false;
+    signIn([address('a', true, 'Porto Alegre', '90020060')]);
+    await renderHeader();
+    expect(deliver().textContent).toBe('Enviar para Ada Cadastrar endereço');
+    expect(fetchAddresses).not.toHaveBeenCalled();
+  });
 });

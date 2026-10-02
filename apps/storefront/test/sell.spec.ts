@@ -9,7 +9,8 @@ import { AmazonHeader } from '../src/components/amazon/amazon-header';
 vi.mock('server-only', () => ({}));
 vi.mock('../src/config/feature-gate', () => ({ isFeatureEnabled: () => false }));
 vi.mock('../src/features/auth/server-session', () => ({ getServerSession: async () => null }));
-vi.mock('../src/features/cart/cart-header-link', () => ({ CartHeaderLink: () => null }));
+vi.mock('../src/features/account/account-server', () => ({ fetchAddresses: async () => [] }));
+vi.mock('../src/features/cart/cart-header-link',() => ({ CartHeaderLink: () => null }));
 vi.mock('../src/components/amazon/account-menu', () => ({ AccountMenu: () => null }));
 
 afterEach(cleanup);

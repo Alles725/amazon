@@ -25,6 +25,12 @@ Styles live in `features/account/account.css` (scoped to `.az-acct*` / `.az-add-
 - Lists come back default first, so checkout (`data[0]`) and the product page
   ("Enviar para …") keep using the default without changes.
 - The page reuses checkout's `AddressForm`; validation lives in one place.
+- Header "Enviar para" block (`amazon-header.tsx`) reads the same `fetchAddresses()`
+  (React `cache`, one request per render) and shows the address with `isDefault`
+  as `Cidade CEP`, linking to `/addresses`. With no default (or no address, or a
+  guest) it shows "Cadastrar endereço" linking to `/addresses?add=1`, which opens
+  the add form directly; API down shows "Seus endereços". Every successful change
+  on the page calls `router.refresh()`, so the server-rendered header follows it.
 - `addresses.phone` and `addresses.delivery_instructions` (migration
   `20261001000200_address_contact`), both optional so older addresses stay valid.
   Phone is stored as DDD + número digits (the API strips formatting) and shown as
