@@ -649,6 +649,13 @@ a {
   background: #131921;
   color: #fff;
 }
+/* The header renders inside every page wrapper, so it owns its link reset
+   instead of relying on each wrapper's (e.g. .amazon-orders-page has none).
+   :where() keeps it at zero extra specificity, like the page resets. */
+:where(.az-header) a {
+  text-decoration: none;
+  color: inherit;
+}
 .az-header :focus-visible {
   outline: 2px solid #ff9900;
   outline-offset: -2px;
