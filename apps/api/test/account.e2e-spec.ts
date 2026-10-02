@@ -146,6 +146,40 @@ describe('account area (integration)', () => {
       expect(listed.body).toHaveLength(1);
       await http().delete(`${CHECKOUT_ROUTES.addresses}/not-a-uuid`).set('Cookie', owner.cookie).expect(400);
     });
+
+    it('stores phone and delivery instructions; an update without instructions keeps them', async () => {
+      const { cookie } = await register();
+      const saved = await http()
+        .post(CHECKOUT_ROUTES.addresses)
+        .set('Cookie', cookie)
+        .send({ ...address, phone: '(54) 99670-4398', deliveryInstructions: '  Deixar na portaria ' })
+        .expect(201);
+      expect(saved.body).toMatchObject({ phone: '54996704398', deliveryInstructions: 'Deixar na portaria' });
+
+      const target = `${CHECKOUT_ROUTES.addresses}/${saved.body.id}`;
+      // The account/checkout form never sends instructions: they must survive its edits.
+      const edited = await http()
+        .put(target)
+        .set('Cookie', cookie)
+        .send({ ...address, number: '456', phone: '54996704398' })
+        .expect(200);
+      expect(edited.body).toMatchObject({ number: '456', deliveryInstructions: 'Deixar na portaria' });
+
+      const cleared = await http()
+        .put(target)
+        .set('Cookie', cookie)
+        .send({ ...address, phone: '', deliveryInstructions: '' })
+        .expect(200);
+      expect(cleared.body).not.toHaveProperty('phone');
+      expect(cleared.body).not.toHaveProperty('deliveryInstructions');
+
+      await http().post(CHECKOUT_ROUTES.addresses).set('Cookie', cookie).send({ ...address, phone: '123' }).expect(400);
+      await http()
+        .post(CHECKOUT_ROUTES.addresses)
+        .set('Cookie', cookie)
+        .send({ ...address, deliveryInstructions: 'x'.repeat(301) })
+        .expect(400);
+    });
   });
 
   describe('access and security', () => {

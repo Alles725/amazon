@@ -147,9 +147,11 @@ export class UsersRepository implements UsersApi, UserAddressesApi {
 }
 
 function publicAddress(
-  address: Omit<AddressInput, 'complement'> & {
+  address: Omit<AddressInput, 'complement' | 'phone' | 'deliveryInstructions'> & {
     id: string;
     complement: string | null;
+    phone: string | null;
+    deliveryInstructions: string | null;
     isDefault: boolean;
   },
 ): AccountAddress {
@@ -163,6 +165,8 @@ function publicAddress(
     neighborhood,
     city,
     state,
+    phone,
+    deliveryInstructions,
     isDefault,
   } = address;
   return {
@@ -175,6 +179,8 @@ function publicAddress(
     neighborhood,
     city,
     state,
+    ...(phone ? { phone } : {}),
+    ...(deliveryInstructions ? { deliveryInstructions } : {}),
     isDefault,
   };
 }

@@ -11,7 +11,9 @@ const fields = [
   ['neighborhood', 'Bairro', 100, 'off'],
   ['city', 'Cidade', 100, 'address-level2'],
   ['state', 'Estado (UF)', 2, 'address-level1'],
+  ['phone', 'Telefone com DDD (opcional)', 15, 'tel-national'],
 ] as const;
+const optional: readonly string[] = ['complement', 'phone'];
 export function AddressForm({
   initial,
   name,
@@ -34,6 +36,7 @@ export function AddressForm({
           neighborhood: initial.neighborhood,
           city: initial.city,
           state: initial.state,
+          phone: initial.phone ?? '',
         }
       : {
           recipient: name,
@@ -44,6 +47,7 @@ export function AddressForm({
           neighborhood: '',
           city: '',
           state: '',
+          phone: '',
         },
   );
   const [saving, setSaving] = useState(false);
@@ -74,7 +78,8 @@ export function AddressForm({
             <input
               name={field}
               value={values[field] ?? ''}
-              required={field !== 'complement'}
+              type={field === 'phone' ? 'tel' : undefined}
+              required={!optional.includes(field)}
               maxLength={maxLength}
               minLength={
                 ['recipient', 'street', 'neighborhood', 'city', 'state'].includes(field)
@@ -84,7 +89,7 @@ export function AddressForm({
               pattern={
                 field === 'postalCode' ? '[0-9]{8}' : field === 'state' ? '[A-Z]{2}' : undefined
               }
-              inputMode={field === 'postalCode' ? 'numeric' : undefined}
+              inputMode={field === 'postalCode' ? 'numeric' : field === 'phone' ? 'tel' : undefined}
               autoComplete={autoComplete}
               disabled={saving}
               onChange={(event) =>

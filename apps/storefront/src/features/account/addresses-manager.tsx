@@ -2,12 +2,19 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { AccountAddress, SavedAddress } from '@amazon-mvp/api-contract';
+import { AccountAddress, AddressInput, SavedAddress } from '@amazon-mvp/api-contract';
+import { AmazonLogo } from '@/components/amazon-logo';
 import { AddressForm } from '@/features/checkout/address-form';
 import { accountClient, AccountRequestError } from './account-client';
-import { formatPostalCode } from './account-presentation';
 
 type Editor = { mode: 'new' } | { mode: 'edit'; address: AccountAddress } | null;
+
+const INSTRUCTIONS_MAX = 300;
+
+/** PUT replaces the whole address, so instructions travel with the other fields. */
+function toInput({ id: _id, isDefault: _isDefault, ...input }: AccountAddress): AddressInput {
+  return input;
+}
 
 /** "Seus endereços": add tile + one card per saved address, Amazon layout. The
  * form is checkout's AddressForm, so validation rules live in one place. */
@@ -22,6 +29,7 @@ export function AddressesManager({
   const [addresses, setAddresses] = useState(initial);
   const [editor, setEditor] = useState<Editor>(null);
   const [confirming, setConfirming] = useState<string | null>(null);
+  const [instructing, setInstructing] = useState<{ id: string; text: string } | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState('');
   const [status, setStatus] = useState('');
@@ -47,12 +55,31 @@ export function AddressesManager({
     try {
       setAddresses(await work());
       setStatus(done);
+      return true;
     } catch (reason) {
       fail(reason);
+      return false;
     } finally {
       setBusy(null);
       setConfirming(null);
     }
+  }
+
+  async function saveInstructions(address: AccountAddress, text: string) {
+    const ok = await run(
+      address.id,
+      async () => {
+        const updated = await accountClient.updateAddress(address.id, {
+          ...toInput(address),
+          deliveryInstructions: text.trim(),
+        });
+        return addresses.map((item) => (item.id === updated.id ? updated : item));
+      },
+      'Instruções de entrega salvas.',
+    );
+    if (!ok) return;
+    setInstructing(null);
+    requestAnimationFrame(() => document.getElementById(`address-${address.id}`)?.focus());
   }
 
   async function saved(address: SavedAddress) {
@@ -129,23 +156,90 @@ export function AddressesManager({
           >
             {address.isDefault && (
               <p className="az-acct-address__badge">
-                <strong>Padrão:</strong> usado primeiro no checkout
+                Endereço padrão:
+                <AmazonLogo className="az-acct-address__logo" />
               </p>
             )}
-            <address className="az-acct-address__body">
-              <strong>{address.recipient}</strong>
-              {address.street}, {address.number}
-              {address.complement ? ` - ${address.complement}` : ''}
-              <br />
-              {address.neighborhood}
-              <br />
-              {address.city.toUpperCase()}, {address.state} {formatPostalCode(address.postalCode)}
-              <br />
-              Brasil
-            </address>
+            <div className="az-acct-address__body">
+              <address>
+                <strong>{address.recipient}</strong>
+                {address.street} {address.number}
+                <br />
+                {[address.complement, address.neighborhood].filter(Boolean).join(' ')}
+                <br />
+                {address.city}, {address.state} {address.postalCode}
+                <br />
+                Brasil
+                {address.phone && (
+                  <>
+                    <br />
+                    Telefone: +55{address.phone}
+                  </>
+                )}
+              </address>
+              {instructing?.id === address.id ? (
+                <form
+                  className="az-acct-address__instructions-form"
+                  aria-label={`Instruções de entrega para ${address.recipient}, ${address.street}`}
+                  onSubmit={(event) => {
+                    event.preventDefault();
+                    void saveInstructions(address, instructing.text);
+                  }}
+                >
+                  <label htmlFor={`instructions-${address.id}`}>Instruções de entrega</label>
+                  <textarea
+                    id={`instructions-${address.id}`}
+                    value={instructing.text}
+                    maxLength={INSTRUCTIONS_MAX}
+                    rows={3}
+                    autoFocus
+                    disabled={busy === address.id}
+                    placeholder="Ex.: deixar com o porteiro, tocar o interfone 710"
+                    onChange={(event) => setInstructing({ id: address.id, text: event.target.value })}
+                  />
+                  <div className="az-acct-form__actions">
+                    <button
+                      type="submit"
+                      className="az-acct-button az-acct-button--primary"
+                      disabled={busy === address.id}
+                    >
+                      {busy === address.id ? 'Salvando…' : 'Salvar'}
+                    </button>
+                    <button
+                      type="button"
+                      className="az-acct-button"
+                      disabled={busy === address.id}
+                      onClick={() => setInstructing(null)}
+                    >
+                      Cancelar
+                    </button>
+                  </div>
+                </form>
+              ) : (
+                <>
+                  {address.deliveryInstructions && (
+                    <p className="az-acct-address__instructions">
+                      <strong>Instruções de entrega:</strong> {address.deliveryInstructions}
+                    </p>
+                  )}
+                  <button
+                    type="button"
+                    className="az-acct-linkbutton"
+                    disabled={Boolean(busy) || Boolean(instructing)}
+                    aria-label={`${address.deliveryInstructions ? 'Editar' : 'Adicionar'} instruções de entrega para ${address.recipient}, ${address.street}`}
+                    onClick={() => {
+                      setStatus('');
+                      setInstructing({ id: address.id, text: address.deliveryInstructions ?? '' });
+                    }}
+                  >
+                    {address.deliveryInstructions ? 'Editar' : 'Adicionar'} instruções de entrega
+                  </button>
+                </>
+              )}
+            </div>
             {confirming === address.id ? (
-              <div className="az-acct-address__confirm" role="group" aria-label="Confirmar remoção">
-                <p>Remover este endereço?</p>
+              <div className="az-acct-address__confirm" role="group" aria-label="Confirmar exclusão">
+                <p>Excluir este endereço?</p>
                 <div className="az-acct-form__actions">
                   <button
                     type="button"
@@ -156,11 +250,11 @@ export function AddressesManager({
                       void run(
                         address.id,
                         () => accountClient.deleteAddress(address.id),
-                        'Endereço removido.',
+                        'Endereço excluído.',
                       )
                     }
                   >
-                    {busy === address.id ? 'Removendo…' : 'Sim, remover'}
+                    {busy === address.id ? 'Excluindo…' : 'Sim, excluir'}
                   </button>
                   <button
                     type="button"
@@ -178,22 +272,22 @@ export function AddressesManager({
                   type="button"
                   className="az-acct-linkbutton"
                   disabled={Boolean(busy)}
-                  aria-label={`Editar endereço de ${address.recipient}, ${address.street}`}
+                  aria-label={`Alterar endereço de ${address.recipient}, ${address.street}`}
                   onClick={() => {
                     setStatus('');
                     setEditor({ mode: 'edit', address });
                   }}
                 >
-                  Editar
+                  Alterar
                 </button>
                 <button
                   type="button"
                   className="az-acct-linkbutton"
                   disabled={Boolean(busy)}
-                  aria-label={`Remover endereço de ${address.recipient}, ${address.street}`}
+                  aria-label={`Excluir endereço de ${address.recipient}, ${address.street}`}
                   onClick={() => setConfirming(address.id)}
                 >
-                  Remover
+                  Excluir
                 </button>
                 {!address.isDefault && (
                   <button

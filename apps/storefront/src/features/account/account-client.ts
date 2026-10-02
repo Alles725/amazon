@@ -1,6 +1,7 @@
 import {
   ACCOUNT_ROUTES,
   AccountAddress,
+  AddressInput,
   ChangePasswordResponse,
   CHECKOUT_ROUTES,
   ErrorCode,
@@ -69,6 +70,8 @@ const list = (id: string) => `${LIST_ROUTES.lists}/${encodeURIComponent(id)}`;
 
 export const accountClient = {
   addresses: () => request<AccountAddress[]>(CHECKOUT_ROUTES.addresses),
+  updateAddress: (id: string, data: AddressInput) =>
+    request<AccountAddress>(address(id), 'PUT', data),
   deleteAddress: (id: string) => request<AccountAddress[]>(address(id), 'DELETE'),
   setDefaultAddress: (id: string) => request<AccountAddress[]>(`${address(id)}/default`, 'POST'),
 

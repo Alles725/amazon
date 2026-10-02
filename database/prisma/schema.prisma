@@ -29,21 +29,24 @@ model User {
 }
 
 model Address {
-  id           String   @id @default(uuid()) @db.Uuid
-  userId       String   @map("user_id") @db.Uuid
-  recipient    String
-  postalCode   String   @map("postal_code")
-  street       String
-  number       String
-  complement   String?
-  neighborhood String
-  city         String
-  state        String   @db.Char(2)
+  id                   String   @id @default(uuid()) @db.Uuid
+  userId               String   @map("user_id") @db.Uuid
+  recipient            String
+  postalCode           String   @map("postal_code")
+  street               String
+  number               String
+  complement           String?
+  neighborhood         String
+  city                 String
+  state                String   @db.Char(2)
+  // National number (DDD + número, digits only); shown as +55… on the account page.
+  phone                String?
+  deliveryInstructions String?  @map("delivery_instructions")
   // At most one default per user; enforced by UsersRepository under a per-user lock.
-  isDefault    Boolean  @default(false) @map("is_default")
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  isDefault            Boolean  @default(false) @map("is_default")
+  createdAt            DateTime @default(now()) @map("created_at")
+  updatedAt            DateTime @updatedAt @map("updated_at")
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@map("addresses")

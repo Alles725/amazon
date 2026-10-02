@@ -60,6 +60,17 @@ export class AddressInputDto implements AddressInput {
     'TO',
   ])
   state: string;
+  @ApiPropertyOptional({ example: '54996704398', description: 'DDD + número, digits only' })
+  @IsOptional()
+  @Transform(({ value }) => (typeof value === 'string' ? value.replace(/\D/g, '') : value))
+  @Matches(/^(\d{10,11})?$/)
+  phone?: string;
+  @ApiPropertyOptional({ description: 'Omit to keep the stored value; empty clears it' })
+  @IsOptional()
+  @Transform(trim)
+  @IsString()
+  @MaxLength(300)
+  deliveryInstructions?: string;
 }
 export class SavedAddressDto extends AddressInputDto implements SavedAddress {
   @ApiProperty({ format: 'uuid' }) id: string;
