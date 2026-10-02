@@ -3,7 +3,9 @@ import {
   SavedAddress,
   CheckoutQuote,
   OrderResponse,
+  PaymentCardInput,
   PlaceOrderRequest,
+  SavedPaymentCard,
   SimulatedPayment,
   CHECKOUT_ROUTES,
   isApiErrorBody,
@@ -45,6 +47,10 @@ export const checkoutClient = {
       id ? 'PUT' : 'POST',
       data,
     ),
+  cards: () => request<SavedPaymentCard[]>(CHECKOUT_ROUTES.paymentCards),
+  /** Brand + last four digits only; the full number never reaches this call. */
+  saveCard: (data: PaymentCardInput) =>
+    request<SavedPaymentCard>(CHECKOUT_ROUTES.paymentCards, 'POST', data),
   /** Totals (and the Pix discount) are always computed by the API for this method. */
   quote: (paymentMethod?: SimulatedPayment) =>
     request<CheckoutQuote>(

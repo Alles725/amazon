@@ -22,8 +22,9 @@ model User {
   sessions  Session[]
   carts     Cart[]
   orders    Order[]
-  addresses Address[]
-  lists     List[]
+  addresses    Address[]
+  lists        List[]
+  paymentCards PaymentCard[]
 
   @@map("users")
 }
@@ -50,6 +51,24 @@ model Address {
 
   @@index([userId])
   @@map("addresses")
+}
+
+// Simulated saved card (CARD-001). Only what a real PSP would hand back after
+// tokenization: brand, last four digits, holder and expiry. The full number and
+// CVV are never sent to the API, let alone stored.
+model PaymentCard {
+  id         String   @id @default(uuid()) @db.Uuid
+  userId     String   @map("user_id") @db.Uuid
+  brand      String
+  last4      String   @db.Char(4)
+  holderName String   @map("holder_name")
+  expMonth   Int      @map("exp_month") @db.SmallInt
+  expYear    Int      @map("exp_year") @db.SmallInt
+  createdAt  DateTime @default(now()) @map("created_at")
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("payment_cards")
 }
 
 model Session {
@@ -194,6 +213,9 @@ model Order {
   discountMinor   Int     @default(0) @map("discount_minor")
   shippingAddress Json?   @map("shipping_address")
   paymentMethod   String? @map("payment_method")
+  // SIMULATED_CARD only: { brand, last4 } snapshot and interest-free installment count.
+  paymentCard     Json?   @map("payment_card")
+  installments    Int?
 
   // Delivery tracking. Null until the carrier confirms delivery.
   deliveredAt  DateTime? @map("delivered_at")

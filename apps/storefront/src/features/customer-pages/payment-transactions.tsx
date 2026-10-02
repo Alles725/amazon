@@ -1,13 +1,7 @@
 import Link from 'next/link';
-import type { OrderResponse, SimulatedPayment } from '@amazon-mvp/api-contract';
+import type { OrderResponse } from '@amazon-mvp/api-contract';
 import { formatCartMoney } from '@/features/cart/money';
-import { formatOrderDate } from '@/features/orders/order-presentation';
-
-/** Same labels the checkout and the order details page show. */
-export const PAYMENT_LABELS: Record<SimulatedPayment, string> = {
-  SIMULATED_CARD: 'Cartão fictício · Visa final 4242',
-  SIMULATED_PIX: 'Pix simulado',
-};
+import { formatOrderDate, paymentLabel } from '@/features/orders/order-presentation';
 
 export const TRANSACTIONS_LIMIT = 5;
 const LOGIN_HREF = `/login?next=${encodeURIComponent('/payment-methods')}`;
@@ -72,7 +66,7 @@ export function PaymentTransactions({
               <span className="az-cp__transaction-date">{formatOrderDate(order.placedAt)}</span>
             </span>
             <span className="az-cp__transaction-method">
-              {order.paymentMethod ? PAYMENT_LABELS[order.paymentMethod] : 'Não informado'}
+              {paymentLabel(order)}
             </span>
             <strong className="az-cp__transaction-total">
               {formatCartMoney(order.totalMinor, order.currency)}

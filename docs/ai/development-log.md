@@ -547,3 +547,34 @@ Both are copied into the order shipping-address snapshot. `docs/openapi.json` re
 Validation: lint, typecheck, 338 unit tests (config 18, api 46, storefront 274), 71 API
 integration tests on a disposable database. Smoke test against the running app rendered
 the three screenshot addresses as expected; the temporary user was removed.
+
+## 2026-10-01 — CARD-001: adicionar cartão e parcelamento no checkout
+
+Changes:
+The checkout payment section lists the user's saved cards (expired ones disabled), the
+demo "Cartão fictício · Visa final 4242", a "+ Adicionar cartão de crédito" form and, for
+card payments, a "Parcelamento" select ("2x sem juros (1ª de R$ 5,50 + 1x de R$ 5,49)").
+The summary repeats the chosen plan. Order confirmation, order details and "Meios de
+pagamento" show the card and plan through a shared `paymentLabel`.
+
+Security: the card number is validated (brand prefix + Luhn) in the browser only; the
+API receives brand, last four digits, holder and expiry. There is no CVV field, and the
+DTO whitelist rejects `number`/`cvv`.
+
+Database impact:
+Migration `20261001000300_payment_cards` adds `payment_cards` (Users module) and nullable
+`orders.payment_card` (JSON `{ brand, last4 }`) and `orders.installments`. Drift check clean.
+
+API/contract impact:
+New `GET/POST /payment-cards`, `DELETE /payment-cards/:cardId` (`USER_PAYMENT_CARDS_API`).
+`CheckoutQuote.installmentOptions`, `CheckoutPricing.maxInstallments/minInstallmentMinor`,
+`PlaceOrderRequest.cardId?/installments?`, `OrderResponse.paymentCard/installments`,
+error codes `CARD_LIMIT_EXCEEDED` and `PAYMENT_INVALID`. Omitting the new request fields
+keeps the old behaviour (demo Visa, 1x). `docs/openapi.json` regenerated.
+
+Configuration impact:
+`checkout.maxInstallments` (default 10, `MAX_INSTALLMENTS`) and
+`checkout.minInstallmentMinor` (default 500, `MIN_INSTALLMENT_MINOR`).
+
+Validation: lint, typecheck, unit tests (config 18, api 50, storefront 279) and the
+77 API integration tests (six new for cards and installments) on a disposable database.

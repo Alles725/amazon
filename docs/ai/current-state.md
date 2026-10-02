@@ -353,6 +353,17 @@ hub is part of the authenticated shell and does not enable account management.
   endpoint is public; per-unit Pix prices can differ by a cent or two from the subtotal
   discount checkout charges.
 
+## Saved cards and installments (CARD-001) — 2026-10-01
+
+- Checkout lists saved simulated cards, the demo Visa 4242 and "+ Adicionar cartão de
+  crédito"; card payments offer interest-free installments returned by the quote.
+- The API stores only brand, last four digits, holder and expiry; the full number is
+  checked (brand prefix + Luhn) in the browser and never sent. Orders snapshot
+  `{ brand, last4 }` and the installment count.
+- Executed: unit tests and the API integration suite on a disposable database. Not
+  built: managing cards outside checkout ("Meios de pagamento" still only lists recent
+  transactions), editing a saved card.
+
 ## Customer reviews (REVIEWS-001) — 2026-09-30
 
 - Reviews and ratings come from the reviews module; productReviews is on.

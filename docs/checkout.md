@@ -12,8 +12,9 @@ simplificado, endereço/pagamento/produtos à esquerda e resumo à direita.
 - Order/OrderItem já existiam. A migration 20260926000000_checkout acrescenta
   addresses, totais separados, endereço congelado, forma de pagamento simulada e
   sourceCartId único. Pedidos antigos continuam válidos, com metadados opcionais.
-- Pagamento aceita somente SIMULATED_CARD ou SIMULATED_PIX. A opção cartão mostra
-  Visa 4242 fictício; não coleta nem armazena número de cartão, CVV ou credenciais.
+- Pagamento aceita somente SIMULATED_CARD ou SIMULATED_PIX. O cartão pode ser o Visa
+  4242 fictício (padrão) ou um cartão salvo pelo usuário, com parcelamento sem juros
+  (abaixo). Nunca se envia nem se armazena número completo, CVV ou credenciais.
 - Frete é zero nesta simulação, sem cálculo de prazo. O único desconto é o do Pix
   (abaixo); não existe motor de promoções. O total usa preços atuais do catálogo, em
   centavos inteiros. Não se usa o preço anterior promocional da apresentação como
@@ -57,6 +58,40 @@ simplificado, endereço/pagamento/produtos à esquerda e resumo à direita.
 - Status inicial PENDING. Não há gateway, cobrança, logística nem transição automática
   para PAID. `/orders` continua sendo a página ainda não implementada; a confirmação
   real fica em `/checkout/success/:orderId` e pode ser recarregada.
+
+## Cartões salvos e parcelamento (CARD-001)
+
+- **Adicionar cartão**: no checkout, "+ Adicionar cartão de crédito" abre um formulário
+  com número, nome impresso e validade (mês/ano). O número é validado só no navegador
+  (bandeira por prefixo — Visa, Mastercard, Elo, American Express, Hipercard — e Luhn) e
+  **não sai dele**: o `POST /payment-cards` recebe apenas `brand`, `last4`,
+  `holderName`, `expMonth` e `expYear`. Não há campo de CVV. O DTO rejeita (400)
+  campos extras como `number` ou `cvv`, cartão vencido ou bandeira desconhecida.
+- **Dados**: tabela `payment_cards` (migration `20261001000300_payment_cards`),
+  pertencente ao módulo Users e exposta pelo contrato `USER_PAYMENT_CARDS_API`. Até
+  `MAX_SAVED_CARDS` (10) por usuário, sob lock consultivo por conta (409 acima disso).
+  Cartões vencidos aparecem desabilitados no checkout.
+- **Parcelamento**: sem juros, de 1x até `checkout.maxInstallments` (padrão 10,
+  `MAX_INSTALLMENTS`), enquanto cada parcela for ≥ `checkout.minInstallmentMinor`
+  (padrão 500 = R$ 5,00, `MIN_INSTALLMENT_MINOR`). A regra é `installmentOptions` em
+  `@amazon-mvp/api-contract`: parcela = `floor(total / n)` e a 1ª absorve o resto, de
+  modo que a soma é exatamente o total. A cotação de cartão devolve
+  `installmentOptions`; a de Pix devolve `[]`. Como não há juros, o plano não altera o
+  total e não entra na `revision`.
+- **Confirmação**: `PlaceOrderRequest` ganhou `cardId?` (omitido = Visa 4242 fictício)
+  e `installments?` (omitido = 1). O POST valida o cartão do próprio usuário (404 se de
+  outro), vencimento e se o número de parcelas existe para o total recalculado na
+  transação (400 `PAYMENT_INVALID`); Pix com `cardId` ou `installments` também é 400.
+  O pedido grava `payment_card` (`{ brand, last4 }`) e `installments`; excluir o
+  cartão depois não altera o pedido. Pix e pedidos antigos ficam com ambos nulos.
+- **Exibição**: confirmação, detalhes do pedido e "Meios de pagamento" usam
+  `paymentLabel`: "Cartão fictício · Mastercard final 5100 · 3x sem juros". Pedidos
+  anteriores ao CARD-001 continuam "Cartão fictício · Visa final 4242".
+
+| Endpoint | Função |
+| --- | --- |
+| GET/POST `/api/v1/payment-cards` | Listar/salvar cartões simulados próprios |
+| DELETE `/api/v1/payment-cards/:cardId` | Remover cartão próprio; devolve os restantes |
 
 ## Contrato e consistência
 

@@ -22,3 +22,7 @@ checkout:
   # "5% de desconto à vista no Pix". Whole percent, 0-100 (0 disables the discount).
   # Overridden by PIX_DISCOUNT_PERCENT.
   pixDiscountPercent: 5
+  # Interest-free card installments (CARD-001): up to maxInstallments, each at least
+  # minInstallmentMinor cents. Overridden by MAX_INSTALLMENTS / MIN_INSTALLMENT_MINOR.
+  maxInstallments: 10
+  minInstallmentMinor: 500

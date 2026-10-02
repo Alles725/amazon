@@ -1,4 +1,10 @@
-import { AccountAddress, AddressInput, SavedAddress } from '@amazon-mvp/api-contract';
+import {
+  AccountAddress,
+  AddressInput,
+  PaymentCardInput,
+  SavedAddress,
+  SavedPaymentCard,
+} from '@amazon-mvp/api-contract';
 import { Prisma } from '@amazon-mvp/database';
 /**
  * Cross-module application interface. Other modules (auth, orders, ...) depend on
@@ -31,6 +37,21 @@ export interface UserAddressesApi {
     id: string,
     tx?: Prisma.TransactionClient,
   ): Promise<SavedAddress | null>;
+}
+
+export const USER_PAYMENT_CARDS_API = 'USER_PAYMENT_CARDS_API';
+/** Simulated saved cards (CARD-001): brand, last four digits, holder and expiry only. */
+export interface UserPaymentCardsApi {
+  /** Oldest first. */
+  listCards(userId: string): Promise<SavedPaymentCard[]>;
+  /** Rejects expired cards and more than MAX_SAVED_CARDS per user. */
+  addCard(userId: string, input: PaymentCardInput): Promise<SavedPaymentCard>;
+  deleteCard(userId: string, id: string): Promise<SavedPaymentCard[]>;
+  findCard(
+    userId: string,
+    id: string,
+    tx?: Prisma.TransactionClient,
+  ): Promise<SavedPaymentCard | null>;
 }
 
 export interface UsersApi {

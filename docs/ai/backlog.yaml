@@ -317,6 +317,16 @@ iterations:
           single rounding rule in api-contract, shown on product page, cart, checkout and
           order pages. 6 new integration cases.
 
+      - id: CARD-001
+        owner: dev1
+        status: done
+        title: Add a simulated card and choose interest-free installments at checkout
+        note: >-
+          Saved cards (brand, last4, holder, expiry only; number validated in the browser,
+          no CVV), up to 10x sem juros with a R$ 5,00 minimum installment from API config,
+          validated in the order transaction and snapshotted on the order. 6 new
+          integration cases.
+
       - id: CATALOG-BATCH-001
         owner: dev1
         status: done

@@ -7,7 +7,7 @@ import { getConfig } from '@/config/storefront-config';
 import { getServerSession } from '@/features/auth/server-session';
 import { CheckoutShell } from '@/features/checkout/checkout-shell';
 import { formatCartMoney } from '@/features/cart/money';
-import { discountLabel } from '@/features/orders/order-presentation';
+import { discountLabel, paymentLabel } from '@/features/orders/order-presentation';
 export default async function CheckoutSuccess({ params }: { params: { orderId: string } }) {
   if (!isFeatureEnabled('checkout'))
     return (
@@ -53,12 +53,7 @@ export default async function CheckoutSuccess({ params }: { params: { orderId: s
             </p>
           )}
           <p>
-            Pagamento:{' '}
-            {order.paymentMethod === 'SIMULATED_CARD'
-              ? 'Cartão fictício · Visa final 4242'
-              : order.paymentMethod === 'SIMULATED_PIX'
-                ? 'Pix simulado'
-                : 'Não informado'}
+            Pagamento: {paymentLabel(order)}
           </p>
         </section>
         <section className="az-checkout-panel">

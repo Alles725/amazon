@@ -3,7 +3,10 @@ import { cache } from 'react';
 import type { CheckoutPricing } from '@amazon-mvp/api-contract';
 import { getConfig } from '@/config/storefront-config';
 
-const isPricing = (value: unknown): value is CheckoutPricing => {
+/** The storefront only advertises the Pix rate; installment rules arrive with each quote. */
+type PixPricing = Pick<CheckoutPricing, 'pixDiscountPercent'>;
+
+const isPricing = (value: unknown): value is PixPricing => {
   const percent = (value as { pixDiscountPercent?: unknown } | null)?.pixDiscountPercent;
   return Number.isInteger(percent) && (percent as number) >= 0 && (percent as number) <= 100;
 };
@@ -13,7 +16,7 @@ const isPricing = (value: unknown): value is CheckoutPricing => {
  * once per request. null when the API cannot answer: callers then advertise no Pix
  * price rather than guessing a rate the checkout might not honour.
  */
-export const getCheckoutPricing = cache(async (): Promise<CheckoutPricing | null> => {
+export const getCheckoutPricing = cache(async (): Promise<PixPricing | null> => {
   try {
     const config = getConfig();
     const response = await fetch(
