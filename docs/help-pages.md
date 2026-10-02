@@ -52,3 +52,22 @@ Não há números, parceiros, tarifas, telefones, CNPJ nem links externos invent
 - Navegador: as sete páginas em 390 e 1440 px, sem overflow horizontal nem erros de
   console; links do rodapé, “Ver opções de pagamento” da página de produto e
   “Seus pagamentos” de Sua conta.
+
+## Páginas legais (`/privacy` e `/conditions-of-use`)
+
+| Rota | Flag | Conteúdo |
+| --- | --- | --- |
+| `/privacy` | `privacyNotice` | Notificação de Privacidade da Amazon |
+| `/conditions-of-use` | `conditionsOfUse` | Condições de Uso |
+
+Artigos legais transcritos da amazon.com.br em `features/legal/`: cada documento é
+um `LegalDocument` tipado (`legal-types.ts`) em `*-content.ts`, renderizado por
+`LegalArticle` no layout dos artigos de ajuda da amazon.com.br: título “Ajuda e
+Serviço de atendimento ao cliente”, barra lateral “Políticas legais”
+(`legal-nav.ts`, página atual em negrito; itens sem página aqui ficam como texto)
+e coluna com busca “Encontrar mais soluções” (mesma biblioteca de `/help`),
+trilha, título, sumário com âncoras e seções. `LegalPageLayout` envolve com
+header, rodapé e `legal.css`. São o destino de “Condições de Uso” e
+“Notificação de Privacidade” no rodapé, no login e no cadastro. Links só para
+rotas existentes ou âncoras da página; URLs e páginas da Amazon que não existem
+aqui ficam como texto (`test/legal-pages.spec.ts`).

@@ -47,10 +47,10 @@ const COLUMNS = [
 ];
 
 const BOTTOM_LINKS = [
-  'Condições de Uso',
-  'Notificação de Privacidade',
-  'Cookies',
-  'Anúncios Baseados em Interesses',
+  { label: 'Condições de Uso', href: '/conditions-of-use' },
+  { label: 'Notificação de Privacidade', href: '/privacy' },
+  { label: 'Cookies', href: '#' },
+  { label: 'Anúncios Baseados em Interesses', href: '#' },
 ];
 
 export function AmazonFooter() {
@@ -86,11 +86,17 @@ export function AmazonFooter() {
 
       <div className="az-footer__legal">
         <nav className="az-footer__legal-links" aria-label="Legal">
-          {BOTTOM_LINKS.map((link) => (
-            <a key={link} href="#">
-              {link}
-            </a>
-          ))}
+          {BOTTOM_LINKS.map((link) =>
+            link.href === '#' ? (
+              <a key={link.label} href="#">
+                {link.label}
+              </a>
+            ) : (
+              <Link key={link.label} href={link.href}>
+                {link.label}
+              </Link>
+            ),
+          )}
         </nav>
         <p className="az-footer__copyright">© 2021-2026 Amazon.com, Inc. ou suas afiliadas</p>
         <div className="az-footer__institutional">

@@ -34,8 +34,8 @@ export default async function RegisterPage({
 
         <footer className="amazon-login__footer">
           <nav className="amazon-login__footer-links" aria-label="Amazon">
-            <a href="#">Condições de uso</a>
-            <a href="#">Notificação de privacidade</a>
+            <Link href="/conditions-of-use">Condições de uso</Link>
+            <Link href="/privacy">Notificação de privacidade</Link>
             <a href="#">Ajuda</a>
             <a href="#">Cookies</a>
             <a href="#">Anúncios Baseados em Interesses</a>

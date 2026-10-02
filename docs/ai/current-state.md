@@ -344,6 +344,12 @@ hub is part of the authenticated shell and does not enable account management.
   content/devices management, online returns/cancellations, delivery dates and tracking;
   the recall list is empty because no recall records exist.
 
+## Legal pages — 2026-10-02
+
+- /privacy and /conditions-of-use are real (flags privacyNotice and conditionsOfUse on),
+  linked from the footer, login and register; Cookies and "Anúncios Baseados em
+  Interesses" footer links are still placeholders.
+
 ## Pix discount (PIX-001) — 2026-09-30
 
 - Pix discount is computed server-side in the quote and again in the order transaction;

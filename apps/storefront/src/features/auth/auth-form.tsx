@@ -173,8 +173,8 @@ export function AuthForm({ mode, initialEmail }: { mode: Mode; initialEmail?: st
 
       {mode === 'register' && (
         <p className="amazon-card__legal">
-          Ao criar uma conta, você concorda com as <a href="#">Condições de Uso</a> da Amazon. Por
-          favor verifique a <a href="#">Notificação de Privacidade</a>, a{' '}
+          Ao criar uma conta, você concorda com as <Link href="/conditions-of-use">Condições de Uso</Link> da Amazon. Por
+          favor verifique a <Link href="/privacy">Notificação de Privacidade</Link>, a{' '}
           <a href="#">Notificação de Cookies</a> e a{' '}
           <a href="#">Notificação de Anúncios Baseados em Interesse</a>.
         </p>

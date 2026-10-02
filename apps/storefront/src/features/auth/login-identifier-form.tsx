@@ -151,8 +151,8 @@ export function LoginIdentifierForm() {
             </form>
 
             <p className="amazon-card__legal">
-              Ao continuar, você concorda com as <a href="#">Condições de Uso</a> e a{' '}
-              <a href="#">Notificação de privacidade da Amazon</a>.
+              Ao continuar, você concorda com as <Link href="/conditions-of-use">Condições de Uso</Link> e a{' '}
+              <Link href="/privacy">Notificação de privacidade da Amazon</Link>.
             </p>
 
             <a className="amazon-card__help" href="#">
