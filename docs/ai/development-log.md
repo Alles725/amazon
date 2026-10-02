@@ -670,3 +670,21 @@ including the new `test/prime-payment-notice.spec.ts` and banner cases in
 `test/product-page.spec.ts`) and API build. Storefront `next build`, integration tests and
 a browser check were not run (dev server running; no API change); `prisma generate` hit
 EPERM because the running API holds the query engine DLL (schema unchanged).
+
+## 2026-10-02 — Home: remove o CTA do card "Seu mercado"
+
+Changes:
+The pantry promo card (`components/amazon/hero-banner.tsx`) no longer renders the
+"Explore alimentos e bebidas ›" pill. It sat between the headline and the photos, unlike
+the other cards whose text link sits at the bottom, and duplicated the card's own link:
+the whole card is still one `Link` to `/products?q=alimentos`. The now-unused
+`.az-promo__pill` rules (desktop and mobile) were removed from `app/globals.css`.
+
+Database impact: none.
+
+API/contract impact: none.
+
+Validation: workspace lint, typecheck and unit tests (config 18, api 50, storefront 320);
+home served by the dev server (200, CTA text absent from the HTML). Storefront
+`next build`, integration tests and a browser visual check were not run (dev server
+running; browser tooling unavailable; no API change).
